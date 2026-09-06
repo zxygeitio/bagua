@@ -107,7 +107,7 @@ export default function HistoryPage() {
                   key={r.id}
                   className="group flex items-center gap-4 rounded-card border border-bagua-border/40 bg-bagua-surface p-4 shadow-sm transition hover:shadow-md"
                 >
-                  <Link href={`/result/${r.id}`} className="flex flex-1 items-center gap-4">
+                  <Link href={`/result?id=${r.id}`} className="flex flex-1 items-center gap-4">
                     <div className="flex-shrink-0">
                       <HexagramSymbol gua={gua} size="sm" />
                     </div>

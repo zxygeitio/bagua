@@ -1,0 +1,6 @@
+name = "bagua"
+compatibility_date = "2026-09-06"
+pages_build_output_dir = "./out"
+
+# 不需要 Functions - 这是纯静态站点
+# 静态资源 100% 由 Cloudflare CDN 免费提供

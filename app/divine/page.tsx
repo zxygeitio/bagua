@@ -28,7 +28,7 @@ export default function DivinePage() {
     try {
       const record = await performDivination({ method, question })
       addRecord(record)
-      router.push(`/result/${record.id}`)
+      router.push(`/result?id=${record.id}`)
     } catch (e) {
       console.error(e)
       setIsCasting(false)
