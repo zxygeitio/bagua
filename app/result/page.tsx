@@ -7,7 +7,7 @@ import { getGuaById } from '@/lib/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SyncIndicator } from '@/components/SyncIndicator'
 import { ShareDialog } from '@/components/ShareDialog'
-import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles } from 'lucide-react'
+import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles } from '@/components/icons'
 
 type Tab = 'ben' | 'bian' | 'hu' | 'dui' | 'zong'
 

@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { getGuaById } from '@/lib/iching'
 import Link from 'next/link'
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowLeft, Sparkles } from '@/components/icons'
 
 interface SharedLine {
   p: number

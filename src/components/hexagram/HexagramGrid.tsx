@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useState, useMemo } from 'react'
 import { HexagramSymbol } from './HexagramSymbol'
 import { getAllHexagrams, searchHexagrams } from '@/lib/iching'
-import { Search, Sparkles } from 'lucide-react'
+import { Search, Sparkles } from '@/components/icons'
 
 type SortMode = 'id' | 'wuxing' | 'trigram'
 

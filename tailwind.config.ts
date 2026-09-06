@@ -5,6 +5,11 @@ const config: Config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+  // Tailwind JIT 不会扫描动态拼接的 class，预先声明以确保生成。
+  safelist: [
+    'from-gold-500/8', 'via-transparent', 'to-transparent',
+    'from-jade-500/8', 'from-indigo-500/8', 'from-vermilion-500/8', 'from-amber-700/8',
+  ],
   theme: {
     extend: {
       colors: {
@@ -38,9 +43,44 @@ const config: Config = {
           muted: '#6B7280',
           border: 'rgba(229,231,235,0.5)',
         },
+        // 深色博物馆主题 - 墨色/金/玉/朱/琥珀
         ink: {
-          red: '#DC2626',
-          gold: '#B45309',
+          50: '#F5F5F4',
+          100: '#E7E5E4',
+          200: '#D6D3D1',
+          300: '#A8A29E',
+          400: '#78716C',
+          500: '#57534E',
+          600: '#3F3F46',
+          700: '#27272A',
+          800: '#1C1B1F',
+          900: '#111113',
+          950: '#08080A',
+        },
+        gold: {
+          50: '#FEFCE8',
+          100: '#FEF9C3',
+          300: '#FDE68A',
+          400: '#FBBF24',
+          500: '#F59E0B',
+          600: '#D97706',
+          700: '#B45309',
+        },
+        jade: {
+          100: '#D1FAE5',
+          300: '#6EE7B7',
+          400: '#34D399',
+          500: '#10B981',
+          600: '#059669',
+          700: '#047857',
+        },
+        vermilion: {
+          100: '#FEE2E2',
+          300: '#FCA5A5',
+          400: '#F87171',
+          500: '#EF4444',
+          600: '#DC2626',
+          700: '#B91C1C',
         },
       },
       fontFamily: {
@@ -63,6 +103,8 @@ const config: Config = {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
         'fade-up': 'fadeUp 0.5s ease-out',
+        'fade-down': 'fadeDown 0.5s ease-out',
+        'scale-in': 'scaleIn 0.5s cubic-bezier(0.16,1,0.3,1)',
         'slide-up': 'slideUp 0.4s cubic-bezier(0.16,1,0.3,1)',
         'shimmer': 'shimmer 2s infinite linear',
         'float': 'float 6s ease-in-out infinite',
@@ -71,6 +113,8 @@ const config: Config = {
       keyframes: {
         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
         fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        fadeDown: { '0%': { opacity: '0', transform: 'translateY(-12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        scaleIn: { '0%': { opacity: '0', transform: 'scale(0.92)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
         slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
         shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
         float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },

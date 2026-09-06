@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useHistoryStore } from '@/store/history'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
-import { Cloud, CloudOff, Loader2, Check } from 'lucide-react'
+import { Cloud, CloudOff, Loader2, Check } from '@/components/icons'
 
 export function SyncIndicator() {
   const status = useHistoryStore(s => s.cloudSyncStatus)

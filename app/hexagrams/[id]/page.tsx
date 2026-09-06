@@ -5,7 +5,7 @@ import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { getGuaById } from '@/lib/iching'
 import type { Gua } from '@/lib/iching'
 
-import { ArrowLeft, Sparkles, BookOpen, Compass, Star } from 'lucide-react'
+import { ArrowLeft, Share2, Star, Compass, Layers } from '@/components/icons'
 
 interface PageProps {
   params: { id: string }
@@ -15,315 +15,355 @@ export function generateStaticParams() {
   return Array.from({ length: 64 }, (_, i) => ({ id: String(i + 1) }))
 }
 
-const WUXING_COLOR: Record<string, string> = {
-  金: 'from-amber-200/30 to-yellow-100/10',
-  木: 'from-emerald-200/30 to-green-100/10',
-  水: 'from-blue-200/30 to-cyan-100/10',
-  火: 'from-rose-200/30 to-orange-100/10',
-  土: 'from-yellow-200/30 to-stone-200/10',
+/**
+ * 五行主题色系（金/木/水/火/土） - 预先定义避免 Tailwind JIT 无法扫描动态拼接的 class。
+ * 同步在 tailwind.config.ts 的 safelist 中列出对应 from-*-500/8 类名。
+ */
+const WUXING_THEME: Record<
+  string,
+  {
+    bg: string
+    text: string
+    border: string
+    label: string
+    fromClass: string
+  }
+> = {
+  金: {
+    bg: 'bg-gold-500/10',
+    text: 'text-gold-400',
+    border: 'border-gold-500/20',
+    label: '金',
+    fromClass: 'from-gold-500/8',
+  },
+  木: {
+    bg: 'bg-jade-500/10',
+    text: 'text-jade-300',
+    border: 'border-jade-500/20',
+    label: '木',
+    fromClass: 'from-jade-500/8',
+  },
+  水: {
+    bg: 'bg-indigo-500/10',
+    text: 'text-indigo-300',
+    border: 'border-indigo-500/20',
+    label: '水',
+    fromClass: 'from-indigo-500/8',
+  },
+  火: {
+    bg: 'bg-vermilion-500/10',
+    text: 'text-vermilion-300',
+    border: 'border-vermilion-500/20',
+    label: '火',
+    fromClass: 'from-vermilion-500/8',
+  },
+  土: {
+    bg: 'bg-amber-700/10',
+    text: 'text-amber-500',
+    border: 'border-amber-700/20',
+    label: '土',
+    fromClass: 'from-amber-700/8',
+  },
 }
 
-const WUXING_HEX: Record<string, string> = {
-  金: '#F59E0B',
-  木: '#10B981',
-  水: '#3B82F6',
-  火: '#EF4444',
-  土: '#A16207',
-}
+const DEFAULT_THEME = WUXING_THEME['金']!
+
+const RELATION_DESCS = {
+  dui: '阴阳全反',
+  zong: '上下颠倒',
+  hu: '中四爻成',
+  bian: '变爻之后',
+} as const
 
 export default function HexagramDetailPage({ params }: PageProps) {
   const id = parseInt(params.id, 10)
   const gua = getGuaById(id)
   if (!gua) notFound()
 
-  const dui = getGuaById(gua.duiGua)!
-  const zong = getGuaById(gua.zongGua)!
-  const hu = getGuaById(gua.huGua)!
-  const bianId = gua.guaBian[0]
-  const bian = bianId !== undefined ? getGuaById(bianId) : null
-
-  const bgGradient = WUXING_COLOR[gua.wuxing] ?? 'from-bagua-primary/5 to-bagua-secondary/5'
+  const wx = WUXING_THEME[gua.wuxing] ?? DEFAULT_THEME
+  const dui = getGuaById(gua.duiGua)
+  const zong = getGuaById(gua.zongGua)
+  const hu = getGuaById(gua.huGua)
+  const bianFirstId = gua.guaBian[0]
+  const bian = bianFirstId !== undefined ? getGuaById(bianFirstId) : null
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* 五行背景光晕 */}
+    <main className="relative min-h-screen overflow-hidden bg-ink-950 text-ink-100">
+      {/* 五行主题背景 */}
       <div
-        className={`pointer-events-none absolute inset-0 bg-gradient-radial ${bgGradient} animate-fade-in`}
+        className={`pointer-events-none absolute inset-0 bg-gradient-radial ${wx.fromClass} via-transparent to-transparent`}
       />
 
-      {/* 装饰：背景八卦符号 */}
-      <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 opacity-[0.03]">
-        <svg viewBox="0 0 200 200">
-          <text x="50%" y="50%" textAnchor="middle" fontSize="180" fill="currentColor">
-            {gua.symbol}
-          </text>
-        </svg>
-      </div>
-      <div className="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rotate-180 opacity-[0.03]">
-        <svg viewBox="0 0 200 200">
-          <text x="50%" y="50%" textAnchor="middle" fontSize="180" fill="currentColor">
+      {/* 装饰八卦符号 */}
+      <div className="pointer-events-none absolute right-0 top-0 h-[600px] w-[600px] opacity-[0.04]">
+        <svg viewBox="0 0 200 200" className="h-full w-full">
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            fontSize="180"
+            fill="currentColor"
+            className="text-gold-500"
+          >
             {gua.symbol}
           </text>
         </svg>
       </div>
 
-      <div className="relative">
-        {/* 顶部 */}
-        <header className="glass-card sticky top-0 z-50 border-b border-bagua-border/30">
-          <div className="container mx-auto flex items-center justify-between px-6 py-4">
-            <Link
-              href="/hexagrams"
-              className="flex items-center gap-2 font-body text-sm text-bagua-muted transition hover:text-bagua-text"
+      {/* 顶部 */}
+      <header className="relative z-10 border-b border-ink-800/60 bg-ink-950/80 backdrop-blur-xl">
+        <div className="container mx-auto flex items-center justify-between px-8 py-4">
+          <Link
+            href="/hexagrams"
+            className="group flex items-center gap-2 font-body text-sm text-ink-300 transition hover:text-ink-50"
+          >
+            <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
+            返回卦象库
+          </Link>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs text-ink-500">
+              #{gua.id.toString().padStart(2, '0')} / 64
+            </span>
+            <button
+              type="button"
+              aria-label="收藏"
+              className="rounded-full p-2 text-ink-400 transition hover:bg-ink-800/50 hover:text-gold-400"
             >
-              <ArrowLeft className="h-4 w-4" />
-              返回64卦
-            </Link>
-            <div className="flex items-center gap-2">
-              <span className="font-calligraphy text-base text-bagua-muted">
-                #{gua.id.toString().padStart(2, '0')} / 64
-              </span>
-            </div>
+              <Star className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="分享"
+              className="rounded-full p-2 text-ink-400 transition hover:bg-ink-800/50 hover:text-ink-50"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
           </div>
-        </header>
+        </div>
+      </header>
 
+      <article className="relative z-10">
         {/* Hero */}
-        <section className="container mx-auto px-6 py-16 md:py-20">
+        <section className="container mx-auto px-8 py-16 md:py-24">
           <div className="mx-auto max-w-5xl">
-            {/* 标题区 */}
-            <div className="mb-12 text-center animate-fade-up">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-pill border border-bagua-primary/20 bg-bagua-primary/5 px-4 py-1.5 font-body text-xs font-medium text-bagua-primary">
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: WUXING_HEX[gua.wuxing] }}
-                />
-                五行属{gua.wuxing} · {gua.pronunciation}
+            {/* 分类徽章 */}
+            <div className="flex flex-wrap items-center gap-3 animate-fade-down">
+              <div
+                className={`inline-flex items-center gap-1.5 rounded-pill border px-3 py-1 font-body text-xs ${wx.bg} ${wx.text} ${wx.border}`}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                五行属{wx.label}
               </div>
-              <h1 className="my-6 font-calligraphy text-6xl font-bold leading-none text-bagua-text md:text-8xl animate-fade-up stagger-1">
-                {gua.name}
-              </h1>
-              <div className="flex items-center justify-center gap-3 animate-fade-up stagger-2">
-                <span className="seal text-sm">#{gua.id}</span>
-                <span className="font-display text-base text-bagua-muted">
-                  {gua.shangGua}上 · {gua.xiaGua}下
-                </span>
+              <div className="tag">
+                {gua.shangGua}上 · {gua.xiaGua}下
+              </div>
+              <div className="tag">
+                京房八宫 · 第{gua.palace}宫
               </div>
             </div>
 
-            {/* 主卦象（大） */}
-            <div className="mb-16 flex justify-center animate-fade-up stagger-3">
-              <div className="glass-card card-hover rounded-card p-12">
+            {/* 卦名 */}
+            <h1 className="mt-8 animate-fade-up font-calligraphy text-7xl font-medium leading-none text-ink-50 stagger-1 md:text-9xl">
+              {gua.name}
+            </h1>
+            <p className="mt-4 animate-fade-up font-display text-2xl font-light text-ink-300 stagger-2">
+              {gua.pronunciation}
+            </p>
+
+            {/* 印章 */}
+            <div className="mt-8 animate-fade-up stagger-3">
+              <span className="seal">第 {gua.id} 卦</span>
+            </div>
+
+            {/* 主卦象 */}
+            <div className="mt-16 flex justify-center animate-scale-in stagger-4">
+              <div className="card-gold p-16">
                 <HexagramSymbol gua={gua} size="lg" />
               </div>
-            </div>
-
-            {/* 关系八卦图 */}
-            <div className="mb-16 animate-fade-up stagger-4">
-              <h2 className="mb-8 text-center font-display text-2xl font-bold text-bagua-text">
-                <Compass className="mr-2 inline h-6 w-6 text-bagua-primary" />
-                卦象关系
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <RelationCard
-                  label="错卦"
-                  sub="阴阳全反"
-                  gua={dui}
-                  highlight={gua.duiGua === 2}
-                />
-                <RelationCard
-                  label="综卦"
-                  sub="上下颠倒"
-                  gua={zong}
-                  highlight={gua.zongGua === 2}
-                />
-                <RelationCard label="互卦" sub="取2-3-4与3-4-5" gua={hu} />
-                <RelationCard label="之卦" sub="变爻之后" gua={bian} disabled={!bian} />
-              </div>
-            </div>
-
-            {/* 三列内容布局 */}
-            <div className="grid gap-6 lg:grid-cols-3">
-              {/* 左：卦辞 + 彖传 */}
-              <div className="space-y-6 lg:col-span-2">
-                <div className="glass-card rounded-card p-8 animate-fade-up">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-bagua-primary/10 text-bagua-primary">
-                      <BookOpen className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-bagua-text">卦辞</h3>
-                  </div>
-                  <p className="font-calligraphy text-2xl leading-relaxed text-bagua-text">
-                    {gua.guaci}
-                  </p>
-                </div>
-
-                <div className="glass-card rounded-card p-8 animate-fade-up stagger-1">
-                  <h3 className="mb-4 font-display text-xl font-bold text-bagua-text">
-                    <span className="seal mr-2 text-xs">彖</span>
-                    彖传
-                  </h3>
-                  <p className="font-body leading-loose text-bagua-text">{gua.tuanZhuan}</p>
-                </div>
-
-                <div className="glass-card rounded-card p-8 animate-fade-up stagger-2">
-                  <h3 className="mb-4 font-display text-xl font-bold text-bagua-text">
-                    <span className="seal mr-2 text-xs">象</span>
-                    象传
-                  </h3>
-                  <p className="font-calligraphy text-lg leading-relaxed text-bagua-text">
-                    {gua.daXiangZhuan}
-                  </p>
-                </div>
-
-                {gua.wenYan && (
-                  <div className="glass-card rounded-card border border-bagua-accent/40 bg-gradient-to-br from-bagua-accent/10 to-bagua-surface p-8 animate-fade-up stagger-3">
-                    <h3 className="mb-4 font-display text-xl font-bold text-bagua-accent">
-                      <Sparkles className="mr-2 inline h-5 w-5" />
-                      文言传（乾坤专属）
-                    </h3>
-                    <p className="font-body leading-loose text-bagua-text">{gua.wenYan}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* 右：现代启示 */}
-              <div className="lg:col-span-1">
-                <div className="glass-card rounded-card sticky top-24 border border-bagua-secondary/40 bg-gradient-to-br from-bagua-secondary/10 to-bagua-surface p-8 animate-fade-up stagger-4">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-bagua-secondary/10 text-bagua-secondary">
-                      <Star className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-bagua-secondary">
-                      现代启示
-                    </h3>
-                  </div>
-                  <p className="font-body leading-loose text-bagua-text">{gua.modernInsight}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 六爻详情 */}
-            <div className="mt-16">
-              <h2 className="mb-8 text-center font-display text-3xl font-bold text-bagua-text">
-                六爻详情
-              </h2>
-              <div className="mx-auto max-w-3xl space-y-3">
-                {[...gua.yaos].reverse().map((yao, idx) => {
-                  const pos = (6 - idx) as 1 | 2 | 3 | 4 | 5 | 6
-                  const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九']
-                  const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六']
-                  const label =
-                    yao.yinYang === 'yang' ? yaoLabelYang[pos - 1]! : yaoLabelYin[pos - 1]!
-                  return (
-                    <div
-                      key={idx}
-                      className="glass-card card-hover group rounded-card p-6"
-                      style={{ animationDelay: `${idx * 100}ms` }}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="flex flex-col items-center">
-                          <span className="seal text-sm">{label}</span>
-                          <span className="mt-2 font-body text-xs text-bagua-muted">
-                            {yao.yinYang === 'yang' ? '━━━' : '━ ━'}
-                          </span>
-                        </div>
-                        <div className="flex-1 border-l border-bagua-border/30 pl-4">
-                          <p className="mb-2 font-calligraphy text-lg leading-relaxed text-bagua-text">
-                            {yao.text}
-                          </p>
-                          <p className="font-body text-sm leading-relaxed text-bagua-muted">
-                            《象》曰：{yao.xiangZhuan}
-                          </p>
-                          {yao.shiStatus && (
-                            <div className="mt-3 inline-flex items-center gap-1 rounded-pill bg-bagua-canvas/80 px-2.5 py-1 font-body text-xs text-bagua-muted">
-                              {yao.shiStatus}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* 关键词标签 */}
-            <div className="mt-16 flex flex-wrap justify-center gap-2">
-              {gua.keywords.map((kw, i) => (
-                <span
-                  key={i}
-                  className="glass-card rounded-pill px-4 py-1.5 font-body text-sm text-bagua-text animate-fade-up"
-                  style={{ animationDelay: `${i * 80}ms` }}
-                >
-                  {kw}
-                </span>
-              ))}
             </div>
           </div>
         </section>
 
-        <Footer />
-      </div>
+        {/* 卦辞解读 */}
+        <section className="container mx-auto max-w-5xl px-8 pb-16">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* 主内容 */}
+            <div className="space-y-6 lg:col-span-2">
+              <ContentBlock label="卦辞" variant="primary" delay={0}>
+                <p className="font-calligraphy text-2xl leading-loose text-pretty">
+                  {gua.guaci}
+                </p>
+              </ContentBlock>
+
+              <ContentBlock label="彖传" variant="muted" delay={1}>
+                <p className="font-body text-base leading-loose text-pretty text-ink-300">
+                  {gua.tuanZhuan}
+                </p>
+              </ContentBlock>
+
+              <ContentBlock label="象传" variant="muted" delay={2}>
+                <p className="font-calligraphy text-lg leading-loose text-pretty text-ink-200">
+                  {gua.daXiangZhuan}
+                </p>
+              </ContentBlock>
+
+              {gua.wenYan && (
+                <ContentBlock label="文言" variant="gold" delay={3}>
+                  <p className="font-body text-sm leading-loose text-pretty text-ink-300">
+                    {gua.wenYan}
+                  </p>
+                </ContentBlock>
+              )}
+
+              <ContentBlock label="现代启示" variant="vermilion" delay={4}>
+                <p className="font-body text-base leading-loose text-pretty text-ink-200">
+                  {gua.modernInsight}
+                </p>
+              </ContentBlock>
+            </div>
+
+            {/* 侧栏：卦象关系 */}
+            <aside className="lg:col-span-1">
+              <div className="sticky top-24 space-y-4">
+                <h3 className="flex items-center gap-2 font-display text-base font-medium text-ink-200">
+                  <Compass className="h-4 w-4 text-gold-400" />
+                  卦象关系
+                </h3>
+                <RelationMini label="错卦" sub={RELATION_DESCS.dui} gua={dui} />
+                <RelationMini label="综卦" sub={RELATION_DESCS.zong} gua={zong} />
+                <RelationMini label="互卦" sub={RELATION_DESCS.hu} gua={hu} />
+                <RelationMini
+                  label="之卦"
+                  sub={RELATION_DESCS.bian}
+                  gua={bian}
+                  disabled={!bian}
+                />
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        {/* 六爻详情 */}
+        <section className="container mx-auto max-w-4xl px-8 pb-20">
+          <h2 className="mb-8 flex items-center gap-3 font-display text-2xl font-medium text-ink-50">
+            <Layers className="h-5 w-5 text-gold-400" />
+            六爻详情
+            <span className="ml-auto font-mono text-xs text-ink-500">初爻 → 上爻</span>
+          </h2>
+          <div className="space-y-3">
+            {[...gua.yaos].reverse().map((yao, idx) => {
+              const pos = (6 - idx) as 1 | 2 | 3 | 4 | 5 | 6
+              const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九']
+              const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六']
+              const label =
+                yao.yinYang === 'yang' ? yaoLabelYang[pos - 1]! : yaoLabelYin[pos - 1]!
+              return (
+                <div
+                  key={idx}
+                  className="card-base card-hover p-5"
+                  style={{ animationDelay: `${idx * 50}ms` }}
+                >
+                  <div className="flex items-baseline gap-3">
+                    <span className="seal text-xs">{label}</span>
+                    <span className="font-mono text-xs text-ink-500">
+                      {yao.yinYang === 'yang' ? '阳爻 ━━━' : '阴爻 ━ ━'}
+                    </span>
+                  </div>
+                  <p className="mt-3 font-calligraphy text-lg leading-relaxed text-ink-50">
+                    {yao.text}
+                  </p>
+                  <p className="mt-2 font-body text-sm leading-relaxed text-ink-400">
+                    《象》曰：{yao.xiangZhuan}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* 关键词 */}
+        <section className="container mx-auto max-w-4xl px-8 pb-24">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {gua.keywords.map((kw, i) => (
+              <span
+                key={kw}
+                className="tag animate-fade-up"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                {kw}
+              </span>
+            ))}
+          </div>
+        </section>
+      </article>
     </main>
   )
 }
 
-function RelationCard({
-  label,
-  sub,
-  gua,
-  highlight = false,
-  disabled = false,
-}: {
+interface ContentBlockProps {
   label: string
-  sub: string
-  gua: Pick<Gua, 'id' | 'name' | 'yaos'> | null | undefined
-  highlight?: boolean
-  disabled?: boolean
-}) {
-  if (disabled || !gua) {
-    return (
-      <div className="glass-card rounded-card p-6 text-center opacity-50">
-        <div className="font-body text-xs uppercase tracking-wider text-bagua-muted">{label}</div>
-        <div className="my-4 flex justify-center opacity-30">
-          <div className="h-20 w-16 rounded border border-dashed border-bagua-border" />
-        </div>
-        <div className="font-calligraphy text-sm text-bagua-muted">—</div>
-        <div className="mt-1 font-body text-xs text-bagua-muted">{sub}</div>
-      </div>
-    )
+  children: React.ReactNode
+  variant: 'primary' | 'gold' | 'vermilion' | 'muted'
+  delay: number
+}
+
+function ContentBlock({ label, children, variant, delay }: ContentBlockProps) {
+  const variants: Record<ContentBlockProps['variant'], string> = {
+    primary: 'card-base border-gold-500/30',
+    gold: 'card-gold',
+    vermilion: 'card-base border-vermilion-500/30',
+    muted: 'card-base',
   }
   return (
-    <Link
-      href={`/hexagrams/${gua.id}`}
-      className={`group glass-card card-hover relative overflow-hidden rounded-card p-6 text-center ${
-        highlight ? 'border-bagua-primary/60 ring-2 ring-bagua-primary/20' : ''
-      }`}
+    <div
+      className={`p-8 animate-fade-up ${variants[variant]}`}
+      style={{ animationDelay: `${delay * 100}ms` }}
     >
-      <div className="font-body text-xs uppercase tracking-wider text-bagua-muted">{label}</div>
-      <div className="my-4 flex justify-center transition-transform group-hover:scale-110">
-        <HexagramSymbol gua={gua as Pick<Gua, 'yaos'>} size="sm" />
-      </div>
-      <div className="font-calligraphy text-base font-bold text-bagua-text">{gua.name}</div>
-      <div className="mt-1 font-body text-xs text-bagua-muted">#{gua.id}</div>
-      <div className="mt-2 font-body text-xs text-bagua-muted">{sub}</div>
-    </Link>
+      <h3 className="mb-4 flex items-center gap-2 font-display text-sm font-medium uppercase tracking-widest text-gold-400">
+        {label}
+      </h3>
+      {children}
+    </div>
   )
 }
 
-function Footer() {
+interface RelationMiniProps {
+  label: string
+  sub: string
+  gua: Pick<Gua, 'id' | 'name' | 'symbol'> | null | undefined
+  disabled?: boolean
+}
+
+function RelationMini({ label, sub, gua, disabled }: RelationMiniProps) {
+  if (disabled || !gua) {
+    return (
+      <div className="card-base p-4 opacity-40">
+        <div className="font-body text-xs text-ink-500">{label}</div>
+        <div className="mt-1 font-display text-base text-ink-600">—</div>
+        <div className="mt-1 font-body text-xs text-ink-600">{sub}</div>
+      </div>
+    )
+  }
+  const symbolChar = gua.symbol?.[0] ?? '☰'
   return (
-    <footer className="mt-20 border-t border-bagua-border/30 bg-bagua-surface/40 backdrop-blur-md">
-      <div className="container mx-auto px-6 py-10">
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Link href="/hexagrams" className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-bagua text-white">
-              <span className="font-calligraphy text-sm">卦</span>
-            </div>
-            <span className="font-calligraphy text-base text-bagua-text">bagua · 易经占卜</span>
-          </Link>
-          <p className="font-body text-xs text-bagua-muted">© 2026 · 数据源于传统经典</p>
+    <Link
+      href={`/hexagrams/${gua.id}`}
+      className="card-base card-hover group block p-4"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="font-body text-xs text-ink-500">{label}</div>
+          <div className="mt-1 font-display text-base text-ink-100 group-hover:text-gold-400">
+            {gua.name}
+          </div>
+        </div>
+        <div className="text-2xl font-display text-gold-500/60 group-hover:text-gold-400">
+          {symbolChar}
         </div>
       </div>
-    </footer>
+      <div className="mt-2 font-body text-xs text-ink-600">
+        #{gua.id} · {sub}
+      </div>
+    </Link>
   )
 }

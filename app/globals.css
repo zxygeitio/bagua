@@ -47,6 +47,46 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
   }
 
+  /* 深色博物馆卡片 - 基础 */
+  .card-base {
+    background: linear-gradient(180deg, rgba(28, 27, 31, 0.6) 0%, rgba(17, 17, 19, 0.4) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* 金色描边典藏卡 */
+  .card-gold {
+    background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, rgba(28, 27, 31, 0.8) 0%, rgba(17, 17, 19, 0.6) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 20px;
+    box-shadow:
+      0 0 0 1px rgba(245, 158, 11, 0.08),
+      0 20px 60px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(245, 158, 11, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* 标签 chip */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: rgb(168 162 158);
+    letter-spacing: 0.02em;
+  }
+
   /* 印章效果（用于卦名） */
   .seal {
     display: inline-flex;

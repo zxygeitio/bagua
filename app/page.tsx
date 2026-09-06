@@ -1,210 +1,248 @@
 import Link from 'next/link'
-import { BookOpen, Sparkles, Compass, Layers, Hexagon, BookText, Github } from 'lucide-react'
+import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { Logo, ArrowRight, Sparkles, Layers, Compass, BookText } from '@/components/icons'
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* 装饰背景 */}
+    <main className="relative min-h-screen overflow-hidden bg-ink-950">
+      {/* 装饰背景：星空 + 光晕 */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-bagua-primary/5 blur-3xl" />
-        <div className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-bagua-secondary/5 blur-3xl" />
-        <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-bagua-accent/5 blur-3xl" />
+        <div className="absolute -left-40 top-1/4 h-[480px] w-[480px] rounded-full bg-indigo-500/10 blur-[120px]" />
+        <div className="absolute right-0 top-0 h-[600px] w-[600px] rounded-full bg-gold-500/8 blur-[140px]" />
+        <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-vermilion-500/8 blur-[100px]" />
+        {/* 装饰八卦符号 */}
+        <div className="absolute right-12 top-1/3 font-display text-[280px] leading-none text-gold-500/5">☰</div>
+        <div className="absolute bottom-32 left-12 font-display text-[200px] leading-none text-gold-500/5">☵</div>
       </div>
 
-      {/* 头部 */}
-      <header className="glass-card sticky top-0 z-50 border-b border-bagua-border/30">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
+      {/* 顶部导航 */}
+      <header className="relative z-10 border-b border-ink-800/60 bg-ink-950/80 backdrop-blur-xl">
+        <div className="container mx-auto flex items-center justify-between px-8 py-5">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="relative">
-              <div className="absolute inset-0 animate-spin-slow rounded-full bg-gradient-bagua opacity-20 blur-md" />
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-bagua text-white shadow-glow">
-                <Hexagon className="h-5 w-5" strokeWidth={2.5} />
-              </div>
+            <Logo className="h-9 w-9 text-gold-400 transition group-hover:rotate-180" />
+            <div className="flex flex-col">
+              <span className="font-display text-base font-semibold text-ink-50">bagua</span>
+              <span className="font-body text-[10px] uppercase tracking-[0.2em] text-gold-400/80">I Ching · 易经</span>
             </div>
-            <h1 className="font-calligraphy text-xl text-bagua-text transition group-hover:text-bagua-primary">
-              bagua · 易经占卜
-            </h1>
           </Link>
-          <a
+          <nav className="hidden items-center gap-1 md:flex">
+            <Link href="/hexagrams" className="rounded-button px-3 py-1.5 font-body text-sm text-ink-300 transition hover:bg-ink-800/50 hover:text-ink-50">
+              卦象库
+            </Link>
+            <Link href="/divine" className="rounded-button px-3 py-1.5 font-body text-sm text-ink-300 transition hover:bg-ink-800/50 hover:text-ink-50">
+              起卦
+            </Link>
+            <Link href="/history" className="rounded-button px-3 py-1.5 font-body text-sm text-ink-300 transition hover:bg-ink-800/50 hover:text-ink-50">
+              历史
+            </Link>
+            <Link href="/settings" className="rounded-button px-3 py-1.5 font-body text-sm text-ink-300 transition hover:bg-ink-800/50 hover:text-ink-50">
+              设置
+            </Link>
+          </nav>
+          <Link
             href="https://github.com/zxygeitio/bagua"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 font-body text-sm text-bagua-muted transition hover:text-bagua-text"
+            className="btn-secondary"
           >
-            <Github className="h-4 w-4" />
-            <span className="hidden sm:inline">源码</span>
-          </a>
+            GitHub
+          </Link>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="container relative mx-auto px-6 py-20 md:py-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="animate-fade-up">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-pill border border-bagua-primary/20 bg-bagua-primary/5 px-4 py-1.5 font-body text-xs font-medium text-bagua-primary">
-              <Sparkles className="h-3.5 w-3.5" />
-              千年智慧 · 现代演绎
+      <section className="relative z-10 container mx-auto px-8 pt-24 pb-32 md:pt-32 md:pb-40">
+        <div className="mx-auto max-w-4xl">
+          {/* 徽章 */}
+          <div className="animate-fade-down">
+            <div className="inline-flex items-center gap-2 rounded-pill border border-gold-500/30 bg-gold-500/5 px-3.5 py-1.5 font-body text-xs text-gold-300">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold-400" />
+              周易 · 群经之首 · 文化之源
             </div>
           </div>
-          <h2 className="animate-fade-up stagger-1 font-display text-5xl font-bold leading-tight text-balance text-bagua-text md:text-6xl lg:text-7xl">
-            古老智慧 ·{' '}
-            <span className="text-gradient">现代体验</span>
-          </h2>
-          <p className="animate-fade-up stagger-2 mx-auto mt-8 max-w-2xl text-pretty font-body text-lg leading-relaxed text-bagua-muted md:text-xl">
-            探索这部千年经典的指引
+
+          {/* 主标题 */}
+          <h1 className="mt-8 animate-fade-up stagger-1 font-display text-6xl font-medium leading-[1.1] text-balance text-ink-50 md:text-7xl lg:text-[88px]">
+            观象玩辞
+            <span className="mt-2 block">
+              <span className="metallic-gold">洞见</span>
+              <span className="text-ink-200">天机</span>
+            </span>
+          </h1>
+
+          {/* 副标题 */}
+          <p className="mt-8 max-w-2xl animate-fade-up stagger-2 font-body text-base leading-relaxed text-pretty text-ink-300 md:text-lg">
+            以铜钱蓍草之方，循文王周公之义。
             <br className="hidden md:block" />
-            通过互动起卦、卦辞解读与现代建议，发现属于你的答案
+            六十四卦三百八十四爻，悉载于此；人生百事六合八方，皆可问焉。
           </p>
+
+          {/* CTA */}
+          <div className="mt-10 flex flex-col items-start gap-3 animate-fade-up stagger-3 sm:flex-row sm:items-center">
+            <Link
+              href="/divine"
+              className="btn-primary group inline-flex items-center gap-2 font-display text-base"
+            >
+              <Sparkles className="h-4 w-4" />
+              起卦问事
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              href="/hexagrams"
+              className="btn-secondary inline-flex items-center gap-2 font-body text-sm"
+            >
+              检阅六十四卦
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          {/* 信任标识 */}
+          <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 animate-fade-up stagger-4 font-mono text-[11px] uppercase tracking-widest text-ink-400">
+            <span>数据源：维基文库通行本 · 中华书局</span>
+            <span className="hidden md:inline">·</span>
+            <span>三种起卦法：硬币 / 蓍草 / 手动</span>
+            <span className="hidden md:inline">·</span>
+            <span>云端同步已就绪</span>
+          </div>
         </div>
 
-        {/* 双入口卡片 */}
-        <div className="mx-auto mt-20 grid max-w-5xl gap-8 md:grid-cols-2">
-          <Link
-            href="/hexagrams"
-            className="group glass-card card-hover relative overflow-hidden rounded-card p-10"
-          >
-            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-bagua-primary/10 transition-transform duration-700 group-hover:scale-150 group-hover:rotate-12" />
-            <div className="absolute -bottom-16 -left-16 h-32 w-32 rounded-full bg-bagua-primary/5 blur-2xl transition-opacity group-hover:opacity-100" />
-            <div className="relative">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-bagua-primary/10 text-bagua-primary shadow-soft transition group-hover:scale-110 group-hover:bg-bagua-primary group-hover:text-white">
-                <BookOpen className="h-8 w-8" />
-              </div>
-              <h3 className="font-display text-3xl font-bold text-bagua-text">
-                浏览卦象
-              </h3>
-              <p className="mt-4 font-body leading-relaxed text-bagua-muted">
-                探索全部 64 卦的卦辞、彖传、象传与六爻爻辞
-              </p>
-              <p className="mt-8 inline-flex items-center gap-2 font-body text-sm font-medium text-bagua-primary transition group-hover:gap-3">
-                开始探索
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/divine"
-            className="group glass-card card-hover relative overflow-hidden rounded-card p-10"
-          >
-            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-bagua-secondary/10 transition-transform duration-700 group-hover:scale-150 group-hover:rotate-12" />
-            <div className="absolute -bottom-16 -left-16 h-32 w-32 rounded-full bg-bagua-secondary/5 blur-2xl transition-opacity group-hover:opacity-100" />
-            <div className="relative">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-bagua-secondary/10 text-bagua-secondary shadow-soft transition group-hover:scale-110 group-hover:bg-bagua-secondary group-hover:text-white">
-                <Sparkles className="h-8 w-8" />
-              </div>
-              <h3 className="font-display text-3xl font-bold text-bagua-text">
-                随机起卦
-              </h3>
-              <p className="mt-4 font-body leading-relaxed text-bagua-muted">
-                让宇宙指引你，通过三种传统起卦方式获得启示
-              </p>
-              <p className="mt-8 inline-flex items-center gap-2 font-body text-sm font-medium text-bagua-secondary transition group-hover:gap-3">
-                起一卦
-                <span className="transition-transform group-hover:translate-x-1">→</span>
-              </p>
-            </div>
-          </Link>
+        {/* 主卦象预览 */}
+        <div className="relative mt-20 animate-fade-up stagger-5">
+          <div className="grid gap-4 md:grid-cols-3">
+            <FeaturedHexagram
+              id={1}
+              name="乾为天"
+              subtitle="刚健中正"
+              detail="天行健，君子以自强不息"
+              hue="gold"
+            />
+            <FeaturedHexagram
+              id={2}
+              name="坤为地"
+              subtitle="柔顺包容"
+              detail="地势坤，君子以厚德载物"
+              hue="vermilion"
+              offset
+            />
+            <FeaturedHexagram
+              id={3}
+              name="水雷屯"
+              subtitle="起始艰难"
+              detail="云雷屯，君子以经纶"
+              hue="jade"
+            />
+          </div>
         </div>
       </section>
 
       {/* Features */}
-      <section className="container relative mx-auto px-6 pb-20">
-        <div className="mb-16 text-center">
-          <h2 className="font-display text-4xl font-bold text-bagua-text">核心特性</h2>
-          <p className="mt-3 font-body text-bagua-muted">精心打磨每一处细节</p>
-        </div>
-        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
-          <FeatureCard
-            icon={<Layers className="h-6 w-6" />}
-            color="primary"
-            title="完整卦象库"
-            description="64 卦 + 384 爻 + 完整十翼（彖传、象传、文言）"
-            delay={0}
-          />
-          <FeatureCard
-            icon={<Compass className="h-6 w-6" />}
-            color="secondary"
-            title="三种起卦方式"
-            description="硬币法、蓍草揲占、手动选卦，满足不同场景需求"
-            delay={1}
-          />
-          <FeatureCard
-            icon={<BookText className="h-6 w-6" />}
-            color="accent"
-            title="现代解读"
-            description="预置 9 大场景 × 64 卦的高质量解读内容"
-            delay={2}
-          />
+      <section className="relative z-10 border-t border-ink-800/40 bg-ink-900/30 backdrop-blur-sm">
+        <div className="container mx-auto px-8 py-24">
+          <div className="mb-16 max-w-2xl">
+            <h2 className="font-display text-3xl font-medium text-ink-50 md:text-4xl">
+              以严谨之心，还经典之貌
+            </h2>
+            <p className="mt-4 font-body text-ink-300">
+              每字每句，皆有所本；每个爻辞，都经过四源比对与异文校对。
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <FeatureCard
+              icon={<Layers className="h-5 w-5" />}
+              title="六十四卦 · 三百八十四爻"
+              description="完整收录通行本卦辞、彖传、象传、爻辞、小象传；乾坤附《文言》。"
+              hue="gold"
+            />
+            <FeatureCard
+              icon={<Compass className="h-5 w-5" />}
+              title="三种起卦法"
+              description="硬币法应日常，蓍草法从古礼，手动选卦研学理。各得其所。"
+              hue="jade"
+            />
+            <FeatureCard
+              icon={<BookText className="h-5 w-5" />}
+              title="五种卦变关系"
+              description="本卦、之卦、互卦、错卦、综卦，层层推演，由象达意。"
+              hue="vermilion"
+            />
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-bagua-border/30 bg-bagua-surface/40 backdrop-blur-md">
-        <div className="container mx-auto px-6 py-10">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-bagua text-white">
-                <Hexagon className="h-4 w-4" />
-              </div>
-              <span className="font-calligraphy text-base text-bagua-text">bagua · 易经占卜</span>
+      <footer className="relative z-10 border-t border-ink-800/40 py-10">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-8 md:flex-row">
+          <div className="flex items-center gap-3">
+            <Logo className="h-6 w-6 text-gold-400" />
+            <div className="font-body text-xs text-ink-400">
+              <span className="text-ink-200">bagua · 易经占卜</span>
+              <span className="mx-2">·</span>
+              <span>© 2026</span>
             </div>
-            <p className="font-body text-xs text-bagua-muted">
-              由 Next.js · TypeScript 构建 · 数据源于传统经典 · © 2026
-            </p>
           </div>
+          <p className="font-body text-xs text-ink-500">
+            仅供文化学习与学术研究 · 非迷信引导
+          </p>
         </div>
       </footer>
     </main>
   )
 }
 
-function FeatureCard({
-  icon,
-  color,
-  title,
-  description,
-  delay,
-}: {
+function FeaturedHexagram({ id, name, subtitle, detail, hue, offset = false }: {
+  id: number
+  name: string
+  subtitle: string
+  detail: string
+  hue: 'gold' | 'vermilion' | 'jade'
+  offset?: boolean
+}) {
+  return (
+    <Link
+      href={`/hexagrams/${id}`}
+      className={`group glass-card card-hover relative overflow-hidden p-6 ${offset ? 'md:mt-8' : ''}`}
+    >
+      <div className="flex items-start justify-between">
+        <div>
+          <div className="font-mono text-xs text-ink-500">#{id.toString().padStart(2, '0')} / 64</div>
+          <h3 className="mt-2 font-calligraphy text-2xl text-ink-50">{name}</h3>
+          <p className="mt-1 font-body text-xs text-ink-400">{subtitle}</p>
+        </div>
+        <div className={`flex h-16 w-16 items-center justify-center rounded-full bg-${hue}-500/10`}>
+          <span className={`font-display text-2xl text-${hue}-400`}>
+            {id === 1 ? '☰' : id === 2 ? '☷' : '☵'}
+          </span>
+        </div>
+      </div>
+      <p className="mt-6 font-body text-sm leading-relaxed text-ink-300">{detail}</p>
+      <div className="mt-6 flex items-center gap-1.5 font-body text-xs text-ink-400 transition group-hover:text-gold-400">
+        查看详情
+        <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
+      </div>
+    </Link>
+  )
+}
+
+function FeatureCard({ icon, title, description, hue }: {
   icon: React.ReactNode
-  color: 'primary' | 'secondary' | 'accent'
   title: string
   description: string
-  delay: number
+  hue: 'gold' | 'jade' | 'vermilion'
 }) {
   const colorMap = {
-    primary: {
-      bg: 'bg-bagua-primary/10',
-      text: 'text-bagua-primary',
-      border: 'border-bagua-primary/20',
-      hover: 'group-hover:bg-bagua-primary',
-      hoverText: 'group-hover:text-white',
-    },
-    secondary: {
-      bg: 'bg-bagua-secondary/10',
-      text: 'text-bagua-secondary',
-      border: 'border-bagua-secondary/20',
-      hover: 'group-hover:bg-bagua-secondary',
-      hoverText: 'group-hover:text-white',
-    },
-    accent: {
-      bg: 'bg-bagua-accent/10',
-      text: 'text-bagua-accent',
-      border: 'border-bagua-accent/20',
-      hover: 'group-hover:bg-bagua-accent',
-      hoverText: 'group-hover:text-white',
-    },
+    gold: { bg: 'bg-gold-500/10', text: 'text-gold-400', border: 'border-gold-500/20' },
+    jade: { bg: 'bg-jade-500/10', text: 'text-jade-300', border: 'border-jade-500/20' },
+    vermilion: { bg: 'bg-vermilion-500/10', text: 'text-vermilion-300', border: 'border-vermilion-500/20' },
   }
-  const colors = colorMap[color]
+  const c = colorMap[hue]
   return (
-    <div
-      className="group glass-card card-hover relative overflow-hidden rounded-card border border-transparent p-8 text-center animate-fade-up"
-      style={{ animationDelay: `${delay * 100}ms` }}
-    >
-      <div className={`mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl ${colors.bg} ${colors.text} transition-all duration-300 ${colors.hover} ${colors.hoverText}`}>
+    <div className="card-base card-hover p-8">
+      <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${c.bg} ${c.text} border ${c.border}`}>
         {icon}
       </div>
-      <h3 className="font-display text-lg font-bold text-bagua-text">{title}</h3>
-      <p className="mt-3 font-body text-sm leading-relaxed text-bagua-muted">{description}</p>
+      <h3 className="mt-6 font-display text-lg font-medium text-ink-50">{title}</h3>
+      <p className="mt-3 font-body text-sm leading-relaxed text-ink-400">{description}</p>
     </div>
   )
 }

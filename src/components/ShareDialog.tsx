@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useHistoryStore } from '@/store/history'
-import { X, Copy, Check, Link as LinkIcon } from 'lucide-react'
+import { X, Copy, Check, Link as LinkIcon } from '@/components/icons'
 
 export function ShareDialog({ recordId, onClose }: { recordId: string; onClose: () => void }) {
   const records = useHistoryStore(s => s.records)

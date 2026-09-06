@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Settings as SettingsIcon } from 'lucide-react'
+import { ArrowLeft, Settings as SettingsIcon } from '@/components/icons'
 
 export default function SettingsPage() {
   const [defaultMethod, setDefaultMethod] = useState<'coins' | 'yarrow' | 'manual'>('coins')

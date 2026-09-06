@@ -85,7 +85,7 @@
     },
     "symbol": "☰☰",
     "meaning": "乾为天，象征刚健、创造、主动。天行健，君子以自强不息。",
-    "modernInsight": "乾为天，象征刚健、创造、主动。天行健，君子以自强不息。",
+    "modernInsight": "乾为纯阳之卦，象征刚健与创始。天行健，君子当法天之不息，自强而不息，奋发而不止。此卦利于开创、领导、决策，唯忌过刚易折，宜刚柔并济。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -181,7 +181,7 @@
     },
     "symbol": "☷☷",
     "meaning": "坤为地，象征柔顺、承载、被动。地势坤，君子以厚德载物。",
-    "modernInsight": "坤为地，象征柔顺、承载、被动。地势坤，君子以厚德载物。",
+    "modernInsight": "坤为纯阴之卦，象征包容与承载。地势坤，君子当厚德以载物，柔顺而不逆。此卦利于配合、辅佐、积累，宜顺势而为，静待时机。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -282,7 +282,7 @@
     },
     "symbol": "☵☳",
     "meaning": "屯象征万物始生之难，如草木初生，艰难萌生。",
-    "modernInsight": "屯象征万物始生之难，如草木初生，艰难萌生。",
+    "modernInsight": "屯者，物之初生也。雷在水上，动而险。初创艰难，宜守正待时，不可冒进。得此卦者宜求师问友，积蓄力量。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -383,7 +383,7 @@
     },
     "symbol": "☶☵",
     "meaning": "蒙象征蒙昧无知，如山下有泉，需要启蒙教化。",
-    "modernInsight": "蒙象征蒙昧无知，如山下有泉，需要启蒙教化。",
+    "modernInsight": "蒙者，稚也。山下有泉，蒙昧待启。此卦利于求教、启蒙。教者当严，学者当诚，去其蒙而开其智。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -484,7 +484,7 @@
     },
     "symbol": "☵☰",
     "meaning": "需象征等待，云上于天，待时而降。",
-    "modernInsight": "需象征等待，云上于天，待时而降。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "需者，须也，等待也。水在天上，云升而未雨。此卦利于守静待机，不可强求。等待不是消极，而是蓄势。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -585,7 +585,7 @@
     },
     "symbol": "☰☵",
     "meaning": "讼象征争讼，天与水违行，意见相违。",
-    "modernInsight": "讼象征争讼，天与水违行，意见相违。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "讼者，争也。天与水背道而行。此卦警示争端已起，宜止争息讼，退让为上，切忌固执己见。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -686,7 +686,7 @@
     },
     "symbol": "☷☵",
     "meaning": "师象征军队，地中有水，聚众之象。",
-    "modernInsight": "师象征军队，地中有水，聚众之象。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "师者，兵众也。地中有水，兵藏于民。此卦利于治军、任将、整治。统帅须正，师出有名。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -787,7 +787,7 @@
     },
     "symbol": "☵☷",
     "meaning": "比象征亲比，地上有水，水亲比于地。",
-    "modernInsight": "比象征亲比，地上有水，水亲比于地。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "比者，亲辅也。水在地上，亲比相辅。此卦利于结盟、亲近、协作。上下相亲，事业可成。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -888,7 +888,7 @@
     },
     "symbol": "☴☰",
     "meaning": "小畜象征小有蓄积，风行天上，密云不雨。",
-    "modernInsight": "小畜象征小有蓄积，风行天上，密云不雨。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "小畜者，以柔制刚也。风行天上，蓄养小者。此卦利于小规模积累，宜以柔克刚，待时而动。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -989,7 +989,7 @@
     },
     "symbol": "☰☱",
     "meaning": "履象征践履，上天下泽，辨上下之分。",
-    "modernInsight": "履象征践履，上天下泽，辨上下之分。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "履者，礼也，谨慎行事也。天在上，泽在下，礼行而天下定。此卦警示如履薄冰，须守礼守分。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1090,7 +1090,7 @@
     },
     "symbol": "☷☰",
     "meaning": "泰象征通泰，天地交合，万物亨通。",
-    "modernInsight": "泰象征通泰，天地交合，万物亨通。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "泰者，通泰也。天地相交，万物通泰。此卦大吉，利于诸事。但泰极而否，需居安思危。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1191,7 +1191,7 @@
     },
     "symbol": "☰☷",
     "meaning": "否象征否塞，天地不交，万物不通。",
-    "modernInsight": "否象征否塞，天地不交，万物不通。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "否者，闭塞也。天地不交，万物不通。此卦警示困顿之境，宜静守待变，不可妄动。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1292,7 +1292,7 @@
     },
     "symbol": "☰☲",
     "meaning": "同人象征和同于人，天与火同明，志同则合。",
-    "modernInsight": "同人象征和同于人，天与火同明，志同则合。",
+    "modernInsight": "同人者，与人和同也。火焰向上，同心协力。此卦利于求同存异，团结合作，事业可成。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1393,7 +1393,7 @@
     },
     "symbol": "☲☰",
     "meaning": "大有象征大有所获，火在天上，光明盛大。",
-    "modernInsight": "大有象征大有所获，火在天上，光明盛大。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "大有者，大富有也。火在天上，普照万物。此卦大吉，富有而能谦，则可长保。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1494,7 +1494,7 @@
     },
     "symbol": "☷☶",
     "meaning": "谦象征谦虚，地中有山，内高外卑。",
-    "modernInsight": "谦象征谦虚，地中有山，内高外卑。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "谦者，谦逊也。地中有山，谦下而不自满。此卦大吉，谦则受益，满则招损。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1595,7 +1595,7 @@
     },
     "symbol": "☳☷",
     "meaning": "豫象征喜乐，雷出地奋，万物舒畅。",
-    "modernInsight": "豫象征喜乐，雷出地奋，万物舒畅。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "豫者，预备而乐也。雷出地奋，万物振奋。此卦利于谋划、进取，但豫乐不可过度。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1696,7 +1696,7 @@
     },
     "symbol": "☱☳",
     "meaning": "随象征随从，泽中有雷，动而喜悦。",
-    "modernInsight": "随象征随从，泽中有雷，动而喜悦。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "随者，随顺也。泽中有雷，随时而行。此卦利于随顺时势，灵活应变，不可固执。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1797,7 +1797,7 @@
     },
     "symbol": "☶☴",
     "meaning": "蛊象征蛊坏，山下有风，物坏虫生。",
-    "modernInsight": "蛊象征蛊坏，山下有风，物坏虫生。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "蛊者，弊乱而当整治也。山下有风，风过山下，整治弊乱。此卦利于革新、整顿、修复。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1898,7 +1898,7 @@
     },
     "symbol": "☷☱",
     "meaning": "临象征临莅，泽上有地，居高临下。",
-    "modernInsight": "临象征临莅，泽上有地，居高临下。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "临者，以上临下也。泽上有地，居高临下。此卦利于领导、教化、扩展，宜积极进取。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -1999,7 +1999,7 @@
     },
     "symbol": "☴☷",
     "meaning": "观象征观瞻，风行地上，遍观万物。",
-    "modernInsight": "观象征观瞻，风行地上，遍观万物。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "观者，观察也。风行地上，仰观俯察。此卦利于观察、反省、修身，不宜妄动。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2100,7 +2100,7 @@
     },
     "symbol": "☲☳",
     "meaning": "噬嗑象征咬合，雷电交加，明罚敕法。",
-    "modernInsight": "噬嗑象征咬合，雷电交加，明罚敕法。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "噬嗑者，咬合也。雷电交加，明察秋毫。此卦利于决断、排除障碍，行动果断。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2201,7 +2201,7 @@
     },
     "symbol": "☶☲",
     "meaning": "贲象征文饰，山下有火，文明以止。",
-    "modernInsight": "贲象征文饰，山下有火，文明以止。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "贲者，文饰也。山下有火，文饰光明。此卦利于装点、修饰、文化之事。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2302,7 +2302,7 @@
     },
     "symbol": "☶☷",
     "meaning": "剥象征剥落，山附于地，阴长阳消。",
-    "modernInsight": "剥象征剥落，山附于地，阴长阳消。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "剥者，剥落也。山附于地，剥而不复。此卦警示衰败之象，宜守不宜进。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2403,7 +2403,7 @@
     },
     "symbol": "☷☳",
     "meaning": "复象征回复，雷在地中，一阳来复。",
-    "modernInsight": "复象征回复，雷在地中，一阳来复。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "复者，反还也。雷在地中，一阳来复。此卦利于复兴、回归、转机。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2504,7 +2504,7 @@
     },
     "symbol": "☰☳",
     "meaning": "无妄象征不妄为，天下雷行，物与无妄。",
-    "modernInsight": "无妄象征不妄为，天下雷行，物与无妄。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "无妄者，至诚无妄也。天雷无妄，无虚无伪。此卦利于真诚、坦荡，忌妄为。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2605,7 +2605,7 @@
     },
     "symbol": "☶☰",
     "meaning": "大畜象征大蓄积，天在山中，蓄积深厚。",
-    "modernInsight": "大畜象征大蓄积，天在山中，蓄积深厚。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "大畜者，大有积蓄也。山天大畜，蓄养大有。此卦利于积累、涵养、厚积薄发。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2706,7 +2706,7 @@
     },
     "symbol": "☶☳",
     "meaning": "颐象征颐养，山下有雷，动而养正。",
-    "modernInsight": "颐象征颐养，山下有雷，动而养正。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "颐者，养也。山雷颐，养正则吉。此卦利于养生、养德、养才。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2807,7 +2807,7 @@
     },
     "symbol": "☱☴",
     "meaning": "大过象征大过越，泽灭木，刚过而中。",
-    "modernInsight": "大过象征大过越，泽灭木，刚过而中。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "大过者，大有过越也。泽灭木，大有过。此卦警示非常之时，宜非常之举。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2902,7 +2902,7 @@
     },
     "symbol": "☵☵",
     "meaning": "坎象征险陷，水洊至，重险之象。",
-    "modernInsight": "坎象征险陷，水洊至，重险之象。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "坎者，重险也。水洊至，险中有险。此卦警示困境重重，宜以刚济险。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -2997,7 +2997,7 @@
     },
     "symbol": "☲☲",
     "meaning": "离象征附丽，明两作，光明相继。",
-    "modernInsight": "离象征附丽，明两作，光明相继。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "离者，明也，丽也。火丽乎上，光明相继。此卦利于附丽、光辉、文明。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3098,7 +3098,7 @@
     },
     "symbol": "☱☶",
     "meaning": "咸象征感应，山上有泽，二气感应。",
-    "modernInsight": "咸象征感应，山上有泽，二气感应。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "咸者，感也。泽山咸，感应相和。此卦利于人际关系、感应互通。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3199,7 +3199,7 @@
     },
     "symbol": "☳☴",
     "meaning": "恒象征恒久，雷风相与，长久不变。",
-    "modernInsight": "恒象征恒久，雷风相与，长久不变。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "恒者，常久也。雷风恒，恒久不变。此卦利于守常、持久、合乎常道。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3300,7 +3300,7 @@
     },
     "symbol": "☰☶",
     "meaning": "遁象征退避，天下有山，君子远小人。",
-    "modernInsight": "遁象征退避，天下有山，君子远小人。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "遁者，退避也。天山遁，退而避世。此卦利于退让、避祸、知进退。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3401,7 +3401,7 @@
     },
     "symbol": "☳☰",
     "meaning": "大壮象征强盛，雷在天上，声势浩大。",
-    "modernInsight": "大壮象征强盛，雷在天上，声势浩大。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "大壮者，阳气壮盛也。雷在天上，大壮有力。此卦利于进取、壮大事物。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3502,7 +3502,7 @@
     },
     "symbol": "☲☷",
     "meaning": "晋象征进升，明出地上，光明上进。",
-    "modernInsight": "晋象征进升，明出地上，光明上进。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "晋者，进也。明出地上，旭日东升。此卦利于晋升、进取、光明在前。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3603,7 +3603,7 @@
     },
     "symbol": "☷☲",
     "meaning": "明夷象征光明受伤，明入地中，韬光养晦。",
-    "modernInsight": "明夷象征光明受伤，明入地中，韬光养晦。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "明夷者，明而受伤也。地中有火，明入地中。此卦警示光明受损，宜韬光养晦。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3704,7 +3704,7 @@
     },
     "symbol": "☴☲",
     "meaning": "家人象征家庭，风自火出，家道正则天下定。",
-    "modernInsight": "家人象征家庭，风自火出，家道正则天下定。",
+    "modernInsight": "家人者，一家之内也。风火家人，治家之道。此卦利于治家、齐家、和睦。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3805,7 +3805,7 @@
     },
     "symbol": "☲☱",
     "meaning": "睽象征乖离，上火下泽，二女同居志不同。",
-    "modernInsight": "睽象征乖离，上火下泽，二女同居志不同。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "睽者，背离也。火泽睽，相违相背。此卦利于求同存异，调和分歧。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -3906,7 +3906,7 @@
     },
     "symbol": "☵☶",
     "meaning": "蹇象征艰难，山上有水，见险而止。",
-    "modernInsight": "蹇象征艰难，山上有水，见险而止。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "蹇者，难也。山上水，险阻在前。此卦警示前行困难，宜止而后进。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4007,7 +4007,7 @@
     },
     "symbol": "☳☵",
     "meaning": "解象征解脱，雷雨作，险难解散。",
-    "modernInsight": "解象征解脱，雷雨作，险难解散。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "解者，缓解也。雷水解，险难解散。此卦利于解除困境、消除障碍。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4108,7 +4108,7 @@
     },
     "symbol": "☶☱",
     "meaning": "损象征减损，山下有泽，损下益上。",
-    "modernInsight": "损象征减损，山下有泽，损下益上。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "损者，减损也。山泽损，损下益上。此卦利于减损、补益、节约。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4209,7 +4209,7 @@
     },
     "symbol": "☴☳",
     "meaning": "益象征增益，风雷相助，损上益下。",
-    "modernInsight": "益象征增益，风雷相助，损上益下。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "益者，增益也。风雷益，损上益下。此卦利于增益、扩大、惠及他人。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4310,7 +4310,7 @@
     },
     "symbol": "☱☰",
     "meaning": "夬象征决断，泽上于天，刚决柔也。",
-    "modernInsight": "夬象征决断，泽上于天，刚决柔也。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "夬者，决也。泽天夬，决断而行。此卦利于决断、果决、去除羁绊。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4411,7 +4411,7 @@
     },
     "symbol": "☰☴",
     "meaning": "姤象征相遇，天下有风，柔遇刚也。",
-    "modernInsight": "姤象征相遇，天下有风，柔遇刚也。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "姤者，遇也。天风姤，阴气初生。此卦警示阴气渐长，宜警惕防范。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4512,7 +4512,7 @@
     },
     "symbol": "☱☷",
     "meaning": "萃象征聚集，泽上于地，万物汇聚。",
-    "modernInsight": "萃象征聚集，泽上于地，万物汇聚。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "萃者，聚也。泽地萃，人才荟萃。此卦利于聚集、招揽人才。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4613,7 +4613,7 @@
     },
     "symbol": "☷☴",
     "meaning": "升象征上升，地中生木，积小高大。",
-    "modernInsight": "升象征上升，地中生木，积小高大。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "升者，向上也。地风升，木生于地。此卦利于上升、晋升、循序渐进。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4714,7 +4714,7 @@
     },
     "symbol": "☱☵",
     "meaning": "困象征困穷，泽无水，君子致命遂志。",
-    "modernInsight": "困象征困穷，泽无水，君子致命遂志。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "困者，困顿也。泽水困，水在泽下。此卦警示困境，宜守志待时。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4815,7 +4815,7 @@
     },
     "symbol": "☵☴",
     "meaning": "井象征井养，木上有水，养而不穷。",
-    "modernInsight": "井象征井养，木上有水，养而不穷。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "井者，水井也。风水井，井养而不穷。此卦利于涵养、滋养、不竭。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -4916,7 +4916,7 @@
     },
     "symbol": "☱☲",
     "meaning": "革象征变革，泽中有火，水火相息。",
-    "modernInsight": "革象征变革，泽中有火，水火相息。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "革者，变革也。泽火革，变革图新。此卦利于革新、变革、突破。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5017,7 +5017,7 @@
     },
     "symbol": "☲☴",
     "meaning": "鼎象征鼎新，木上有火，亨饪养贤。",
-    "modernInsight": "鼎象征鼎新，木上有火，亨饪养贤。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "鼎者，鼎器也。火风鼎，鼎新革故。此卦利于任贤、立法、立基业。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5112,7 +5112,7 @@
     },
     "symbol": "☳☳",
     "meaning": "震象征震动，洊雷震震，君子修省。",
-    "modernInsight": "震象征震动，洊雷震震，君子修省。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "震者，雷也。震来虩虩，警示惊醒。此卦利于警醒、奋发、雷厉风行。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5207,7 +5207,7 @@
     },
     "symbol": "☶☶",
     "meaning": "艮象征静止，兼山艮止，止于其所。",
-    "modernInsight": "艮象征静止，兼山艮止，止于其所。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "艮者，止也。山止于地，止于至善。此卦利于止步、静守、知止。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5308,7 +5308,7 @@
     },
     "symbol": "☴☶",
     "meaning": "渐象征渐进，山上有木，循序渐进。",
-    "modernInsight": "渐象征渐进，山上有木，循序渐进。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "渐者，渐进也。风山渐，循序渐进。此卦利于渐进、有序、徐徐图之。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5409,7 +5409,7 @@
     },
     "symbol": "☳☱",
     "meaning": "归妹象征嫁娶，泽上有雷，少女从长男。",
-    "modernInsight": "归妹象征嫁娶，泽上有雷，少女从长男。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "归妹者，归嫁也。雷泽归妹，嫁娶之象。此卦利于婚姻、归宿。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5510,7 +5510,7 @@
     },
     "symbol": "☳☲",
     "meaning": "丰象征丰盛，雷电皆至，明以动故丰。",
-    "modernInsight": "丰象征丰盛，雷电皆至，明以动故丰。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "丰者，盛大也。雷火丰，丰盛之极。此卦利于盛大、丰收，但盛极必衰。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5611,7 +5611,7 @@
     },
     "symbol": "☲☶",
     "meaning": "旅象征行旅，山上有火，明慎用刑。",
-    "modernInsight": "旅象征行旅，山上有火，明慎用刑。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "旅者，旅行也。火山旅，行旅在外。此卦利于行旅、漂泊、谨慎。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5706,7 +5706,7 @@
     },
     "symbol": "☴☴",
     "meaning": "巽象征顺从，随风巽巽，申命行事。",
-    "modernInsight": "巽象征顺从，随风巽巽，申命行事。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "巽者，风也，谦入也。随风巽，谦逊入于。此卦利于顺入、谦逊、文教。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5801,7 +5801,7 @@
     },
     "symbol": "☱☱",
     "meaning": "兑象征喜悦，丽泽兑悦，朋友讲习。",
-    "modernInsight": "兑象征喜悦，丽泽兑悦，朋友讲习。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "兑者，悦也。兑为泽，两泽相悦。此卦利于和悦、言说、人际。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -5902,7 +5902,7 @@
     },
     "symbol": "☴☵",
     "meaning": "涣象征涣散，风行水上，散而不穷。",
-    "modernInsight": "涣象征涣散，风行水上，散而不穷。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "涣者，散也。风水涣，散而复聚。此卦利于涣散、流通、解除郁结。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -6003,7 +6003,7 @@
     },
     "symbol": "☵☱",
     "meaning": "节象征节制，泽上有水，以制度节。",
-    "modernInsight": "节象征节制，泽上有水，以制度节。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "节者，节制也。水泽节，节制有度。此卦利于节制、节约、有度。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -6104,7 +6104,7 @@
     },
     "symbol": "☴☱",
     "meaning": "中孚象征诚信，泽上有风，诚信感物。",
-    "modernInsight": "中孚象征诚信，泽上有风，诚信感物。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "中孚者，至诚信也。风泽中孚，信及豚鱼。此卦大吉，诚信可通神。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -6205,7 +6205,7 @@
     },
     "symbol": "☳☶",
     "meaning": "小过象征小有过越，山上有雷，过乎恭哀俭。",
-    "modernInsight": "小过象征小有过越，山上有雷，过乎恭哀俭。",
+    "modernInsight": "小过者，小有过也。雷山小过，小有过越。此卦警示小过无害，谨防大过。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -6306,7 +6306,7 @@
     },
     "symbol": "☵☲",
     "meaning": "既济象征已成，水在火上，事成物济。",
-    "modernInsight": "既济象征已成，水在火上，事成物济。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "既济者，已成也。水火既济，万事俱备。此卦利于诸事已成，但成功之后需防未济。",
     "metadata": {
       "primary": "iching64",
       "sources": [
@@ -6407,7 +6407,7 @@
     },
     "symbol": "☲☵",
     "meaning": "未济象征未成，火在水上，事未成而待济。",
-    "modernInsight": "未济象征未成，火在水上，事未成而待济。——结合时代背景，深入理解卦象的现代意义。",
+    "modernInsight": "未济者，未成也。火水未济，事未完成。此卦警示事未竟，需继续努力。",
     "metadata": {
       "primary": "iching64",
       "sources": [

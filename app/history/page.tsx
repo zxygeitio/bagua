@@ -5,7 +5,7 @@ import { useHistoryStore } from '@/store/history'
 import { getGuaById } from '@/lib/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SyncIndicator } from '@/components/SyncIndicator'
-import { ArrowLeft, Star, Trash2, Search, Sparkles } from 'lucide-react'
+import { ArrowLeft, Star, Trash2, Search, Sparkles } from '@/components/icons'
 
 export default function HistoryPage() {
   const records = useHistoryStore(s => s.records)

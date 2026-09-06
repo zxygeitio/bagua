@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Sparkles, ChevronRight, Leaf, Hand } from 'lucide-react'
+import { Sparkles, ChevronRight, Leaf, Hand } from '@/components/icons'
 import { performDivination } from '@/services/divination.service'
 import { useHistoryStore } from '@/store/history'
 
