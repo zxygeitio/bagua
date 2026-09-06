@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useHistoryStore } from '@/store/history'
 import { getGuaById } from '@/lib/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { SyncIndicator } from '@/components/SyncIndicator'
 import { ArrowLeft, Star, Trash2, Search, Sparkles } from 'lucide-react'
 
 export default function HistoryPage() {
@@ -42,7 +43,10 @@ export default function HistoryPage() {
             <ArrowLeft className="h-4 w-4" />
             返回首页
           </Link>
-          <span className="seal text-sm">历史</span>
+          <div className="flex items-center gap-3">
+            <SyncIndicator />
+            <span className="seal text-sm">历史</span>
+          </div>
         </div>
       </header>
 

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useHistoryStore } from '@/store/history'
 import { getGuaById } from '@/lib/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { SyncIndicator } from '@/components/SyncIndicator'
+import { ShareDialog } from '@/components/ShareDialog'
 import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles } from 'lucide-react'
 
 type Tab = 'ben' | 'bian' | 'hu' | 'dui' | 'zong'
@@ -21,6 +23,7 @@ export default function ResultPage() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<Tab>('ben')
   const [recordId, setRecordId] = useState<string | null>(null)
+  const [showShare, setShowShare] = useState(false)
   const records = useHistoryStore(s => s.records)
   const toggleFavorite = useHistoryStore(s => s.toggleFavorite)
   const removeRecord = useHistoryStore(s => s.removeRecord)
@@ -70,6 +73,10 @@ export default function ResultPage() {
             返回首页
           </Link>
           <div className="flex items-center gap-2">
+            <SyncIndicator />
+            <span className="hidden font-body text-xs text-bagua-muted md:inline">
+              {date} · {methodLabel}
+            </span>
             <button
               onClick={() => toggleFavorite(record.id)}
               className={`rounded-full p-2 transition ${record.favorite ? 'bg-bagua-accent/10 text-bagua-accent' : 'text-bagua-muted hover:bg-bagua-border/30'}`}
@@ -181,14 +188,7 @@ export default function ResultPage() {
             查看历史
           </Link>
           <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({ title: `bagua · ${benGua?.name}`, text: `我刚起了一卦：${benGua?.name}`, url: window.location.href }).catch(() => {})
-              } else {
-                navigator.clipboard?.writeText(window.location.href)
-                alert('链接已复制')
-              }
-            }}
+            onClick={() => setShowShare(true)}
             className="inline-flex items-center gap-2 rounded-button border border-bagua-border/40 bg-bagua-surface px-6 py-3 font-body font-medium text-bagua-text transition hover:bg-bagua-border/30"
           >
             <Share2 className="h-4 w-4" />
@@ -196,6 +196,10 @@ export default function ResultPage() {
           </button>
         </div>
       </section>
+
+      {showShare && (
+        <ShareDialog recordId={record.id} onClose={() => setShowShare(false)} />
+      )}
     </main>
   )
 }
