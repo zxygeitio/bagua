@@ -505,29 +505,39 @@
 /* ====================================================================
  * Scroll-triggered Reveal Animations
  * ==================================================================== */
-.reveal {
+.reveal-base {
+  /* SSR-safe: 默认显示，JS hydration 后再用 class 控制 */
+  opacity: 1;
+  transform: none;
+}
+
+/* 当 .reveal-init 类被 JS 添加时，隐藏元素准备动画 */
+.reveal-base.reveal-init {
   opacity: 0;
   transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
-.reveal-up { transform: translate3d(0, 32px, 0); }
-.reveal-down { transform: translate3d(0, -32px, 0); }
-.reveal-left { transform: translate3d(-32px, 0, 0); }
-.reveal-right { transform: translate3d(32px, 0, 0); }
-.reveal-scale { transform: scale(0.92); }
-.reveal-fade { transform: none; }
-.reveal-none { transform: none; }
+.reveal-base.reveal-init.reveal-up { transform: translate3d(0, 32px, 0); }
+.reveal-base.reveal-init.reveal-down { transform: translate3d(0, -32px, 0); }
+.reveal-base.reveal-init.reveal-left { transform: translate3d(-32px, 0, 0); }
+.reveal-base.reveal-init.reveal-right { transform: translate3d(32px, 0, 0); }
+.reveal-base.reveal-init.reveal-scale { transform: scale(0.92); }
 
-.reveal-shown {
+.reveal-base.reveal-shown {
   opacity: 1;
   transform: none;
 }
 
 /* 减弱动态效果偏好 */
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal-base.reveal-init,
+  .reveal-base.reveal-init.reveal-up,
+  .reveal-base.reveal-init.reveal-down,
+  .reveal-base.reveal-init.reveal-left,
+  .reveal-base.reveal-init.reveal-right,
+  .reveal-base.reveal-init.reveal-scale {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
