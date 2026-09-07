@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { BaguaCompass } from '@/components/home/BaguaCompass'
 import { DailyOracle } from '@/components/hexagram/DailyOracle'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { Reveal } from '@/components/Reveal'
 import {
   ArrowRight,
   Coins,
@@ -67,143 +68,158 @@ export default function HomePage() {
         <section className="relative mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-20">
           <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
             {/* 左：标题 + CTA */}
-            <div className="enter-up">
-              <p className="section-kicker">周易 · 草纸刻本</p>
-              <h1 className="mt-5 font-display text-7xl leading-none tracking-[0.06em] text-bagua-text md:text-[8rem]">
-                八卦
-              </h1>
-              <div className="paper-rule-fade mt-5 max-w-xs" />
-              <p className="prose-body mt-6 max-w-md text-pretty text-bagua-muted">
-                三钱成爻，梅花取数。动爻多少，决定读卦辞还是爻辞。
-                一个面向初学者与读卦者的现代工具——保留古意，不拘仪式。
-              </p>
-
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Link href="/divine" className="btn-primary">
-                  <Wand className="h-4 w-4" />
-                  起卦问事
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href="/hexagrams" className="btn-secondary">
-                  六十四卦
-                </Link>
-                <Link href="/learn" className="btn-secondary">
-                  易学入门
-                </Link>
-              </div>
-
-              {/* 场景 chip */}
-              <div className="mt-7">
-                <p className="mb-2 font-display text-[10px] tracking-[0.28em] text-bagua-muted">
-                  或从问事起
+            <div>
+              <Reveal direction="left">
+                <p className="section-kicker">周易 · 草纸刻本</p>
+                <h1 className="mt-5 font-display text-7xl leading-none tracking-[0.06em] text-bagua-text md:text-[8rem]">
+                  八卦
+                </h1>
+              </Reveal>
+              <Reveal delay={150} direction="left">
+                <div className="paper-rule-fade mt-5 max-w-xs" />
+                <p className="prose-body mt-6 max-w-md text-pretty text-bagua-muted">
+                  三钱成爻，梅花取数。动爻多少，决定读卦辞还是爻辞。
+                  一个面向初学者与读卦者的现代工具——保留古意，不拘仪式。
                 </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {SCENARIO_CARDS.map((s) => {
-                    const Icon = s.Icon
-                    return (
-                      <Link
-                        key={s.tag}
-                        href="/divine"
-                        className="btn-press group flex items-center gap-1.5 border-2 border-bagua-fiber bg-bagua-surface px-2.5 py-1 hover:border-bagua-text hover:bg-bagua-wash"
-                      >
-                        <Icon className="h-3.5 w-3.5 text-bagua-primary" />
-                        <span className="font-display text-xs tracking-widest text-bagua-text">
-                          {s.tag}
-                        </span>
-                        <span className="hidden font-body text-[10px] text-bagua-muted md:inline">
-                          {s.hint}
-                        </span>
-                      </Link>
-                    )
-                  })}
+              </Reveal>
+
+              <Reveal delay={300} direction="up">
+                <div className="mt-7 flex flex-wrap items-center gap-3">
+                  <Link href="/divine" className="btn-primary glow-pulse">
+                    <Wand className="h-4 w-4" />
+                    起卦问事
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link href="/hexagrams" className="btn-secondary draw-underline">
+                    六十四卦
+                  </Link>
+                  <Link href="/learn" className="btn-secondary draw-underline">
+                    易学入门
+                  </Link>
                 </div>
-              </div>
+              </Reveal>
+
+              <Reveal delay={450} direction="up">
+                <div className="mt-7">
+                  <p className="mb-2 font-display text-[10px] tracking-[0.28em] text-bagua-muted">
+                    或从问事起
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SCENARIO_CARDS.map((s) => {
+                      const Icon = s.Icon
+                      return (
+                        <Link
+                          key={s.tag}
+                          href="/divine"
+                          className="btn-press group flex items-center gap-1.5 border-2 border-bagua-fiber bg-bagua-surface px-2.5 py-1 hover:border-bagua-text hover:bg-bagua-wash"
+                        >
+                          <Icon className="h-3.5 w-3.5 text-bagua-primary" />
+                          <span className="font-display text-xs tracking-widest text-bagua-text">
+                            {s.tag}
+                          </span>
+                          <span className="hidden font-body text-[10px] text-bagua-muted md:inline">
+                            {s.hint}
+                          </span>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              </Reveal>
             </div>
 
             {/* 右：太极曼陀罗 */}
-            <div className="enter-up stagger-2 hidden justify-self-center md:block">
-              <BaguaCompass />
-            </div>
+            <Reveal delay={200} direction="scale">
+              <div className="hidden justify-self-center md:block">
+                <BaguaCompass />
+              </div>
+            </Reveal>
           </div>
 
           {/* Daily Oracle — 全宽 */}
-          <div className="mt-12 enter-up stagger-3 max-w-2xl">
-            <DailyOracle />
-          </div>
+          <Reveal delay={600} direction="up">
+            <div className="mt-12 max-w-2xl">
+              <DailyOracle />
+            </div>
+          </Reveal>
         </section>
 
         {/* ========== 入口卡片 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-4 md:px-8">
-          <div className="enter-up grid gap-3 md:grid-cols-3">
-            {METHOD_SHORTCUTS.map((m, i) => {
-              const Icon = m.Icon
-              return (
-                <Link
-                  key={m.href}
-                  href={m.href}
-                  style={{ animationDelay: `${i * 80}ms` }}
-                  className="paper-panel enter-up group flex items-center gap-4 p-5 hover:border-bagua-text"
-                >
-                  <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-wash text-bagua-primary">
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-display text-base tracking-wider">
-                        {m.title}
+          <Reveal>
+            <div className="grid gap-3 md:grid-cols-3">
+              {METHOD_SHORTCUTS.map((m, i) => {
+                const Icon = m.Icon
+                return (
+                  <Reveal key={m.href} delay={i * 100} direction="up">
+                    <Link
+                      href={m.href}
+                      className="paper-panel lift group flex items-center gap-4 p-5"
+                    >
+                      <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-wash text-bagua-primary transition group-hover:scale-110 group-hover:rotate-3">
+                        <Icon className="h-6 w-6" />
                       </span>
-                      {m.recommended && (
-                        <span className="border-2 border-bagua-text bg-bagua-primary px-1.5 py-0.5 font-display text-[9px] tracking-widest text-bagua-surface">
-                          推荐
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 font-body text-xs text-bagua-muted">
-                      {m.desc}
-                    </p>
-                  </div>
-                  <ArrowRight className="h-4 w-4 flex-shrink-0 text-bagua-muted transition group-hover:translate-x-1 group-hover:text-bagua-primary" />
-                </Link>
-              )
-            })}
-          </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-display text-base tracking-wider">
+                            {m.title}
+                          </span>
+                          {m.recommended && (
+                            <span className="border-2 border-bagua-text bg-bagua-primary px-1.5 py-0.5 font-display text-[9px] tracking-widest text-bagua-surface">
+                              推荐
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 font-body text-xs text-bagua-muted">
+                          {m.desc}
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 flex-shrink-0 text-bagua-muted transition group-hover:translate-x-1 group-hover:text-bagua-primary" />
+                    </Link>
+                  </Reveal>
+                )
+              })}
+            </div>
+          </Reveal>
         </section>
 
         {/* ========== 五行索引 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-10 md:px-8">
-          <SectionHeader
-            index="01"
-            title="五行索引"
-            desc="万物皆五行所生，卦亦不离。点击进入其代表卦。"
-            link={{ href: '/hexagrams', label: '全部 64 卦' }}
-          />
-          <div className="enter-up grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <Reveal>
+            <SectionHeader
+              index="01"
+              title="五行索引"
+              desc="万物皆五行所生，卦亦不离。点击进入其代表卦。"
+              link={{ href: '/hexagrams', label: '全部 64 卦' }}
+            />
+          </Reveal>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
             {WUXING.map(({ tag, gua: id, color, label, desc }, i) => {
               const gua = getGuaById(id)
               const Icon = WUXING_ICON[color as keyof typeof WUXING_ICON]
               const txt = WUXING_TEXT[color as keyof typeof WUXING_TEXT]
               if (!gua) return null
               return (
-                <Link
-                  key={tag}
-                  href={`/hexagrams/${id}`}
-                  style={{ animationDelay: `${i * 70}ms` }}
-                  className="paper-panel enter-up group flex h-full flex-col items-center gap-2 p-5 hover:border-bagua-text"
-                >
-                  <Icon className={`h-7 w-7 ${txt}`} strokeWidth={1.5} />
-                  <div className="font-display text-2xl tracking-widest text-bagua-text">
-                    {tag}
-                  </div>
-                  <div className="my-1">
-                    <HexagramSymbol gua={gua} size="sm" />
-                  </div>
-                  <div className="font-display text-sm tracking-widest">
-                    {gua.name}
-                  </div>
-                  <p className="text-balance text-center font-body text-[10px] text-bagua-muted">
-                    {label} · {desc}
-                  </p>
-                </Link>
+                <Reveal key={tag} delay={i * 80} direction="up">
+                  <Link
+                    href={`/hexagrams/${id}`}
+                    className="paper-panel lift group flex h-full flex-col items-center gap-2 p-5"
+                  >
+                    <Icon className={`h-7 w-7 ${txt} transition group-hover:scale-110`} strokeWidth={1.5} />
+                    <div className="font-display text-2xl tracking-widest text-bagua-text">
+                      {tag}
+                    </div>
+                    <div className="my-1">
+                      <HexagramSymbol gua={gua} size="sm" />
+                    </div>
+                    <div className="font-display text-sm tracking-widest">
+                      {gua.name}
+                    </div>
+                    <p className="text-balance text-center font-body text-[10px] text-bagua-muted">
+                      {label} · {desc}
+                    </p>
+                  </Link>
+                </Reveal>
               )
             })}
           </div>
@@ -211,52 +227,58 @@ export default function HomePage() {
 
         {/* ========== 先天八卦方位 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-10 md:px-8">
-          <SectionHeader
-            index="02"
-            title="先天八卦方位"
-            desc="伏羲所作。乾南坤北、离东坎西，八方位以应天地之理。"
-            link={{ href: '/learn', label: '学习更多' }}
-          />
-          <div className="enter-up paper-panel flex justify-center px-6 py-12 md:px-12 md:py-16">
-            <BaguaCompass />
-          </div>
+          <Reveal>
+            <SectionHeader
+              index="02"
+              title="先天八卦方位"
+              desc="伏羲所作。乾南坤北、离东坎西，八方位以应天地之理。"
+              link={{ href: '/learn', label: '学习更多' }}
+            />
+          </Reveal>
+          <Reveal delay={200} direction="scale">
+            <div className="paper-panel flex justify-center px-6 py-12 md:px-12 md:py-16">
+              <BaguaCompass />
+            </div>
+          </Reveal>
         </section>
 
         {/* ========== 精选卦象 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-10 pb-20 md:px-8">
-          <SectionHeader
-            index="03"
-            title="精选卦象"
-            desc="64 卦中的几个关键节点：始、终、泰、复、未济。"
-            link={{ href: '/hexagrams', label: '查看全部' }}
-          />
-          <div className="enter-up grid grid-cols-2 gap-3 md:grid-cols-5">
+          <Reveal>
+            <SectionHeader
+              index="03"
+              title="精选卦象"
+              desc="64 卦中的几个关键节点：始、终、泰、复、未济。"
+              link={{ href: '/hexagrams', label: '查看全部' }}
+            />
+          </Reveal>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
             {FEATURED.map((id, i) => {
               const gua = getGuaById(id)
               if (!gua) return null
               return (
-                <Link
-                  key={id}
-                  href={`/hexagrams/${id}`}
-                  style={{ animationDelay: `${i * 80}ms` }}
-                  className="paper-panel enter-up group flex h-full flex-col items-center gap-2 p-5 hover:bg-bagua-wash"
-                >
-                  <div className="flex w-full items-center justify-between font-display text-[10px] tracking-widest text-bagua-muted">
-                    <span>#{id.toString().padStart(2, '0')}</span>
-                    {i === 0 && (
-                      <Star className="h-3 w-3 fill-bagua-primary text-bagua-primary" />
-                    )}
-                  </div>
-                  <div className="my-2 transition group-hover:scale-110">
-                    <HexagramSymbol gua={gua} size="md" />
-                  </div>
-                  <span className="font-display text-base tracking-widest group-hover:text-bagua-primary">
-                    {gua.name}
-                  </span>
-                  <p className="text-balance text-center font-body text-[11px] leading-relaxed text-bagua-muted">
-                    {gua.guaci}
-                  </p>
-                </Link>
+                <Reveal key={id} delay={i * 100} direction="up">
+                  <Link
+                    href={`/hexagrams/${id}`}
+                    className="paper-panel lift group flex h-full flex-col items-center gap-2 p-5"
+                  >
+                    <div className="flex w-full items-center justify-between font-display text-[10px] tracking-widest text-bagua-muted">
+                      <span>#{id.toString().padStart(2, '0')}</span>
+                      {i === 0 && (
+                        <Star className="h-3 w-3 fill-bagua-primary text-bagua-primary" />
+                      )}
+                    </div>
+                    <div className="my-2 transition group-hover:scale-110">
+                      <HexagramSymbol gua={gua} size="md" />
+                    </div>
+                    <span className="font-display text-base tracking-widest group-hover:text-bagua-primary">
+                      {gua.name}
+                    </span>
+                    <p className="text-balance text-center font-body text-[11px] leading-relaxed text-bagua-muted">
+                      {gua.guaci}
+                    </p>
+                  </Link>
+                </Reveal>
               )
             })}
           </div>

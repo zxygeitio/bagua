@@ -28,16 +28,43 @@ export function BaguaCompass() {
   return (
     <div className="relative mx-auto w-full max-w-[420px]">
       <svg viewBox={`0 0 ${size} ${size}`} className="w-full">
-        {/* 装饰双圆 */}
-        <circle
-          cx={center}
-          cy={center}
-          r={radius + 30}
-          fill="none"
-          stroke="var(--paper-fiber)"
-          strokeWidth="1"
-          opacity="0.5"
-        />
+        {/* 装饰双圆 · 慢速旋转（外环） */}
+        <g
+          style={{
+            transformOrigin: `${center}px ${center}px`,
+            transformBox: 'fill-box',
+            animation: 'spin-slow 60s linear infinite',
+          }}
+        >
+          <circle
+            cx={center}
+            cy={center}
+            r={radius + 30}
+            fill="none"
+            stroke="var(--paper-fiber)"
+            strokeWidth="1"
+            opacity="0.4"
+            strokeDasharray="2 6"
+          />
+        </g>
+        <g
+          style={{
+            transformOrigin: `${center}px ${center}px`,
+            transformBox: 'fill-box',
+            animation: 'spin-slow-reverse 80s linear infinite',
+          }}
+        >
+          <circle
+            cx={center}
+            cy={center}
+            r={radius - 30}
+            fill="none"
+            stroke="var(--paper-fiber)"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+            opacity="0.5"
+          />
+        </g>
         <circle
           cx={center}
           cy={center}
@@ -46,16 +73,6 @@ export function BaguaCompass() {
           stroke="var(--paper-ink)"
           strokeWidth="1.5"
           opacity="0.7"
-        />
-        <circle
-          cx={center}
-          cy={center}
-          r={radius - 30}
-          fill="none"
-          stroke="var(--paper-fiber)"
-          strokeWidth="1"
-          strokeDasharray="3 3"
-          opacity="0.5"
         />
 
         {/* 四正位刻度线 */}
@@ -90,10 +107,10 @@ export function BaguaCompass() {
             key={p.guaId}
             href={`/hexagrams/${p.guaId}`}
             style={{ left: `${xPct}%`, top: `${yPct}%` }}
-            className="group absolute flex w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+            className="group absolute flex w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-transform duration-300 hover:scale-110"
             title={p.desc}
           >
-            <span className="flex h-12 w-12 items-center justify-center border-4 border-bagua-text bg-bagua-surface font-display text-xl leading-none text-bagua-text transition group-hover:scale-110 group-hover:bg-bagua-primary group-hover:text-bagua-surface">
+            <span className="flex h-12 w-12 items-center justify-center border-4 border-bagua-text bg-bagua-surface font-display text-xl leading-none text-bagua-text transition group-hover:rotate-6 group-hover:bg-bagua-primary group-hover:text-bagua-surface">
               {p.label}
             </span>
             {gua && (
@@ -105,8 +122,13 @@ export function BaguaCompass() {
         )
       })}
 
-      {/* 中心太极 */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      {/* 中心太极 · 浮动 + 旋转 */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{
+          animation: 'float-y 6s ease-in-out infinite',
+        }}
+      >
         <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-bagua-text bg-bagua-wash shadow-soft">
           <svg viewBox="0 0 24 24" className="h-14 w-14 text-bagua-primary">
             <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />

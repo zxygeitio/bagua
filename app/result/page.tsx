@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { Reveal } from '@/components/Reveal'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { VerdictPanel } from '@/components/hexagram/VerdictPanel'
 import { ShareDialog } from '@/components/ShareDialog'
@@ -170,13 +171,16 @@ export default function ResultPage() {
 
         {/* ===== 朱熹判读 ===== */}
         {reading && (
-          <section className="enter-up stagger-2 mb-10">
-            <SectionHeader index="01" title="朱熹判读" desc="本卦两动爻，以上爻为主。" />
-            <VerdictPanel rule={reading.rule} verdicts={reading.verdicts} />
-          </section>
+          <Reveal>
+            <section className="mb-10">
+              <SectionHeader index="01" title="朱熹判读" desc="本卦两动爻，以上爻为主。" />
+              <VerdictPanel rule={reading.rule} verdicts={reading.verdicts} />
+            </section>
+          </Reveal>
         )}
 
         {/* ===== 笔记 ===== */}
+        <Reveal delay={100}>
         <section className="enter-up stagger-3 mb-10">
           <SectionHeader
             index="02"
@@ -224,8 +228,10 @@ export default function ResultPage() {
             </div>
           </div>
         </section>
+        </Reveal>
 
         {/* ===== 五种卦变 ===== */}
+        <Reveal delay={200}>
         <section className="enter-up stagger-4 mb-10">
           <SectionHeader
             index="03"
@@ -276,32 +282,36 @@ export default function ResultPage() {
             )}
           </div>
         </section>
+        </Reveal>
 
         {/* ===== 卦辞 · 彖 · 象 · 现代启示 ===== */}
         {activeGua && (
+          <Reveal delay={300}>
           <section className="enter-up stagger-5 mb-10 space-y-6">
             <ClassicSection index="04" title="卦辞" body={activeGua.guaci} />
             <ClassicSection index="05" title="彖传" body={activeGua.tuanZhuan} larger />
             <ClassicSection index="06" title="象传" body={activeGua.daXiangZhuan} />
             <InsightSection index="07" title="现代启示" body={activeGua.modernInsight} />
           </section>
+          </Reveal>
         )}
 
         {/* ===== 六爻详情 ===== */}
         {activeTab === 'ben' && benGua && (
+          <Reveal delay={400}>
           <section className="enter-up stagger-6 mb-10">
             <SectionHeader index="08" title="六爻详情" desc="动爻处即是变化的关键。" />
             <ol className="space-y-3">
-              {[...benGua.yaos].reverse().map((yao) => {
+              {[...benGua.yaos].reverse().map((yao, i) => {
                 const isChanging = record.changingLinePositions.includes(yao.position)
                 const isPrimary = reading?.rule.primaryPositions[0] === yao.position
                 const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九'][yao.position - 1]
                 const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六'][yao.position - 1]
                 const label = yao.yinYang === 'yang' ? yaoLabelYang! : yaoLabelYin!
                 return (
+                  <Reveal key={yao.position} delay={i * 60} direction="left">
                   <li
-                    key={yao.position}
-                    className={`border-l-4 pl-4 transition ${
+                    className={`border-l-4 pl-4 transition hover:translate-x-1 ${
                       isPrimary
                         ? 'border-bagua-primary bg-bagua-wash py-3'
                         : isChanging
@@ -332,10 +342,12 @@ export default function ResultPage() {
                       《象》曰：{yao.xiangZhuan}
                     </p>
                   </li>
+                  </Reveal>
                 )
               })}
             </ol>
           </section>
+          </Reveal>
         )}
 
         {/* ===== 底部操作 ===== */}
