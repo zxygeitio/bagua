@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { HexagramMandala } from '@/components/learn/HexagramMandala'
 import { MethodCards } from '@/components/learn/MethodCards'
 import { ReadingGuide } from '@/components/learn/ReadingGuide'
 import { TrigramOverview } from '@/components/learn/TrigramCard'
@@ -23,6 +24,12 @@ export default function LearnPage() {
 
         <Section index="01" title="八卦总览" intro="卦象的基础是八卦。下表为每一卦的取象与卦德，点击可展开详细。">
           <TrigramOverview />
+        </Section>
+
+        <Section index="01.5" title="六十四卦曼陀罗" intro="按上卦分八区，每区八卦。悬停查看卦名，点击进入全文。">
+          <div className="flex justify-center">
+            <HexagramMandala />
+          </div>
         </Section>
 
         <Section index="02" title="五种起卦法" intro="不同方法对应不同的郑重程度。日常多以硬币法或时间起卦；想要郑重其事，可用蓍草法。">

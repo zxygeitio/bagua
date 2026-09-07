@@ -1,0 +1,33 @@
+{
+  "name": "八卦 · 易经占卜",
+  "short_name": "八卦",
+  "description": "周易草纸刻本 · 三钱成爻，梅花取数",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#E7D3A4",
+  "theme_color": "#B23A2A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "education"],
+  "lang": "zh-CN"
+}
