@@ -1,36 +1,22 @@
-import Link from 'next/link'
 import { HexagramGrid } from '@/components/hexagram/HexagramGrid'
+import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata = {
-  title: '64卦 · bagua',
+  title: '六十四卦 · bagua',
 }
 
 export default function HexagramsPage() {
   return (
-    <main className="min-h-screen bg-bagua-canvas">
-      <header className="border-b border-bagua-border/30 bg-bagua-surface/60 backdrop-blur-md">
-        <div className="container mx-auto flex items-center gap-3 px-6 py-4">
-          <Link
-            href="/"
-            className="font-body text-sm text-bagua-muted transition hover:text-bagua-text"
-          >
-            ← 返回首页
-          </Link>
+    <SiteShell eyebrow="HEXAGRAMS / 02">
+      <main className="mx-auto max-w-6xl px-4 py-8 md:px-6">
+        <h1 className="enter-up font-display text-4xl tracking-[0.16em] md:text-5xl">六十四卦</h1>
+        <p className="prose-body mt-3 text-bagua-muted">
+          周易全经。点开一格，读卦辞、彖传、象传与六爻。
+        </p>
+        <div className="mt-8 enter-up stagger-2">
+          <HexagramGrid />
         </div>
-      </header>
-
-      <section className="container mx-auto px-6 py-12">
-        <div className="mb-8">
-          <h1 className="font-display text-4xl font-bold text-bagua-text">
-            六十四卦
-          </h1>
-          <p className="mt-2 font-body text-bagua-muted">
-            周易全经 · 每卦含卦辞、彖传、象传、六爻爻辞
-          </p>
-        </div>
-
-        <HexagramGrid />
-      </section>
-    </main>
+      </main>
+    </SiteShell>
   )
 }

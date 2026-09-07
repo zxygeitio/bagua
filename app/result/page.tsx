@@ -1,13 +1,16 @@
 'use client'
-import { useState, useEffect } from 'react'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useHistoryStore } from '@/store/history'
-import { getGuaById } from '@/lib/iching'
+
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
-import { SyncIndicator } from '@/components/SyncIndicator'
 import { ShareDialog } from '@/components/ShareDialog'
-import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles, Check } from '@/components/icons'
+import { SiteShell } from '@/components/shared/SiteShell'
+import { SyncIndicator } from '@/components/SyncIndicator'
+import { Check, RefreshCw, Share2, Star, Trash2 } from '@/components/icons'
+import { getGuaById } from '@/lib/iching'
+import { useHistoryStore } from '@/store/history'
 
 type Tab = 'ben' | 'bian' | 'hu' | 'dui' | 'zong'
 
@@ -26,10 +29,10 @@ export default function ResultPage() {
   const [showShare, setShowShare] = useState(false)
   const [noteDraft, setNoteDraft] = useState('')
   const [noteSaved, setNoteSaved] = useState(false)
-  const records = useHistoryStore(s => s.records)
-  const toggleFavorite = useHistoryStore(s => s.toggleFavorite)
-  const removeRecord = useHistoryStore(s => s.removeRecord)
-  const updateNotes = useHistoryStore(s => s.updateNotes)
+  const records = useHistoryStore((s) => s.records)
+  const toggleFavorite = useHistoryStore((s) => s.toggleFavorite)
+  const removeRecord = useHistoryStore((s) => s.removeRecord)
+  const updateNotes = useHistoryStore((s) => s.updateNotes)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -38,7 +41,7 @@ export default function ResultPage() {
     }
   }, [])
 
-  const record = recordId ? records.find(r => r.id === recordId) : undefined
+  const record = recordId ? records.find((r) => r.id === recordId) : undefined
 
   useEffect(() => {
     setNoteDraft(record?.notes ?? '')
@@ -47,14 +50,14 @@ export default function ResultPage() {
 
   if (!record) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-bagua-canvas">
-        <div className="text-center">
-          <p className="font-body text-bagua-muted">记录不存在或已删除</p>
-          <Link href="/" className="mt-4 inline-block font-body text-bagua-primary hover:underline">
-            返回首页
-          </Link>
-        </div>
-      </main>
+      <SiteShell>
+        <main className="flex min-h-[50vh] items-center justify-center">
+          <div className="text-center">
+            <p className="font-body text-bagua-muted">记录不存在或已删除</p>
+            <Link href="/" className="mt-4 inline-block font-display text-sm text-bagua-primary">返回首页</Link>
+          </div>
+        </main>
+      </SiteShell>
     )
   }
 
@@ -73,49 +76,39 @@ export default function ResultPage() {
   const date = new Date(record.timestamp).toLocaleString('zh-CN')
 
   return (
-    <main className="min-h-screen bg-bagua-canvas">
-      <header className="border-b border-bagua-border/30 bg-bagua-surface/60 backdrop-blur-md">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 font-body text-sm text-bagua-muted transition hover:text-bagua-text">
-            <ArrowLeft className="h-4 w-4" />
-            返回首页
-          </Link>
+    <SiteShell eyebrow="RESULT / 判词">
+      <main className="mx-auto max-w-3xl px-4 py-8 md:px-6">
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-display text-[11px] tracking-[0.2em] text-bagua-muted">{date} · {methodLabel}</p>
           <div className="flex items-center gap-2">
             <SyncIndicator />
-            <span className="hidden font-body text-xs text-bagua-muted md:inline">
-              {date} · {methodLabel}
-            </span>
-            <button
-              onClick={() => toggleFavorite(record.id)}
-              className={`rounded-full p-2 transition ${record.favorite ? 'bg-bagua-accent/10 text-bagua-accent' : 'text-bagua-muted hover:bg-bagua-border/30'}`}
-            >
-              <Star className="h-5 w-5" fill={record.favorite ? 'currentColor' : 'none'} />
+            <button type="button" onClick={() => toggleFavorite(record.id)} aria-label="收藏" className="btn-press border-4 border-bagua-text p-1">
+              <Star className="h-4 w-4" fill={record.favorite ? 'currentColor' : 'none'} />
             </button>
             <button
+              type="button"
+              aria-label="删除"
               onClick={() => {
                 if (confirm('确定要删除这条记录吗？')) {
                   removeRecord(record.id)
                   router.push('/history')
                 }
               }}
-              className="rounded-full p-2 text-bagua-muted transition hover:bg-bagua-border/30 hover:text-red-500"
+              className="btn-press border-4 border-bagua-text p-1"
             >
-              <Trash2 className="h-5 w-5" />
+              <Trash2 className="h-4 w-4" />
             </button>
           </div>
         </div>
-      </header>
 
-      <section className="container mx-auto max-w-4xl px-6 py-8">
-        <div className="mb-6 text-center">
-          <p className="font-body text-sm text-bagua-muted">{date} · {methodLabel}</p>
-          {record.question && <p className="mt-2 font-calligraphy text-lg text-bagua-text">问：{record.question}</p>}
-        </div>
+        {record.question ? (
+          <p className="prose-classical mt-6">问：{record.question}</p>
+        ) : null}
 
-        <div className="mb-8 rounded-card border border-bagua-border/40 bg-bagua-surface/80 p-5 shadow-md">
+        <div className="mt-8 border-4 border-bagua-text bg-bagua-surface p-4">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
-              <h2 className="font-display text-base font-bold text-bagua-text">本次记录</h2>
+              <h2 className="font-display text-sm tracking-widest">本次记录</h2>
               <p className="mt-1 font-body text-xs text-bagua-muted">写下当下的判断，方便日后复盘。</p>
             </div>
             <button
@@ -125,7 +118,7 @@ export default function ResultPage() {
                 setNoteSaved(true)
                 window.setTimeout(() => setNoteSaved(false), 1800)
               }}
-              className="inline-flex items-center gap-1.5 rounded-button border border-bagua-primary/50 px-3 py-2 font-body text-xs font-medium text-bagua-primary transition hover:bg-bagua-primary/10"
+              className="btn-secondary text-xs"
             >
               {noteSaved ? <Check className="h-3.5 w-3.5" /> : null}
               {noteSaved ? '已保存' : '保存备注'}
@@ -133,35 +126,37 @@ export default function ResultPage() {
           </div>
           <textarea
             value={noteDraft}
-            onChange={event => {
+            onChange={(event) => {
               setNoteDraft(event.target.value)
               setNoteSaved(false)
             }}
             rows={3}
             maxLength={500}
             placeholder="例如：两周后回看这次判断的变化……"
-            className="w-full resize-y rounded-button border border-bagua-border/40 bg-bagua-canvas/50 px-3 py-2 font-body text-sm leading-relaxed text-bagua-text outline-none transition placeholder:text-bagua-muted/70 focus:border-bagua-primary/70 focus:ring-2 focus:ring-bagua-primary/20"
+            className="w-full resize-y border-4 border-bagua-text bg-bagua-canvas px-3 py-2 font-body text-sm leading-relaxed outline-none placeholder:text-bagua-muted"
           />
-          <div className="mt-2 text-right font-mono text-[10px] text-bagua-muted">{noteDraft.length}/500</div>
         </div>
 
-        <div className="mb-8 rounded-card border border-bagua-border/40 bg-bagua-surface shadow-md">
-          <div className="flex overflow-x-auto border-b border-bagua-border/30">
-            {(['ben', 'bian', 'hu', 'dui', 'zong'] as Tab[]).map(tab => (
+        <div className="mt-8 border-4 border-bagua-text">
+          <div className="flex overflow-x-auto border-b-4 border-bagua-text">
+            {(['ben', 'bian', 'hu', 'dui', 'zong'] as Tab[]).map((tab) => (
               <button
                 key={tab}
+                type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 whitespace-nowrap px-6 py-3 font-display text-sm font-medium transition ${activeTab === tab ? 'border-b-2 border-bagua-primary text-bagua-primary' : 'text-bagua-muted hover:text-bagua-text'}`}
+                className={`flex-1 whitespace-nowrap px-4 py-3 font-display text-xs tracking-widest ${
+                  activeTab === tab ? 'bg-bagua-primary text-bagua-surface' : 'bg-bagua-surface text-bagua-muted'
+                }`}
               >
                 {TAB_LABELS[tab]}
               </button>
             ))}
           </div>
           {activeGua ? (
-            <div className="p-8 text-center">
+            <div className="bg-bagua-canvas p-8 text-center">
               <div className="mb-4 flex justify-center"><HexagramSymbol gua={activeGua} size="lg" /></div>
-              <h2 className="font-calligraphy text-3xl font-bold text-bagua-text">{activeGua.name}</h2>
-              <p className="mt-2 font-body text-sm text-bagua-muted">#{activeGua.id} / 64 · {activeGua.pronunciation} · 五行属{activeGua.wuxing}</p>
+              <h2 className="font-display text-3xl tracking-[0.16em]">{activeGua.name}</h2>
+              <p className="mt-2 font-body text-sm text-bagua-muted">#{activeGua.id} / 64 · {activeGua.pronunciation} · 五行{activeGua.wuxing}</p>
             </div>
           ) : (
             <div className="p-12 text-center">
@@ -171,76 +166,64 @@ export default function ResultPage() {
         </div>
 
         {activeGua && (
-          <div className="space-y-6">
-            <div className="rounded-card border border-bagua-border/40 bg-bagua-surface p-6 shadow-md">
-              <h3 className="mb-3 font-display text-lg font-bold text-bagua-text">卦辞</h3>
-              <p className="font-calligraphy text-xl text-bagua-text">{activeGua.guaci}</p>
-            </div>
-            <div className="rounded-card border border-bagua-border/40 bg-bagua-surface p-6 shadow-md">
-              <h3 className="mb-3 font-display text-lg font-bold text-bagua-text">彖传</h3>
-              <p className="font-body leading-relaxed text-bagua-text">{activeGua.tuanZhuan}</p>
-            </div>
-            <div className="rounded-card border border-bagua-border/40 bg-bagua-surface p-6 shadow-md">
-              <h3 className="mb-3 font-display text-lg font-bold text-bagua-text">象传</h3>
-              <p className="font-calligraphy text-lg text-bagua-text">{activeGua.daXiangZhuan}</p>
-            </div>
-            <div className="rounded-card border border-bagua-secondary/40 bg-gradient-to-br from-bagua-secondary/5 to-bagua-surface p-6 shadow-md">
-              <h3 className="mb-3 flex items-center gap-2 font-display text-lg font-bold text-bagua-secondary">
-                <Sparkles className="h-5 w-5" />
-                现代启示
-              </h3>
-              <p className="font-body leading-relaxed text-bagua-text">{activeGua.modernInsight}</p>
-            </div>
+          <div className="mt-8 space-y-8">
+            <section>
+              <h3 className="font-display text-xs tracking-[0.28em] text-bagua-primary">卦辞</h3>
+              <p className="prose-classical mt-3">{activeGua.guaci}</p>
+            </section>
+            <section>
+              <h3 className="font-display text-xs tracking-[0.28em] text-bagua-primary">彖传</h3>
+              <p className="prose-classical mt-3 text-[18px]">{activeGua.tuanZhuan}</p>
+            </section>
+            <section>
+              <h3 className="font-display text-xs tracking-[0.28em] text-bagua-primary">象传</h3>
+              <p className="prose-classical mt-3">{activeGua.daXiangZhuan}</p>
+            </section>
+            <section>
+              <h3 className="font-display text-xs tracking-[0.28em] text-bagua-primary">现代启示</h3>
+              <p className="prose-body mt-3">{activeGua.modernInsight}</p>
+            </section>
           </div>
         )}
 
         {activeTab === 'ben' && benGua && (
-          <div className="mt-6 rounded-card border border-bagua-border/40 bg-bagua-surface p-6 shadow-md">
-            <h3 className="mb-4 font-display text-lg font-bold text-bagua-text">六爻详情</h3>
-            <div className="space-y-4">
-              {[...benGua.yaos].reverse().map((yao, idx) => {
-                const pos = (6 - idx) as 1 | 2 | 3 | 4 | 5 | 6
-                const isChanging = record.changingLinePositions.includes(pos)
-                const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九'][pos - 1]
-                const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六'][pos - 1]
+          <section className="mt-10">
+            <h3 className="mb-4 font-display text-sm tracking-[0.24em]">六爻详情</h3>
+            <ol className="space-y-5">
+              {[...benGua.yaos].map((yao) => {
+                const isChanging = record.changingLinePositions.includes(yao.position)
+                const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九'][yao.position - 1]
+                const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六'][yao.position - 1]
                 const label = yao.yinYang === 'yang' ? yaoLabelYang! : yaoLabelYin!
                 return (
-                  <div key={idx} className={`rounded-card border-l-4 pl-4 ${isChanging ? 'border-l-bagua-accent bg-bagua-accent/5' : 'border-l-bagua-border/40'}`}>
-                    <div className="mb-1 flex items-center gap-2">
-                      <span className={`font-display text-base font-bold ${isChanging ? 'text-bagua-accent' : 'text-bagua-primary'}`}>{label}</span>
-                      {isChanging && (<span className="rounded-full bg-bagua-accent/10 px-2 py-0.5 font-body text-xs text-bagua-accent">动爻</span>)}
-                      <span className="font-body text-sm text-bagua-muted">{yao.yinYang === 'yang' ? '━━━' : '━ ━'}</span>
-                    </div>
-                    <p className="mb-1 font-calligraphy text-lg text-bagua-text">{yao.text}</p>
-                    <p className="font-body text-sm text-bagua-muted">《象》曰：{yao.xiangZhuan}</p>
-                  </div>
+                  <li key={yao.position} className={`border-l-4 pl-4 ${isChanging ? 'border-bagua-primary' : 'border-bagua-text'}`}>
+                    <p className="font-display text-xs tracking-widest">
+                      {label}
+                      {isChanging ? <span className="ml-2 text-bagua-primary">动爻</span> : null}
+                    </p>
+                    <p className="prose-classical mt-1 text-[18px]">{yao.text}</p>
+                    <p className="prose-body mt-1 text-sm text-bagua-muted">《象》曰：{yao.xiangZhuan}</p>
+                  </li>
                 )
               })}
-            </div>
-          </div>
+            </ol>
+          </section>
         )}
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/divine" className="inline-flex items-center gap-2 rounded-button border border-bagua-primary bg-bagua-primary px-6 py-3 font-body font-medium text-white transition hover:bg-bagua-primary/90">
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Link href="/divine" className="btn-primary">
             <RefreshCw className="h-4 w-4" />
             再来一卦
           </Link>
-          <Link href="/history" className="inline-flex items-center gap-2 rounded-button border border-bagua-border/40 bg-bagua-surface px-6 py-3 font-body font-medium text-bagua-text transition hover:bg-bagua-border/30">
-            查看历史
-          </Link>
-          <button
-            onClick={() => setShowShare(true)}
-            className="inline-flex items-center gap-2 rounded-button border border-bagua-border/40 bg-bagua-surface px-6 py-3 font-body font-medium text-bagua-text transition hover:bg-bagua-border/30"
-          >
+          <Link href="/history" className="btn-secondary">查看历史</Link>
+          <button type="button" onClick={() => setShowShare(true)} className="btn-secondary">
             <Share2 className="h-4 w-4" />
             分享
           </button>
         </div>
-      </section>
+      </main>
 
-      {showShare && (
-        <ShareDialog recordId={record.id} onClose={() => setShowShare(false)} />
-      )}
-    </main>
+      {showShare && <ShareDialog recordId={record.id} onClose={() => setShowShare(false)} />}
+    </SiteShell>
   )
 }

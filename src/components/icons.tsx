@@ -16,12 +16,13 @@ const baseProps = {
 }
 
 export const Logo = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
-    {/* 八卦变形 logo：上下双横 + 中间 8 字纹 */}
-    <rect x="4" y="3" width="16" height="18" rx="2" />
-    <path d="M4 9 L20 9 M4 15 L20 15" />
-    <circle cx="12" cy="12" r="2.5" />
-    <path d="M12 14.5 L12 18" />
+  <svg viewBox="0 0 24 24" shapeRendering="crispEdges" aria-hidden="true" {...props}>
+    <rect x="2" y="2" width="20" height="3" fill="currentColor" />
+    <rect x="2" y="8" width="8" height="3" fill="currentColor" />
+    <rect x="14" y="8" width="8" height="3" fill="currentColor" />
+    <rect x="2" y="14" width="20" height="3" fill="currentColor" />
+    <rect x="2" y="20" width="8" height="3" fill="currentColor" />
+    <rect x="14" y="20" width="8" height="3" fill="currentColor" />
   </svg>
 )
 

@@ -20,7 +20,7 @@ export function SyncIndicator() {
 
   if (!mounted || !isSupabaseConfigured) {
     return (
-      <span className="flex items-center gap-1 rounded-pill border border-bagua-border/30 bg-bagua-canvas/50 px-2 py-1 font-body text-xs text-bagua-muted">
+      <span className="flex items-center gap-1 border-4 border-bagua-fiber px-2 py-1 font-display text-[10px] tracking-widest text-bagua-muted">
         <CloudOff className="h-3 w-3" />
         本地模式
       </span>
@@ -30,7 +30,7 @@ export function SyncIndicator() {
   const statusConfig = {
     idle: { icon: Cloud, color: 'text-bagua-muted', label: '云同步就绪' },
     syncing: { icon: Loader2, color: 'text-bagua-primary animate-spin', label: '同步中' },
-    synced: { icon: Check, color: 'text-bagua-secondary', label: '已同步' },
+    synced: { icon: Check, color: 'text-bagua-primary', label: '已同步' },
     error: { icon: CloudOff, color: 'text-red-500', label: '同步失败' },
   }
   const cfg = statusConfig[status]
@@ -39,7 +39,7 @@ export function SyncIndicator() {
   return (
     <button
       onClick={() => loadFromCloud()}
-      className="flex items-center gap-1 rounded-pill border border-bagua-secondary/20 bg-bagua-secondary/5 px-2 py-1 font-body text-xs transition hover:bg-bagua-secondary/10"
+      className="flex items-center gap-1 border-4 border-bagua-text bg-bagua-surface px-2 py-1 font-display text-[10px] tracking-widest hover:bg-bagua-wash"
       title={`点击从云端加载（${records.length} 条本地记录）`}
     >
       <Icon className={`h-3 w-3 ${cfg.color}`} />
