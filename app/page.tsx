@@ -64,86 +64,70 @@ export default function HomePage() {
     <SiteShell>
       <main>
         {/* ========== Hero ========== */}
-        <section className="paper-hero relative mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-20">
+        <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
           <PaperParticles />
-          <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-            {/* 左：标题 + CTA */}
-            <div>
-              <Reveal direction="left">
-                <p className="section-kicker">周易 · 草纸刻本</p>
-                <h1 className="mt-5 font-display text-7xl leading-none tracking-[0.06em] text-bagua-text md:text-[8rem]">
-                  八卦
-                </h1>
-              </Reveal>
-              <Reveal delay={150} direction="left">
-                <div className="paper-rule-fade mt-5 max-w-xs" />
-                <p className="prose-body mt-6 max-w-md text-pretty text-bagua-muted">
-                  三钱成爻，梅花取数。动爻多少，决定读卦辞还是爻辞。
-                  一个面向初学者与读卦者的现代工具——保留古意，不拘仪式。
+          <div className="hero-orbit" aria-hidden="true" />
+          <div className="grid items-center gap-10 lg:grid-cols-[0.72fr_1.2fr_1fr] lg:gap-12">
+            <Reveal direction="left">
+              <aside className="archive-index border-l-2 border-bagua-primary/60 pl-4 md:pl-5">
+                <p className="font-display text-[10px] tracking-[0.34em] text-bagua-primary">ARCHIVE / 01</p>
+                <p className="archive-index__title mt-4 font-display text-xs tracking-[0.2em] text-bagua-text">先天方位索引</p>
+                <div className="archive-index__list mt-5 space-y-3 font-body text-xs leading-relaxed text-bagua-muted">
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>乾 · 南</span><span className="font-display text-[10px]">01 / 08</span></div>
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>坤 · 北</span><span className="font-display text-[10px]">02 / 08</span></div>
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>离 · 东</span><span className="font-display text-[10px]">03 / 08</span></div>
+                  <div className="flex items-center justify-between"><span>坎 · 西</span><span className="font-display text-[10px]">04 / 08</span></div>
+                </div>
+                <div className="archive-index__status mt-8 border-t border-bagua-fiber pt-4">
+                  <p className="font-display text-[10px] tracking-[0.2em] text-bagua-muted">记录状态</p>
+                  <p className="mt-2 flex items-center gap-2 font-display text-xs text-bagua-text"><span className="status-dot" />可开始起卦</p>
+                </div>
+              </aside>
+            </Reveal>
+
+            <div className="hero-copy relative z-10">
+              <Reveal direction="up">
+                <p className="section-kicker">周易 · 草纸刻本 · 现代读法</p>
+                <h1 className="mt-5 font-display text-7xl leading-[0.86] tracking-[0.08em] text-bagua-text md:text-[9rem]">八卦</h1>
+                <div className="paper-rule-fade mt-6 max-w-sm" />
+                <p className="prose-body mt-6 max-w-lg text-pretty text-bagua-muted">
+                  让一个问题，进入天地之间。三钱成爻，以六爻记录此刻，再以卦辞读出变化的方向。
                 </p>
               </Reveal>
-
-              <Reveal delay={300} direction="up">
-                <div className="mt-7 flex flex-wrap items-center gap-3">
-                  <Link href="/divine" className="btn-primary glow-pulse">
-                    <Wand className="h-4 w-4" />
-                    起卦问事
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link href="/hexagrams" className="btn-secondary draw-underline">
-                    六十四卦
-                  </Link>
-                  <Link href="/learn" className="btn-secondary draw-underline">
-                    易学入门
-                  </Link>
+              <Reveal delay={220} direction="up">
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <Link href="/divine" className="btn-primary glow-pulse"><Wand className="h-4 w-4" />开始起卦<ArrowRight className="h-4 w-4" /></Link>
+                  <span className="font-display text-[10px] tracking-[0.18em] text-bagua-muted">约 2 分钟 · 无需注册</span>
                 </div>
               </Reveal>
-
-              <Reveal delay={450} direction="up">
-                <div className="mt-7">
-                  <p className="mb-2 font-display text-[10px] tracking-[0.28em] text-bagua-muted">
-                    或从问事起
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {SCENARIO_CARDS.map((s) => {
-                      const Icon = s.Icon
-                      return (
-                        <Link
-                          key={s.tag}
-                          href="/divine"
-                          className="btn-press group flex items-center gap-2 border-2 border-bagua-fiber bg-bagua-surface px-3 py-1.5 hover:border-bagua-text hover:bg-bagua-wash"
-                        >
-                          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center border-2 border-bagua-text bg-bagua-canvas text-bagua-primary transition group-hover:bg-bagua-primary group-hover:text-bagua-surface">
-                            <Icon className="h-3.5 w-3.5" />
-                          </span>
-                          <span className="font-display text-sm tracking-widest text-bagua-text">
-                            {s.tag}
-                          </span>
-                          <span className="hidden font-body text-[10px] text-bagua-muted md:inline">
-                            {s.hint}
-                          </span>
-                        </Link>
-                      )
-                    })}
-                  </div>
+              <Reveal delay={360} direction="up">
+                <div className="mt-10 grid max-w-lg grid-cols-3 border-y border-bagua-fiber py-4">
+                  {[['问事','把问题说清'],['投爻','记录当下'],['读象','看见变化']].map(([title, desc], index) => (
+                    <div key={title} className="ritual-step border-r border-bagua-fiber px-3 first:pl-0 last:border-r-0">
+                      <span className="font-display text-[10px] tracking-[0.2em] text-bagua-primary">0{index + 1}</span>
+                      <p className="mt-2 font-display text-sm tracking-wider text-bagua-text">{title}</p>
+                      <p className="mt-1 font-body text-[10px] text-bagua-muted">{desc}</p>
+                    </div>
+                  ))}
                 </div>
               </Reveal>
             </div>
 
-            {/* 右：太极曼陀罗 */}
-            <Reveal delay={200} direction="scale">
-              <PaperTilt className="paper-stage hidden justify-self-center md:block" intensity={4.5}>
-                <div className="paper-stack paper-depth p-4">
-                  <BaguaCompass />
-                </div>
-              </PaperTilt>
+            <Reveal delay={180} direction="scale">
+              <div className="instrument-stage">
+                <div className="instrument-label"><span>先天 · 四正位</span><span>仪器读数 / 08</span></div>
+                <PaperTilt className="paper-stage" intensity={4.5}>
+                  <div className="paper-stack paper-depth p-3 md:p-4"><BaguaCompass /></div>
+                </PaperTilt>
+                <div className="instrument-foot"><span>乾南 / 坤北 / 离东 / 坎西</span><span className="font-display">BAGUA · 01</span></div>
+              </div>
             </Reveal>
           </div>
 
-          {/* Daily Oracle — 全宽 */}
-          <Reveal delay={600} direction="up">
-            <div className="mt-12 max-w-2xl">
+          <Reveal delay={520} direction="up">
+            <div className="mt-12 grid gap-3 border-t border-bagua-fiber pt-4 md:grid-cols-[1fr_auto] md:items-center">
               <DailyOracle />
+              <Link href="/hexagrams" className="draw-underline justify-self-start font-display text-xs tracking-[0.16em] text-bagua-primary md:justify-self-end">浏览六十四卦 →</Link>
             </div>
           </Reveal>
         </section>

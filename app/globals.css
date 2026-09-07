@@ -904,3 +904,56 @@ main {
     transform: translate(3px, 3px);
   }
 }
+
+
+/* 仪式罗盘：受控的 3D 深度与铜金扫描光 */
+.hero-orbit { position:absolute; top:8%; right:7%; width:min(38vw, 25rem); aspect-ratio:1; border:1px solid rgba(183,140,62,.18); border-radius:50%; box-shadow:0 0 0 12px rgba(183,140,62,.035), 0 0 50px rgba(183,140,62,.08); animation:hero-orbit-breathe 9s ease-in-out infinite; pointer-events:none; z-index:-1; }
+.hero-orbit::before,.hero-orbit::after { content:''; position:absolute; inset:10%; border:1px dashed rgba(178,58,42,.18); border-radius:50%; animation:spin-slow 38s linear infinite; }
+.hero-orbit::after { inset:24%; border-color:rgba(183,140,62,.22); animation-duration:52s; animation-direction:reverse; }
+.archive-index { position:relative; }
+.archive-index::before { content:''; position:absolute; left:-3px; top:0; bottom:0; width:3px; background:linear-gradient(var(--paper-cinnabar),var(--paper-gold),transparent); opacity:.7; }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--paper-gold); box-shadow:0 0 0 3px rgba(183,140,62,.12),0 0 14px rgba(183,140,62,.45); animation:status-pulse 2.8s ease-in-out infinite; }
+.instrument-stage { position:relative; transform-style:preserve-3d; }
+.instrument-label,.instrument-foot { display:flex; justify-content:space-between; gap:1rem; font-family:var(--font-display),ui-monospace,monospace; font-size:10px; letter-spacing:.16em; color:var(--paper-muted); }
+.instrument-label { margin:0 0 10px; }
+.instrument-foot { margin-top:12px; padding-top:10px; border-top:1px solid var(--paper-fiber); }
+.bagua-compass { filter: drop-shadow(0 10px 18px rgba(44,36,22,.12)); transform:translateZ(0); }
+.compass-orbit { transform-box:fill-box; transform-origin:center; }
+.compass-orbit--outer { animation:spin-slow 72s linear infinite; }
+.compass-orbit--inner { animation:spin-slow-reverse 54s linear infinite; }
+.compass-scan { transform-origin:50% 50%; animation:compass-scan 8s cubic-bezier(.45,.05,.55,.95) infinite; mix-blend-mode:multiply; }
+.compass-node { transform-style:preserve-3d; filter:drop-shadow(2px 3px 0 rgba(44,36,22,.12)); }
+.compass-node:hover { filter:drop-shadow(3px 5px 0 rgba(44,36,22,.2)); }
+.compass-core { animation:core-float 6s ease-in-out infinite; box-shadow:0 5px 0 rgba(44,36,22,.18), inset 0 0 0 1px rgba(183,140,62,.38), 0 0 24px rgba(183,140,62,.14); }
+.ritual-step { position:relative; }
+.ritual-step::after { content:''; position:absolute; right:-1px; top:50%; width:5px; height:5px; border-radius:50%; background:var(--paper-gold); opacity:.6; }
+.ritual-step:last-child::after { display:none; }
+@keyframes compass-scan { 0% { transform:rotate(-22deg); opacity:.08; } 50% { opacity:.38; } 100% { transform:rotate(338deg); opacity:.08; } }
+@keyframes core-float { 0%,100% { transform:translateY(0) rotate(-1deg); } 50% { transform:translateY(-5px) rotate(1deg); } }
+@keyframes hero-orbit-breathe { 0%,100% { transform:scale(.96) rotate(-2deg); opacity:.55; } 50% { transform:scale(1.02) rotate(2deg); opacity:.9; } }
+@keyframes status-pulse { 0%,100% { opacity:.55; } 50% { opacity:1; } }
+@media (max-width: 767px) { .hero-orbit { top:6%; right:-18%; width:65vw; opacity:.52; } .instrument-label,.instrument-foot { font-size:9px; } .ritual-step::after { display:none; } }
+@media (prefers-reduced-motion: reduce) { .hero-orbit,.hero-orbit::before,.hero-orbit::after,.compass-orbit--outer,.compass-orbit--inner,.compass-scan,.compass-core,.status-dot { animation:none !important; } }
+
+@media (max-width: 767px) {
+  .paper-hero > .grid { display:flex; flex-direction:column; gap:1.5rem; }
+  .paper-hero .hero-copy { order:1; }
+  .paper-hero .archive-index { order:2; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.75rem; border-left:0; border-top:1px solid var(--paper-fiber); border-bottom:1px solid var(--paper-fiber); padding:10px 0; }
+  .paper-hero .archive-index::before { left:0; right:0; top:-1px; bottom:auto; width:auto; height:2px; background:linear-gradient(90deg,var(--paper-cinnabar),var(--paper-gold),transparent); }
+  .paper-hero .archive-index > p:first-child { margin:0; font-size:9px; }
+  .paper-hero .archive-index__title { margin:0; font-size:10px; }
+  .paper-hero .archive-index__list { display:none; }
+  .paper-hero .archive-index__status { margin:0; padding:0; border-top:0; }
+  .paper-hero .archive-index__status p:first-child { display:none; }
+  .paper-hero .archive-index__status p:last-child { margin:0; font-size:10px; white-space:nowrap; }
+  .paper-hero .instrument-stage { order:3; }
+  .paper-hero .hero-copy h1 { font-size:clamp(4.7rem, 23vw, 7rem); }
+}
+
+@media (max-width: 767px) {
+  .paper-hero > .grid > :nth-child(1) { order: 2; }
+  .paper-hero > .grid > :nth-child(2) { order: 1; }
+  .paper-hero > .grid > :nth-child(3) { order: 3; }
+  .paper-hero .instrument-stage { width: min(100%, 22rem); margin-inline: auto; }
+  .paper-hero .instrument-stage .paper-stage { width: 100%; }
+}

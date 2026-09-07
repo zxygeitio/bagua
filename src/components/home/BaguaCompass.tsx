@@ -27,7 +27,12 @@ export function BaguaCompass() {
 
   return (
     <div className="relative mx-auto w-full max-w-[420px]">
-      <svg viewBox={`0 0 ${size} ${size}`} className="w-full">
+      <svg viewBox={`0 0 ${size} ${size}`} className="bagua-compass w-full" role="img" aria-label="先天八卦四正位罗盘">
+        <defs>
+          <radialGradient id="compass-core" cx="50%" cy="42%" r="64%"><stop offset="0%" stopColor="var(--paper-surface)" /><stop offset="70%" stopColor="var(--paper-wash)" /><stop offset="100%" stopColor="var(--paper-fiber)" /></radialGradient>
+          <linearGradient id="compass-scan" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="var(--paper-cinnabar)" stopOpacity="0" /><stop offset="46%" stopColor="var(--paper-gold)" stopOpacity="0.72" /><stop offset="100%" stopColor="var(--paper-gold)" stopOpacity="0" /></linearGradient>
+          <filter id="compass-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+        </defs>
         {/* 装饰双圆 · 慢速旋转（外环） */}
         <g
           style={{
@@ -41,7 +46,7 @@ export function BaguaCompass() {
             cy={center}
             r={radius + 30}
             fill="none"
-            stroke="var(--paper-fiber)"
+            stroke="var(--paper-gold)"
             strokeWidth="1"
             opacity="0.4"
             strokeDasharray="2 6"
@@ -69,11 +74,15 @@ export function BaguaCompass() {
           cx={center}
           cy={center}
           r={radius}
-          fill="none"
+          fill="url(#compass-core)"
           stroke="var(--paper-ink)"
           strokeWidth="1.5"
           opacity="0.7"
         />
+
+        <path className="compass-scan" d={`M${center} ${center} L${center} ${center - radius - 30} A${radius + 30} ${radius + 30} 0 0 1 ${center + radius + 30} ${center} Z`} fill="url(#compass-scan)" opacity="0.22" filter="url(#compass-glow)" />
+        <line x1={center} y1={center - radius - 18} x2={center} y2={center + radius + 18} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.3" />
+        <line x1={center - radius - 18} y1={center} x2={center + radius + 18} y2={center} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.3" />
 
         {/* 四正位刻度线 */}
         {[0, 90, 180, 270].map((a) => (
@@ -107,7 +116,7 @@ export function BaguaCompass() {
             key={p.guaId}
             href={`/hexagrams/${p.guaId}`}
             style={{ left: `${xPct}%`, top: `${yPct}%` }}
-            className="group absolute flex w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-transform duration-300 hover:scale-110"
+            className="compass-node group absolute flex w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-transform duration-300 hover:scale-110"
             title={p.desc}
           >
             <span className="flex h-12 w-12 items-center justify-center border-4 border-bagua-text bg-bagua-surface font-display text-xl leading-none text-bagua-text transition group-hover:rotate-6 group-hover:bg-bagua-primary group-hover:text-bagua-surface">
@@ -129,7 +138,7 @@ export function BaguaCompass() {
           animation: 'float-y 6s ease-in-out infinite',
         }}
       >
-        <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-bagua-text bg-bagua-wash shadow-soft">
+        <div className="compass-core flex h-20 w-20 items-center justify-center rounded-full border-2 border-bagua-text bg-bagua-wash shadow-soft">
           <svg viewBox="0 0 24 24" className="h-14 w-14 text-bagua-primary">
             <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
             <path
