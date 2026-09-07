@@ -420,11 +420,19 @@
 
   .pixel-dock .nav-link {
     display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.18rem;
     justify-content: center;
     padding: 0.7rem 0.2rem;
     font-size: 11px;
     letter-spacing: 0.04em;
     padding-bottom: calc(0.7rem + env(safe-area-inset-bottom));
+  }
+
+  .pixel-dock .nav-link__icon {
+    width: 1rem;
+    height: 1rem;
   }
 
   .field-control {

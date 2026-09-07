@@ -5,16 +5,16 @@ import { usePathname } from 'next/navigation'
 
 import { BackToTop } from '@/components/BackToTop'
 import { KeyboardHelp } from '@/components/KeyboardHelp'
-import { HexagramPattern, Logo } from '@/components/icons'
+import { Clock, CompassRose, HexagramPattern, Leaf, Logo, Settings, Wand } from '@/components/icons'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 
 const NAV = [
-  { href: '/', label: '首页' },
-  { href: '/hexagrams', label: '六十四卦' },
-  { href: '/divine', label: '起卦' },
-  { href: '/learn', label: '入门' },
-  { href: '/history', label: '历史' },
-  { href: '/settings', label: '设置' },
+  { href: '/', label: '首页', Icon: CompassRose },
+  { href: '/hexagrams', label: '六十四卦', Icon: HexagramPattern },
+  { href: '/divine', label: '起卦', Icon: Wand },
+  { href: '/learn', label: '入门', Icon: Leaf },
+  { href: '/history', label: '历史', Icon: Clock },
+  { href: '/settings', label: '设置', Icon: Settings },
 ] as const
 
 interface SiteShellProps {
@@ -147,8 +147,10 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
       <nav className="pixel-dock md:hidden" aria-label="移动导航">
         {NAV.map((item) => {
           const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+          const Icon = item.Icon
           return (
             <Link key={item.href} href={item.href} data-active={active} className="nav-link">
+              <Icon className="nav-link__icon" aria-hidden="true" />
               {item.label}
             </Link>
           )
