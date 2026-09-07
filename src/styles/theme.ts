@@ -14,6 +14,18 @@ export const PAPER = {
   wash: '#DCC59A',
 } as const
 
+/**
+ * 五行配色 — 各家互不相同，与纸本主调和谐
+ *  木 青  火 朱  土 沙  金 月白  水 墨
+ */
+export const WUXING = {
+  wood: '#3F7A3A',   // 草青
+  fire: '#B23A2A',   // 朱砂 (与 primary 一致)
+  earth: '#B8893A',  // 黄沙
+  metal: '#A8A092',  // 月白
+  water: '#1F4F6B',  // 墨青
+} as const
+
 export const PIXEL = {
   step: 4,
   stroke: 4,
@@ -107,6 +119,11 @@ export function themeCssVars(): Record<string, string> {
     '--paper-cinnabar': PAPER.cinnabar,
     '--paper-rule': PAPER.rule,
     '--paper-wash': PAPER.wash,
+    '--wuxing-wood': WUXING.wood,
+    '--wuxing-fire': WUXING.fire,
+    '--wuxing-earth': WUXING.earth,
+    '--wuxing-metal': WUXING.metal,
+    '--wuxing-water': WUXING.water,
     '--pixel-step': `${PIXEL.step}px`,
     '--type-display-size': `${TYPE_ROLES.display.sizePx}px`,
     '--type-body-size': `${TYPE_ROLES.body.sizePx}px`,

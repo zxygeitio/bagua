@@ -18,6 +18,11 @@ const config: Config = {
           accent: 'var(--paper-cinnabar)',
           border: 'var(--paper-rule)',
           wash: 'var(--paper-wash)',
+          wood: 'var(--wuxing-wood)',
+          fire: 'var(--wuxing-fire)',
+          earth: 'var(--wuxing-earth)',
+          metal: 'var(--wuxing-metal)',
+          water: 'var(--wuxing-water)',
         },
       },
       fontFamily: {
