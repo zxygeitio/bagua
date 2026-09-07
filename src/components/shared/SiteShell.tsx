@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { BackToTop } from '@/components/BackToTop'
+import { KeyboardHelp } from '@/components/KeyboardHelp'
 import { HexagramPattern, Logo } from '@/components/icons'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 
 const NAV = [
   { href: '/', label: '首页' },
@@ -22,6 +24,7 @@ interface SiteShellProps {
 
 export function SiteShell({ children, eyebrow }: SiteShellProps) {
   const pathname = usePathname()
+  useKeyboardShortcuts()
 
   return (
     <div className="paper-root">
@@ -153,6 +156,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
       </nav>
 
       <BackToTop />
+      <KeyboardHelp />
     </div>
   )
 }
