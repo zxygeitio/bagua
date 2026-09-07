@@ -283,3 +283,42 @@ export const Pulse = (props: IconProps) => (
     <circle cx="14" cy="19" r="1" fill="currentColor" stroke="none" />
   </svg>
 )
+
+/** Calendar grid mark for the date-grouped history view. */
+export const Calendar = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <rect x="3" y="5" width="18" height="16" rx="1" />
+    <path d="M3 9 L21 9" />
+    <path d="M8 3 L8 7 M16 3 L16 7" />
+    <rect x="7" y="13" width="3" height="3" fill="currentColor" stroke="none" />
+    <rect x="14" y="13" width="3" height="3" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/** Checklist rows for the list view toggle. */
+export const ListChecks = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <path d="M3 6 L5 8 L9 4" />
+    <path d="M11 6 L21 6" />
+    <path d="M3 13 L5 15 L9 11" />
+    <path d="M11 13 L21 13" />
+    <path d="M3 20 L5 22 L9 18" />
+    <path d="M11 20 L21 20" />
+  </svg>
+)
+
+/** Horizontal dots used in compact menus. */
+export const Dots = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+    <circle cx="19" cy="12" r="1" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/** Filter / sort funnel used in toolbars. */
+export const Filter = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <path d="M3 5 L21 5 L14 13 L14 20 L10 18 L10 13 Z" />
+  </svg>
+)

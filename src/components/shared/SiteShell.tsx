@@ -9,6 +9,7 @@ const NAV = [
   { href: '/', label: '首页' },
   { href: '/hexagrams', label: '六十四卦' },
   { href: '/divine', label: '起卦' },
+  { href: '/learn', label: '入门' },
   { href: '/history', label: '历史' },
   { href: '/settings', label: '设置' },
 ] as const
@@ -54,7 +55,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
           <span>仅供文化学习与学术研究</span>
         </div>
       </footer>
-      <nav className="pixel-dock md:hidden" aria-label="移动导航">
+      <nav className="pixel-dock md:hidden overflow-x-auto" aria-label="移动导航">
         {NAV.map((item) => {
           const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
           return (

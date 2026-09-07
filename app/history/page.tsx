@@ -1,114 +1,350 @@
 'use client'
-
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-
-import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
-import { Search, Sparkles, Star, Trash2 } from '@/components/icons'
-import { SiteShell } from '@/components/shared/SiteShell'
-import { SyncIndicator } from '@/components/SyncIndicator'
-import { getGuaById } from '@/lib/iching'
 import { useHistoryStore } from '@/store/history'
+import { getGuaById, type Scenario } from '@/lib/iching'
+import { SCENARIO_LABELS } from '@/types/iching'
+import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { SyncIndicator } from '@/components/SyncIndicator'
+import { SiteShell } from '@/components/shared/SiteShell'
+import { ArrowLeft, Star, Trash2, Search, Sparkles, Calendar, ListChecks } from '@/components/icons'
+
+type View = 'list' | 'calendar'
+type Filter = 'all' | 'favorites' | 'today' | 'week' | 'month'
+
+const FILTER_LABELS: Record<Filter, string> = {
+  all: '全部',
+  favorites: '收藏',
+  today: '今日',
+  week: '本周',
+  month: '本月',
+}
+
+const SCENARIO_OPTIONS: Scenario[] = ['career', 'wealth', 'relationship', 'health', 'study', 'family']
 
 export default function HistoryPage() {
-  const records = useHistoryStore((s) => s.records)
-  const toggleFavorite = useHistoryStore((s) => s.toggleFavorite)
-  const removeRecord = useHistoryStore((s) => s.removeRecord)
-  const [filter, setFilter] = useState<'all' | 'favorites'>('all')
+  const records = useHistoryStore(s => s.records)
+  const toggleFavorite = useHistoryStore(s => s.toggleFavorite)
+  const removeRecord = useHistoryStore(s => s.removeRecord)
+
+  const [view, setView] = useState<View>('list')
+  const [filter, setFilter] = useState<Filter>('all')
+  const [scenarioFilter, setScenarioFilter] = useState<Scenario | null>(null)
   const [query, setQuery] = useState('')
 
   const filtered = useMemo(() => {
-    let list = records.filter((r) => filter === 'all' || r.favorite)
+    const now = Date.now()
+    const oneDay = 24 * 60 * 60 * 1000
+    let list = records.filter(r => {
+      if (filter === 'favorites' && !r.favorite) return false
+      if (filter === 'today' && now - r.timestamp >= oneDay) return false
+      if (filter === 'week' && now - r.timestamp >= 7 * oneDay) return false
+      if (filter === 'month' && now - r.timestamp >= 30 * oneDay) return false
+      if (scenarioFilter && r.scenario !== scenarioFilter) return false
+      return true
+    })
     if (query) {
       const q = query.toLowerCase()
-      list = list.filter((r) => {
+      list = list.filter(r => {
         const gua = getGuaById(r.benGuaId)
         if (!gua) return false
         return gua.name.toLowerCase().includes(q) ||
           gua.chineseName.includes(query) ||
-          (r.question?.toLowerCase().includes(q) ?? false)
+          (r.question?.toLowerCase().includes(q) ?? false) ||
+          (r.notes?.toLowerCase().includes(q) ?? false)
       })
     }
     return list
-  }, [records, filter, query])
+  }, [records, filter, query, scenarioFilter])
 
-  const favoriteCount = records.filter((r) => r.favorite).length
+  // 统计
+  const stats = useMemo(() => {
+    const total = records.length
+    const favorites = records.filter(r => r.favorite).length
+    const changing = records.filter(r => r.changingLinePositions.length > 0).length
+    const benIds = new Set(records.map(r => r.benGuaId))
+    return { total, favorites, changing, unique: benIds.size }
+  }, [records])
+
+  // 按日期分组（用于日历视图）
+  const byDay = useMemo(() => {
+    const map = new Map<string, typeof records>()
+    for (const r of filtered) {
+      const d = new Date(r.timestamp)
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+      const arr = map.get(key) ?? []
+      arr.push(r)
+      map.set(key, arr)
+    }
+    return Array.from(map.entries()).sort(([a], [b]) => b.localeCompare(a))
+  }, [filtered])
+
+  const favoriteCount = records.filter(r => r.favorite).length
 
   return (
-    <SiteShell eyebrow="HISTORY / 03">
-      <main className="mx-auto max-w-3xl px-4 py-8 md:px-6">
-        <div className="flex items-end justify-between gap-4">
+    <SiteShell eyebrow="HISTORY / 05">
+      <main className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
+        <div className="enter-up mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="enter-up font-display text-4xl tracking-[0.16em]">历史</h1>
-            <p className="mt-2 font-body text-sm text-bagua-muted">
-              共 {records.length} 条{favoriteCount > 0 ? ` · ${favoriteCount} 条收藏` : ''}
+            <h1 className="font-display text-5xl tracking-[0.06em]">历史记录</h1>
+            <p className="prose-body mt-2 text-bagua-muted">
+              共 <span className="text-bagua-text">{stats.total}</span> 条
+              {stats.favorites > 0 && <> · <span className="text-bagua-primary">{stats.favorites}</span> 条收藏</>}
+              {stats.changing > 0 && <> · <span className="text-bagua-text">{stats.changing}</span> 条有动爻</>}
+              {stats.unique > 0 && <> · 涉及 <span className="text-bagua-text">{stats.unique}</span> 卦</>}
             </p>
           </div>
-          <SyncIndicator />
+          <div className="flex items-center gap-2">
+            <SyncIndicator />
+          </div>
         </div>
 
+        {/* 数据洞察卡片 */}
         {records.length > 0 && (
-          <div className="mt-6 border-4 border-bagua-text bg-bagua-surface p-3">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-              <div className="flex flex-1 items-center gap-2 px-2">
-                <Search className="h-4 w-4 text-bagua-muted" />
-                <input
-                  type="text"
-                  placeholder="搜索卦名或问题"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  className="flex-1 bg-transparent font-body text-sm outline-none placeholder:text-bagua-muted"
-                />
+          <div className="paper-panel enter-up stagger-1 mb-6 grid grid-cols-2 gap-px border-4 border-bagua-text bg-bagua-text md:grid-cols-4">
+            <Stat label="总起卦" value={stats.total} />
+            <Stat label="收藏" value={stats.favorites} />
+            <Stat label="动爻卦" value={stats.changing} />
+            <Stat label="涉及卦数" value={stats.unique} />
+          </div>
+        )}
+
+        {records.length > 0 && (
+          <div className="enter-up stagger-2 mb-6 space-y-3">
+            <div className="paper-panel--quiet border-4 border-bagua-fiber bg-bagua-surface p-3">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+                <div className="flex flex-1 items-center gap-2 px-2">
+                  <Search className="h-4 w-4 text-bagua-muted" />
+                  <input
+                    type="text"
+                    placeholder="搜索卦名、中文名、问题或备注"
+                    value={query}
+                    onChange={e => setQuery(e.target.value)}
+                    className="flex-1 bg-transparent font-body text-sm text-bagua-text outline-none placeholder:text-bagua-muted"
+                  />
+                </div>
+                <div className="flex gap-1 overflow-x-auto">
+                  {(Object.keys(FILTER_LABELS) as Filter[]).map(f => (
+                    <button
+                      key={f}
+                      onClick={() => setFilter(f)}
+                      className={`btn-press flex-shrink-0 border-4 px-3 py-1 font-display text-[11px] tracking-widest ${
+                        filter === f
+                          ? 'border-bagua-text bg-bagua-primary text-bagua-surface'
+                          : 'border-transparent text-bagua-muted hover:border-bagua-text'
+                      }`}
+                    >
+                      {FILTER_LABELS[f]}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex gap-1">
-                <button type="button" onClick={() => setFilter('all')} className={`btn-press border-4 px-3 py-1 font-display text-[11px] ${filter === 'all' ? 'border-bagua-text bg-bagua-text text-bagua-surface' : 'border-transparent text-bagua-muted'}`}>全部</button>
-                <button type="button" onClick={() => setFilter('favorites')} className={`btn-press border-4 px-3 py-1 font-display text-[11px] ${filter === 'favorites' ? 'border-bagua-text bg-bagua-primary text-bagua-surface' : 'border-transparent text-bagua-muted'}`}>
-                  <Star className="mr-1 inline h-3 w-3" />收藏
+              <div className="mt-2 flex flex-wrap items-center gap-1 border-t-2 border-bagua-fiber/40 pt-2">
+                <span className="px-2 font-display text-[10px] tracking-widest text-bagua-muted">问事</span>
+                <button
+                  onClick={() => setScenarioFilter(null)}
+                  className={`btn-press border-4 px-2 py-0.5 font-display text-[10px] ${
+                    scenarioFilter === null
+                      ? 'border-bagua-text bg-bagua-text text-bagua-surface'
+                      : 'border-transparent text-bagua-muted hover:border-bagua-text'
+                  }`}
+                >
+                  全部
                 </button>
+                {SCENARIO_OPTIONS.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setScenarioFilter(scenarioFilter === s ? null : s)}
+                    className={`btn-press border-4 px-2 py-0.5 font-display text-[10px] ${
+                      scenarioFilter === s
+                        ? 'border-bagua-text bg-bagua-text text-bagua-surface'
+                        : 'border-transparent text-bagua-muted hover:border-bagua-text'
+                    }`}
+                  >
+                    {SCENARIO_LABELS[s]}
+                  </button>
+                ))}
               </div>
+            </div>
+            <div className="flex justify-end gap-1">
+              <button
+                onClick={() => setView('list')}
+                className={`btn-press border-4 px-3 py-1 font-display text-[11px] tracking-widest ${
+                  view === 'list' ? 'border-bagua-text bg-bagua-text text-bagua-surface' : 'border-transparent text-bagua-muted hover:border-bagua-text'
+                }`}
+              >
+                <ListChecks className="mr-1 inline h-3 w-3" />
+                列表
+              </button>
+              <button
+                onClick={() => setView('calendar')}
+                className={`btn-press border-4 px-3 py-1 font-display text-[11px] tracking-widest ${
+                  view === 'calendar' ? 'border-bagua-text bg-bagua-text text-bagua-surface' : 'border-transparent text-bagua-muted hover:border-bagua-text'
+                }`}
+              >
+                <Calendar className="mr-1 inline h-3 w-3" />
+                日历
+              </button>
             </div>
           </div>
         )}
 
         {filtered.length === 0 ? (
-          <div className="mt-10 border-4 border-bagua-text p-12 text-center">
-            <Sparkles className="mx-auto h-8 w-8 text-bagua-muted" />
-            <p className="mt-4 font-body text-bagua-muted">{records.length === 0 ? '暂无起卦记录' : '没有匹配的记录'}</p>
-            <Link href="/divine" className="btn-primary mt-6">前往起卦</Link>
+          <div className="paper-panel enter-up stagger-3 p-12 text-center">
+            <Sparkles className="mx-auto h-12 w-12 text-bagua-muted" />
+            <p className="mt-4 font-body text-bagua-muted">
+              {records.length === 0 ? '暂无起卦记录' : '没有匹配的记录'}
+            </p>
+            <Link href="/divine" className="btn-primary mt-6">
+              前往起卦 →
+            </Link>
           </div>
-        ) : (
-          <ul className="mt-6 divide-y-4 divide-bagua-text border-4 border-bagua-text">
-            {filtered.map((r) => {
+        ) : view === 'list' ? (
+          <div className="space-y-3">
+            {filtered.map((r, idx) => {
               const gua = getGuaById(r.benGuaId)
               if (!gua) return null
-              const date = new Date(r.timestamp).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
               return (
-                <li key={r.id} className="flex items-center gap-3 bg-bagua-canvas p-4 hover:bg-bagua-surface">
-                  <Link href={`/result?id=${r.id}`} className="flex min-w-0 flex-1 items-center gap-4">
-                    <HexagramSymbol gua={gua} size="sm" />
-                    <span className="min-w-0">
-                      <span className="flex items-center gap-2 font-display text-sm tracking-widest">
-                        {gua.name}
-                        {r.changingLinePositions.length > 0 ? <span className="text-[10px] text-bagua-primary">{r.changingLinePositions.length} 动</span> : null}
-                      </span>
-                      <span className="mt-1 block truncate font-body text-xs text-bagua-muted">
-                        {date} · {r.method === 'coins' ? '硬币' : r.method === 'yarrow' ? '蓍草' : '手动'}
-                        {r.question ? ` · ${r.question}` : ''}
-                      </span>
-                    </span>
-                  </Link>
-                  <button type="button" onClick={() => toggleFavorite(r.id)} className="btn-press p-2 text-bagua-muted" aria-label="收藏">
-                    <Star className={`h-4 w-4 ${r.favorite ? 'fill-bagua-primary text-bagua-primary' : ''}`} />
-                  </button>
-                  <button type="button" onClick={() => { if (confirm('删除这条记录？')) removeRecord(r.id) }} className="btn-press p-2 text-bagua-muted" aria-label="删除">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </li>
+                <HistoryRow
+                  key={r.id}
+                  r={r}
+                  gua={gua}
+                  idx={idx}
+                  onToggle={() => toggleFavorite(r.id)}
+                  onRemove={() => {
+                    if (confirm('删除这条记录？')) removeRecord(r.id)
+                  }}
+                />
               )
             })}
-          </ul>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {byDay.map(([day, items]) => (
+              <section key={day}>
+                <header className="mb-2 flex items-baseline gap-3 border-b-4 border-bagua-fiber pb-1">
+                  <span className="font-display text-sm tracking-widest text-bagua-primary">{day}</span>
+                  <span className="font-body text-xs text-bagua-muted">{items.length} 条</span>
+                </header>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {items.map((r) => {
+                    const gua = getGuaById(r.benGuaId)
+                    if (!gua) return null
+                    return (
+                      <Link
+                        key={r.id}
+                        href={`/result?id=${r.id}`}
+                        className="btn-press flex items-center gap-3 border-4 border-bagua-fiber bg-bagua-surface p-3 hover:border-bagua-text hover:bg-bagua-wash"
+                      >
+                        <HexagramSymbol gua={gua} size="sm" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-display text-sm tracking-widest">{gua.name}</span>
+                            {r.favorite && <Star className="h-3 w-3 fill-bagua-primary text-bagua-primary" />}
+                          </div>
+                          <div className="truncate font-body text-xs text-bagua-muted">
+                            {new Date(r.timestamp).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                            {r.question && <> · {r.question}</>}
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
         )}
       </main>
     </SiteShell>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="bg-bagua-canvas p-4 text-center">
+      <div className="font-display text-3xl tracking-wider text-bagua-text">{value}</div>
+      <div className="mt-1 font-display text-[10px] tracking-widest text-bagua-muted">{label}</div>
+    </div>
+  )
+}
+
+function HistoryRow({
+  r,
+  gua,
+  idx,
+  onToggle,
+  onRemove,
+}: {
+  r: ReturnType<typeof useHistoryStore.getState>['records'][number]
+  gua: NonNullable<ReturnType<typeof getGuaById>>
+  idx: number
+  onToggle: () => void
+  onRemove: () => void
+}) {
+  const date = new Date(r.timestamp).toLocaleString('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  const changing = r.changingLinePositions.length
+  return (
+    <div
+      style={{ animationDelay: `${idx * 50}ms` }}
+      className="paper-panel enter-up group flex items-center gap-4 p-4"
+    >
+      <Link href={`/result?id=${r.id}`} className="flex flex-1 items-center gap-4 min-w-0">
+        <div className="flex-shrink-0 border-4 border-bagua-fiber bg-bagua-canvas p-2">
+          <HexagramSymbol gua={gua} size="sm" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="font-display text-lg tracking-wider">{gua.name}</span>
+            {changing > 0 && (
+              <span className="border-2 border-bagua-text bg-bagua-primary px-1.5 py-0.5 font-display text-[10px] tracking-widest text-bagua-surface">
+                {changing} 动
+              </span>
+            )}
+            {r.scenario && (
+              <span className="border-2 border-bagua-fiber px-1.5 py-0.5 font-display text-[10px] tracking-widest text-bagua-text">
+                {SCENARIO_LABELS[r.scenario]}
+              </span>
+            )}
+            {r.favorite && <Star className="h-3.5 w-3.5 fill-bagua-primary text-bagua-primary" />}
+          </div>
+          <div className="flex items-center gap-2 truncate font-body text-xs text-bagua-muted">
+            <span>{date}</span>
+            <span>·</span>
+            <span>{r.method === 'coins' ? '硬币' : r.method === 'yarrow' ? '蓍草' : r.method === 'meihua' ? '梅花' : r.method === 'time' ? '时间' : '手动'}</span>
+            {r.question && (
+              <>
+                <span>·</span>
+                <span className="truncate">{r.question}</span>
+              </>
+            )}
+          </div>
+          {r.notes && (
+            <p className="mt-2 truncate font-body text-xs italic text-bagua-muted">
+              备注：{r.notes}
+            </p>
+          )}
+        </div>
+      </Link>
+      <div className="flex items-center gap-1 md:opacity-0 md:transition-opacity md:group-hover:opacity-100">
+        <button
+          onClick={onToggle}
+          className="btn-press flex h-8 w-8 items-center justify-center text-bagua-muted hover:text-bagua-primary"
+        >
+          <Star className={`h-4 w-4 ${r.favorite ? 'fill-bagua-primary text-bagua-primary' : ''}`} />
+        </button>
+        <button
+          onClick={onRemove}
+          className="btn-press flex h-8 w-8 items-center justify-center text-bagua-muted hover:text-bagua-primary"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
   )
 }
