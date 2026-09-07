@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { DailyOracle } from '@/components/hexagram/DailyOracle'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { ArrowRight } from '@/components/icons'
 import { SiteShell } from '@/components/shared/SiteShell'
@@ -11,14 +12,14 @@ export default function HomePage() {
   return (
     <SiteShell>
       <main>
-        <section className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl items-center gap-10 px-4 py-10 md:grid-cols-[minmax(0,1fr)_auto] md:px-6 md:py-0">
+        <section className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-10 md:min-h-[calc(100svh-4.5rem)] md:grid-cols-[minmax(0,1fr)_auto] md:px-6 md:py-0">
           <div className="enter-up max-w-xl">
             <p className="font-display text-[11px] tracking-[0.32em] text-bagua-primary">周易 · 草纸刻本</p>
-            <h1 className="mt-5 font-display text-5xl leading-none tracking-[0.12em] text-bagua-text md:text-7xl">
+            <h1 className="mt-5 font-display text-5xl leading-none tracking-[0.08em] text-bagua-text md:text-7xl">
               八卦
             </h1>
             <p className="prose-body mt-6 text-pretty text-bagua-muted">
-              以铜钱蓍草之方，循文王周公之义。六十四卦，三百八十四爻，问一事，观一象。
+              三钱成爻，梅花取数。动爻多少，决定读卦辞还是爻辞。
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/divine" className="btn-primary">
@@ -29,11 +30,9 @@ export default function HomePage() {
                 六十四卦
               </Link>
             </div>
-            <ul className="mt-12 space-y-2 font-display text-xs tracking-[0.16em] text-bagua-muted">
-              <li>硬币 · 蓍草 · 手动</li>
-              <li>本卦 · 之卦 · 互卦 · 错卦 · 综卦</li>
-              <li>通行本经文 · 现代启示</li>
-            </ul>
+            <div className="mt-10">
+              <DailyOracle />
+            </div>
           </div>
 
           <div className="enter-up stagger-2 justify-self-center">

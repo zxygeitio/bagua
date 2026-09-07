@@ -131,8 +131,9 @@ export const useHistoryStore = create<HistoryState>()(
     }),
     {
       name: 'bagua-history',
-      version: 2, // 升级版本因为加了云同步字段
+      version: 3,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persisted) => persisted as HistoryState,
     },
   ),
 )

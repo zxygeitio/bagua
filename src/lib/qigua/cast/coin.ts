@@ -38,11 +38,17 @@ function createLine(sum: number): Line {
   }
 }
 
+export type CoinFace = 2 | 3
+
+export function flipThree(rng: () => number = Math.random): { coins: CoinFace[]; line: Line } {
+  const coins: CoinFace[] = [flip(rng), flip(rng), flip(rng)]
+  const sum = coins.reduce((total, face) => total + face, 0)
+  return { coins, line: createLine(sum) }
+}
+
 /** 投一次（3 枚硬币） */
 export function flipOnce(rng: () => number = Math.random): Line {
-  const coins = [flip(rng), flip(rng), flip(rng)]
-  const sum = coins.reduce((a, b) => a + b, 0)
-  return createLine(sum)
+  return flipThree(rng).line
 }
 
 /** 完整起卦：6 爻（初爻到上爻） */

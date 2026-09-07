@@ -29,9 +29,19 @@
 
   h1,
   h2,
+  h3,
+  .font-display,
+  .nav-link,
+  .btn-primary,
+  .btn-secondary {
+    font-family: var(--font-display), ui-monospace, monospace;
+    font-synthesis: none;
+  }
+
+  h1,
+  h2,
   h3 {
-    font-family: var(--font-display), 'Cubic 11', ui-monospace, monospace;
-    letter-spacing: var(--type-display-tracking);
+    letter-spacing: 0.06em;
     line-height: var(--type-display-leading);
     font-weight: 400;
   }
@@ -204,6 +214,53 @@
     color: var(--paper-surface);
   }
 
+  .pixel-dock {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: var(--pixel-step) solid var(--paper-ink);
+    background: var(--paper-canvas);
+  }
+
+  .pixel-dock .nav-link {
+    display: flex;
+    justify-content: center;
+    padding: 0.7rem 0.2rem;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .pixel-coin {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--pixel-step) solid var(--paper-ink);
+    font-family: var(--font-display), ui-monospace, monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    image-rendering: pixelated;
+  }
+
+  .pixel-coin.is-zi {
+    background: var(--paper-cinnabar);
+    color: var(--paper-surface);
+  }
+
+  .pixel-coin.is-bei {
+    background: var(--paper-ink);
+    color: var(--paper-surface);
+  }
+
+  .pixel-coin.is-toss {
+    animation: coinToss var(--motion-yao) steps(4, end);
+  }
+
   .enter-up {
     animation: enterUp var(--motion-entrance) steps(6, end) both;
   }
@@ -277,6 +334,12 @@
   }
 }
 
+@keyframes coinToss {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+  100% { transform: translateY(0); }
+}
+
 .stagger-1 { animation-delay: 0.06s; }
 .stagger-2 { animation-delay: 0.12s; }
 .stagger-3 { animation-delay: 0.18s; }
@@ -298,7 +361,8 @@
   .enter-up,
   .yao-pixel,
   .btn-primary,
-  .btn-secondary {
+  .btn-secondary,
+  .pixel-coin {
     animation: none !important;
     transition: none !important;
   }

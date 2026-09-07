@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { VerdictPanel } from '@/components/hexagram/VerdictPanel'
 import { ShareDialog } from '@/components/ShareDialog'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { SyncIndicator } from '@/components/SyncIndicator'
 import { Check, RefreshCw, Share2, Star, Trash2 } from '@/components/icons'
 import { getGuaById } from '@/lib/iching'
+import { assembleReading } from '@/lib/qigua/reading'
+import { CAST_METHOD_LABELS, SCENARIO_LABELS } from '@/types/iching'
 import { useHistoryStore } from '@/store/history'
 
 type Tab = 'ben' | 'bian' | 'hu' | 'dui' | 'zong'
@@ -72,8 +75,15 @@ export default function ResultPage() {
     }
   })()
 
-  const methodLabel = record.method === 'coins' ? '硬币法' : record.method === 'yarrow' ? '蓍草法' : '手动选卦'
+  const methodLabel = CAST_METHOD_LABELS[record.method] ?? record.method
   const date = new Date(record.timestamp).toLocaleString('zh-CN')
+  const reading = benGua
+    ? assembleReading({
+        ben: benGua,
+        bian: record.bianGuaId ? getGuaById(record.bianGuaId) : null,
+        changing: record.changingLinePositions,
+      })
+    : null
 
   return (
     <SiteShell eyebrow="RESULT / 判词">
@@ -103,6 +113,18 @@ export default function ResultPage() {
 
         {record.question ? (
           <p className="prose-classical mt-6">问：{record.question}</p>
+        ) : null}
+        {record.scenario ? (
+          <p className="mt-2 font-display text-[11px] tracking-[0.2em] text-bagua-primary">
+            问事 · {SCENARIO_LABELS[record.scenario]}
+            {record.kind === 'daily' ? ' · 今日之象' : ''}
+          </p>
+        ) : null}
+
+        {reading ? (
+          <div className="mt-8">
+            <VerdictPanel rule={reading.rule} verdicts={reading.verdicts} />
+          </div>
         ) : null}
 
         <div className="mt-8 border-4 border-bagua-text bg-bagua-surface p-4">
@@ -192,14 +214,16 @@ export default function ResultPage() {
             <ol className="space-y-5">
               {[...benGua.yaos].map((yao) => {
                 const isChanging = record.changingLinePositions.includes(yao.position)
+                const isPrimary = reading?.rule.primaryPositions[0] === yao.position
                 const yaoLabelYang = ['初九', '九二', '九三', '九四', '九五', '上九'][yao.position - 1]
                 const yaoLabelYin = ['初六', '六二', '六三', '六四', '六五', '上六'][yao.position - 1]
                 const label = yao.yinYang === 'yang' ? yaoLabelYang! : yaoLabelYin!
                 return (
-                  <li key={yao.position} className={`border-l-4 pl-4 ${isChanging ? 'border-bagua-primary' : 'border-bagua-text'}`}>
+                  <li key={yao.position} className={`border-l-4 pl-4 ${isPrimary ? 'border-bagua-primary bg-bagua-surface' : isChanging ? 'border-bagua-primary' : 'border-bagua-text'}`}>
                     <p className="font-display text-xs tracking-widest">
                       {label}
                       {isChanging ? <span className="ml-2 text-bagua-primary">动爻</span> : null}
+                      {isPrimary ? <span className="ml-2 text-bagua-primary">主占</span> : null}
                     </p>
                     <p className="prose-classical mt-1 text-[18px]">{yao.text}</p>
                     <p className="prose-body mt-1 text-sm text-bagua-muted">《象》曰：{yao.xiangZhuan}</p>

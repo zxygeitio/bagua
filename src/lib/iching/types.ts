@@ -1,6 +1,6 @@
 import type { z } from 'zod'
 
-import type { CastMethod, YaoPosition, YinYang } from '@/types/iching'
+import type { CastMethod, Scenario, YaoPosition, YinYang } from '@/types/iching'
 
 import type {
   CastRecordSchema,
@@ -49,6 +49,8 @@ export interface CastResult {
   timestamp: number
   method: CastMethod
   question?: string
+  scenario?: Scenario
+  kind?: 'cast' | 'daily'
   lines: Line[]
   benGuaId: number
   bianGuaId?: number

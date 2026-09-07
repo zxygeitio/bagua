@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
 import { HexagramSymbol } from './HexagramSymbol'
+import { TrigramWheel } from './TrigramWheel'
 import { Search } from '@/components/icons'
 import { getAllHexagrams, searchHexagrams } from '@/lib/iching'
+import type { TrigramName } from '@/lib/qigua/types'
 
 type SortMode = 'id' | 'wuxing' | 'trigram'
 
@@ -19,10 +21,12 @@ export function HexagramGrid() {
   const [query, setQuery] = useState('')
   const [sortMode, setSortMode] = useState<SortMode>('id')
   const [wuxingFilter, setWuxingFilter] = useState<string | null>(null)
+  const [trigram, setTrigram] = useState<TrigramName | null>(null)
 
   const hexagrams = useMemo(() => {
     let list = query ? searchHexagrams(query) : getAllHexagrams()
     if (wuxingFilter) list = list.filter((g) => g.wuxing === wuxingFilter)
+    if (trigram) list = list.filter((g) => g.shangGua === trigram || g.xiaGua === trigram)
     if (sortMode === 'wuxing') list = [...list].sort((a, b) => a.wuxing.localeCompare(b.wuxing))
     if (sortMode === 'trigram') {
       list = [...list].sort((a, b) => {
@@ -31,12 +35,15 @@ export function HexagramGrid() {
       })
     }
     return list
-  }, [query, sortMode, wuxingFilter])
+  }, [query, sortMode, wuxingFilter, trigram])
 
   const wuxingOptions = ['金', '木', '水', '火', '土']
 
   return (
     <div>
+      <div className="mb-4">
+        <TrigramWheel value={trigram} onChange={setTrigram} />
+      </div>
       <div className="paper-panel mb-8 p-3">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="flex flex-1 items-center gap-2 px-2">

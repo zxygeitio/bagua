@@ -184,6 +184,8 @@ export const CastResultSchema = z.object({
   timestamp: z.number().int().nonnegative(),
   method: CastMethodSchema,
   question: z.string().optional(),
+  scenario: ScenarioSchema.optional(),
+  kind: z.enum(['cast', 'daily']).optional(),
   lines: z.array(LineSchema).length(6),
   benGuaId: GuaIdSchema,
   bianGuaId: GuaIdSchema.optional(),

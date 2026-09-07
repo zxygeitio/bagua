@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { SiteShell } from '@/components/shared/SiteShell'
 
-type CastMethod = 'coins' | 'yarrow' | 'manual'
+type CastMethod = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
 
 export default function SettingsPage() {
   const [defaultMethod, setDefaultMethod] = useState<CastMethod>('coins')
@@ -37,9 +37,11 @@ export default function SettingsPage() {
           <div className="mt-4 space-y-2">
             {(
               [
-                { value: 'coins' as const, label: '快速起卦', desc: '硬币法 · 约 10 秒' },
-                { value: 'yarrow' as const, label: '蓍草揲占', desc: '传统揲四法 · 约 3 分钟' },
-                { value: 'manual' as const, label: '手动选卦', desc: '学习模式' },
+                { value: 'coins' as const, label: '铜钱', desc: '三钱六掷' },
+                { value: 'meihua' as const, label: '梅花', desc: '以数字或字起卦' },
+                { value: 'time' as const, label: '此刻', desc: '年日月时入先天数' },
+                { value: 'yarrow' as const, label: '蓍草', desc: '大衍揲占' },
+                { value: 'manual' as const, label: '排卦', desc: '自选上下卦' },
               ]
             ).map((opt) => (
               <label
