@@ -101,17 +101,19 @@ export default function HomePage() {
                   <p className="mb-2 font-display text-[10px] tracking-[0.28em] text-bagua-muted">
                     或从问事起
                   </p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {SCENARIO_CARDS.map((s) => {
                       const Icon = s.Icon
                       return (
                         <Link
                           key={s.tag}
                           href="/divine"
-                          className="btn-press group flex items-center gap-1.5 border-2 border-bagua-fiber bg-bagua-surface px-2.5 py-1 hover:border-bagua-text hover:bg-bagua-wash"
+                          className="btn-press group flex items-center gap-2 border-2 border-bagua-fiber bg-bagua-surface px-3 py-1.5 hover:border-bagua-text hover:bg-bagua-wash"
                         >
-                          <Icon className="h-3.5 w-3.5 text-bagua-primary" />
-                          <span className="font-display text-xs tracking-widest text-bagua-text">
+                          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center border-2 border-bagua-text bg-bagua-canvas text-bagua-primary transition group-hover:bg-bagua-primary group-hover:text-bagua-surface">
+                            <Icon className="h-3.5 w-3.5" />
+                          </span>
+                          <span className="font-display text-sm tracking-widest text-bagua-text">
                             {s.tag}
                           </span>
                           <span className="hidden font-body text-[10px] text-bagua-muted md:inline">
