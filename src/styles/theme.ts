@@ -15,15 +15,15 @@ export const PAPER = {
 } as const
 
 /**
- * 五行配色 — 各家互不相同，与纸本主调和谐
- *  木 青  火 朱  土 沙  金 月白  水 墨
+ * 五行配色 — 全部在同一饱和度 / 亮度区间，与纸本主调和谐
+ *  木 林  火 朱  土 沙  金 铜  水 墨
  */
 export const WUXING = {
-  wood: '#3F7A3A',   // 草青
+  wood: '#5C7A3A',   // 林绿
   fire: '#B23A2A',   // 朱砂 (与 primary 一致)
-  earth: '#B8893A',  // 黄沙
-  metal: '#A8A092',  // 月白
-  water: '#1F4F6B',  // 墨青
+  earth: '#A6773A',  // 沙棕
+  metal: '#9A7A3A',  // 铜褐
+  water: '#3A5C7A',  // 墨青
 } as const
 
 export const PIXEL = {

@@ -338,52 +338,42 @@ export const Filter = (props: IconProps) => (
  * 五行图标 — 每个独立动效与造型
  * ------------------------------------------------------------------ */
 
-/** 木 · Tree/wood — 主生发，向上展开 */
+/** 木 · 林 — 简化为两叶 */
 export const Wood = (props: IconProps) => (
   <svg {...baseProps} {...props}>
-    {/* 树 — 根、茎、叶 */}
-    <path d="M12 22 L12 14" />
-    <path d="M8 22 C9 20 10 19 12 19 C14 19 15 20 16 22" />
-    <path d="M12 14 C7 14 4 10 4 6 C4 4.5 5 3.5 6.5 4 C9 5 11 6 12 8" />
-    <path d="M12 14 C17 14 20 10 20 6 C20 4.5 19 3.5 17.5 4 C15 5 13 6 12 8" />
-    <path d="M6 6 L8 5 M18 6 L16 5" opacity="0.7" />
+    <path d="M12 22 L12 11" />
+    <path d="M12 11 C7 11 4 7 4 4" />
+    <path d="M12 11 C17 11 20 7 20 4" />
   </svg>
 )
 
-/** 火 · Fire — 炎上，外焰两尖 */
+/** 火 · 炎 — 简化为单焰 */
 export const Fire = (props: IconProps) => (
   <svg {...baseProps} {...props}>
-    <path d="M12 22 C7 22 4 19 4 15 C4 11 6.5 9.5 8 7 C8 9 9 10 10.5 9 C11 7 10.5 5 12.5 3 C13 6 15.5 6.5 17 9.5 C18 8 19 9 19.5 10.5 C20 12 20.5 14 20 16 C19 19.5 16 22 12 22 Z" />
-    <path d="M9.5 17 C10 19 11 19.5 12 19.5 C13 19.5 14 19 14.5 17" opacity="0.7" />
+    <path d="M12 22 C8 22 5 19 5 15 C5 12 7 10 8 7 C8 9 9.5 10 11 9 C11 6 10 4 12 2 C13 5 15 6 16 9 C17 7 18 8 18.5 10 C19 12 19.5 14 19 16 C18 20 15 22 12 22 Z" />
   </svg>
 )
 
-/** 土 · Earth — 厚德，承托山形 */
+/** 土 · 山 — 简化为单山形 */
 export const Earth = (props: IconProps) => (
   <svg {...baseProps} {...props}>
-    {/* 山形为主，下接土地 */}
-    <path d="M2 20 L22 20" />
-    <path d="M3 20 L8 11 L11 16 L15 7 L22 20" />
-    <path d="M2 8 C6 6 9 7 12 5 C15 3 18 4 22 6" opacity="0.55" />
-    <path d="M11 16 L13 13" opacity="0.6" />
+    <path d="M2 21 L22 21" />
+    <path d="M3 21 L8 12 L12 17 L16 8 L21 21" />
   </svg>
 )
 
-/** 金 · Metal — 刚毅，方圆中含 */
+/** 金 · 铜 — 简化为单方框 + 内圆 */
 export const Metal = (props: IconProps) => (
   <svg {...baseProps} {...props}>
-    <rect x="4" y="4" width="16" height="16" rx="1" transform="rotate(45 12 12)" />
-    <circle cx="12" cy="12" r="2.5" />
+    <rect x="3" y="3" width="18" height="18" rx="0.5" />
+    <circle cx="12" cy="12" r="4" />
   </svg>
 )
 
-/** 水 · Water — 润下，水滴与波 */
+/** 水 · 滴 — 简化为水滴 */
 export const Water = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M12 3 C8 9 5 13 5 16 C5 19.5 8 22 12 22 C16 22 19 19.5 19 16 C19 13 16 9 12 3 Z" />
-    <path d="M9 15 C9.5 17 10.5 18 12 18.5" opacity="0.6" />
-    <path d="M3 5 C5 4 7 5 9 4" opacity="0.5" />
-    <path d="M15 4 C17 5 19 4 21 5" opacity="0.5" />
   </svg>
 )
 
