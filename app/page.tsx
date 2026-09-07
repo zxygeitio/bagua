@@ -21,6 +21,7 @@ import {
   Wand,
 } from '@/components/icons'
 import { SiteShell } from '@/components/shared/SiteShell'
+import { PaperTilt } from '@/components/shared/PaperTilt'
 import { getGuaById } from '@/lib/iching'
 
 const FEATURED = [1, 2, 11, 24, 64]
@@ -129,9 +130,11 @@ export default function HomePage() {
 
             {/* 右：太极曼陀罗 */}
             <Reveal delay={200} direction="scale">
-              <div className="hidden justify-self-center md:block">
-                <BaguaCompass />
-              </div>
+              <PaperTilt className="paper-stage hidden justify-self-center md:block" intensity={4.5}>
+                <div className="paper-stack paper-depth p-4">
+                  <BaguaCompass />
+                </div>
+              </PaperTilt>
             </Reveal>
           </div>
 
@@ -235,9 +238,11 @@ export default function HomePage() {
             />
           </Reveal>
           <Reveal delay={200} direction="scale">
-            <div className="paper-panel flex justify-center px-6 py-12 md:px-12 md:py-16">
-              <BaguaCompass />
-            </div>
+            <PaperTilt className="paper-stack paper-stage">
+              <div className="paper-panel paper-depth flex justify-center px-6 py-12 md:px-12 md:py-16">
+                <BaguaCompass />
+              </div>
+            </PaperTilt>
           </Reveal>
         </section>
 

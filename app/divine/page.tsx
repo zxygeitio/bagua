@@ -8,6 +8,7 @@ import type { Line, Scenario } from '@/lib/iching'
 import { performDivination } from '@/services/divination.service'
 import { useHistoryStore } from '@/store/history'
 import { SiteShell } from '@/components/shared/SiteShell'
+import { PaperTilt } from '@/components/shared/PaperTilt'
 
 type Method = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
 type PreviewLine = Pick<Line, 'yinYang' | 'isChanging'>
@@ -364,52 +365,55 @@ function CastProgress({
   const positions = ['上爻', '五爻', '四爻', '三爻', '二爻', '初爻']
 
   return (
-    <div className="paper-panel enter-up border-4 border-bagua-primary p-6 md:p-8">
-      <div className="mb-1 flex items-center justify-between">
-        <div className="font-display text-xl tracking-wider text-bagua-primary">{labels[method]}</div>
-        <span className="font-display text-[10px] tracking-widest text-bagua-muted">
-          {String(progress).padStart(2, '0')} / 06
-        </span>
-      </div>
-      <div className="mb-6 font-body text-xs text-bagua-muted">爻线从初爻开始，逐层向上显现</div>
-      <div className="space-y-2.5">
-        {positions.map((label, displayIndex) => {
-          const lineIndex = 5 - displayIndex
-          const line = castLines[lineIndex]
-          const isCurrent = lineIndex === progress - 1
-          return (
-            <div key={label} className="flex items-center gap-3">
-              <span className="w-10 font-display text-[10px] text-bagua-muted">{label}</span>
-              <div
-                className={`flex h-7 flex-1 items-center gap-1 ${line ? 'cast-line' : 'opacity-25'}`}
-              >
-                {line?.yinYang === 'yin' ? (
-                  <>
-                    <span className="h-2 flex-1 bg-bagua-text" />
-                    <span className="h-2 flex-1 bg-bagua-text" />
-                  </>
-                ) : (
-                  <span className={`h-2 w-full ${line?.isChanging ? 'bg-bagua-primary' : 'bg-bagua-text'}`} />
-                )}
-                {isCurrent && currentLine && (
-                  <span className="ml-2 font-display text-[10px] text-bagua-primary">
-                    {currentLine.yinYang === 'yang' ? '阳' : '阴'}
-                    {currentLine.isChanging ? ' · 动' : ''}
-                  </span>
-                )}
+    <PaperTilt className="paper-stack paper-stage enter-up" intensity={3.5}>
+      <span className="paper-stage-shadow" aria-hidden="true" />
+      <div className="paper-panel paper-depth border-4 border-bagua-primary p-6 md:p-8">
+        <div className="mb-1 flex items-center justify-between">
+          <div className="font-display text-xl tracking-wider text-bagua-primary">{labels[method]}</div>
+          <span className="font-display text-[10px] tracking-widest text-bagua-muted">
+            {String(progress).padStart(2, '0')} / 06
+          </span>
+        </div>
+        <div className="mb-6 font-body text-xs text-bagua-muted">爻线从初爻开始，逐层向上显现</div>
+        <div className="space-y-2.5">
+          {positions.map((label, displayIndex) => {
+            const lineIndex = 5 - displayIndex
+            const line = castLines[lineIndex]
+            const isCurrent = lineIndex === progress - 1
+            return (
+              <div key={label} className="flex items-center gap-3">
+                <span className="w-10 font-display text-[10px] text-bagua-muted">{label}</span>
+                <div
+                  className={`flex h-7 flex-1 items-center gap-1 ${line ? 'cast-line' : 'opacity-25'}`}
+                >
+                  {line?.yinYang === 'yin' ? (
+                    <>
+                      <span className="h-2 flex-1 bg-bagua-text" />
+                      <span className="h-2 flex-1 bg-bagua-text" />
+                    </>
+                  ) : (
+                    <span className={`h-2 w-full ${line?.isChanging ? 'bg-bagua-primary' : 'bg-bagua-text'}`} />
+                  )}
+                  {isCurrent && currentLine && (
+                    <span className="ml-2 font-display text-[10px] text-bagua-primary">
+                      {currentLine.yinYang === 'yang' ? '阳' : '阴'}
+                      {currentLine.isChanging ? ' · 动' : ''}
+                    </span>
+                  )}
+                </div>
+                {line && <Check className="h-3.5 w-3.5 flex-shrink-0 text-bagua-primary" />}
               </div>
-              {line && <Check className="h-3.5 w-3.5 flex-shrink-0 text-bagua-primary" />}
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
+        <div className="mt-7 h-1 overflow-hidden bg-bagua-fiber">
+          <div
+            className="h-full w-full origin-left bg-bagua-primary transition-transform duration-500 ease-out"
+            style={{ transform: `scaleX(${progress / 6})` }}
+          />
+        </div>
+        <p className="mt-6 text-center font-body text-xs leading-relaxed text-bagua-muted">{tip}</p>
       </div>
-      <div className="mt-7 h-1 overflow-hidden bg-bagua-fiber">
-        <div
-          className="h-full bg-bagua-primary transition-all duration-500"
-          style={{ width: `${(progress / 6) * 100}%` }}
-        />
-      </div>
-      <p className="mt-6 text-center font-body text-xs leading-relaxed text-bagua-muted">{tip}</p>
-    </div>
+    </PaperTilt>
   )
 }
