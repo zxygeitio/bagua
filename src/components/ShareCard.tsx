@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { X, Download } from '@/components/icons'
-import { getGuaById, type Gua } from '@/lib/iching'
+import { type Gua } from '@/lib/iching'
 import { SCENARIO_LABELS, type Scenario } from '@/types/iching'
 import { hexagramPixelMetrics, type HexagramSize } from '@/styles/theme'
 
@@ -414,5 +414,4 @@ async function getBgDataUrl(): Promise<string> {
   return _bgDataUrl
 }
 
-// 占位以防 tree-shake
-void getGuaById
+// 占位以防 tree-shake（已移除无用的 getGuaById import）

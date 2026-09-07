@@ -20,9 +20,7 @@ import {
   Trash2,
   Wand,
 } from '@/components/icons'
-import { cloudHistory } from '@/repositories/CloudHistoryRepository'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
-import { getAnonymousId } from '@/lib/supabase/identity'
 import { useHistoryStore } from '@/store/history'
 
 type CastMethod = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
@@ -363,7 +361,3 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   )
 }
-
-// 临时使用（占位防止未使用警告）
-void cloudHistory
-void getAnonymousId

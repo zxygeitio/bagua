@@ -58,9 +58,6 @@ const SCENARIO_CARDS = [
 ] as const
 
 export default function HomePage() {
-  const qian = getGuaById(1)
-  void qian
-
   return (
     <SiteShell>
       <main>

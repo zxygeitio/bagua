@@ -141,7 +141,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
         </div>
       </footer>
 
-      <nav className="pixel-dock md:hidden overflow-x-auto" aria-label="移动导航">
+      <nav className="pixel-dock md:hidden" aria-label="移动导航">
         {NAV.map((item) => {
           const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
           return (
