@@ -7,7 +7,7 @@ import { getGuaById } from '@/lib/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SyncIndicator } from '@/components/SyncIndicator'
 import { ShareDialog } from '@/components/ShareDialog'
-import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles } from '@/components/icons'
+import { ArrowLeft, Star, Trash2, Share2, RefreshCw, Sparkles, Check } from '@/components/icons'
 
 type Tab = 'ben' | 'bian' | 'hu' | 'dui' | 'zong'
 
@@ -24,9 +24,12 @@ export default function ResultPage() {
   const [activeTab, setActiveTab] = useState<Tab>('ben')
   const [recordId, setRecordId] = useState<string | null>(null)
   const [showShare, setShowShare] = useState(false)
+  const [noteDraft, setNoteDraft] = useState('')
+  const [noteSaved, setNoteSaved] = useState(false)
   const records = useHistoryStore(s => s.records)
   const toggleFavorite = useHistoryStore(s => s.toggleFavorite)
   const removeRecord = useHistoryStore(s => s.removeRecord)
+  const updateNotes = useHistoryStore(s => s.updateNotes)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -36,6 +39,11 @@ export default function ResultPage() {
   }, [])
 
   const record = recordId ? records.find(r => r.id === recordId) : undefined
+
+  useEffect(() => {
+    setNoteDraft(record?.notes ?? '')
+    setNoteSaved(false)
+  }, [record?.id, record?.notes])
 
   if (!record) {
     return (
@@ -102,6 +110,39 @@ export default function ResultPage() {
         <div className="mb-6 text-center">
           <p className="font-body text-sm text-bagua-muted">{date} · {methodLabel}</p>
           {record.question && <p className="mt-2 font-calligraphy text-lg text-bagua-text">问：{record.question}</p>}
+        </div>
+
+        <div className="mb-8 rounded-card border border-bagua-border/40 bg-bagua-surface/80 p-5 shadow-md">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display text-base font-bold text-bagua-text">本次记录</h2>
+              <p className="mt-1 font-body text-xs text-bagua-muted">写下当下的判断，方便日后复盘。</p>
+            </div>
+            <button
+              type="button"
+              onClick={async () => {
+                await updateNotes(record.id, noteDraft.trim())
+                setNoteSaved(true)
+                window.setTimeout(() => setNoteSaved(false), 1800)
+              }}
+              className="inline-flex items-center gap-1.5 rounded-button border border-bagua-primary/50 px-3 py-2 font-body text-xs font-medium text-bagua-primary transition hover:bg-bagua-primary/10"
+            >
+              {noteSaved ? <Check className="h-3.5 w-3.5" /> : null}
+              {noteSaved ? '已保存' : '保存备注'}
+            </button>
+          </div>
+          <textarea
+            value={noteDraft}
+            onChange={event => {
+              setNoteDraft(event.target.value)
+              setNoteSaved(false)
+            }}
+            rows={3}
+            maxLength={500}
+            placeholder="例如：两周后回看这次判断的变化……"
+            className="w-full resize-y rounded-button border border-bagua-border/40 bg-bagua-canvas/50 px-3 py-2 font-body text-sm leading-relaxed text-bagua-text outline-none transition placeholder:text-bagua-muted/70 focus:border-bagua-primary/70 focus:ring-2 focus:ring-bagua-primary/20"
+          />
+          <div className="mt-2 text-right font-mono text-[10px] text-bagua-muted">{noteDraft.length}/500</div>
         </div>
 
         <div className="mb-8 rounded-card border border-bagua-border/40 bg-bagua-surface shadow-md">

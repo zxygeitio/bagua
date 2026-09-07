@@ -1,18 +1,20 @@
 import Link from 'next/link'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
-import { Logo, ArrowRight, Sparkles, Layers, Compass, BookText } from '@/components/icons'
+import { getGuaById } from '@/lib/iching'
+import { ParticleField } from '@/components/visual/ParticleField'
+import { Logo, ArrowRight, Sparkles, Orbit, Wand, Pulse } from '@/components/icons'
 
 export default function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-ink-950">
-      {/* 装饰背景：星空 + 光晕 */}
+      {/* 装饰背景：深度粒子场与轨道线 */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-1/4 h-[480px] w-[480px] rounded-full bg-indigo-500/10 blur-[120px]" />
-        <div className="absolute right-0 top-0 h-[600px] w-[600px] rounded-full bg-gold-500/8 blur-[140px]" />
-        <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-vermilion-500/8 blur-[100px]" />
+        <ParticleField />
+        <div className="hero-orbit absolute right-[-12rem] top-24 h-[34rem] w-[34rem] rounded-full border border-gold-400/10" />
+        <div className="hero-orbit hero-orbit-delayed absolute right-[-6rem] top-48 h-[22rem] w-[22rem] rounded-full border border-jade-300/10" />
         {/* 装饰八卦符号 */}
-        <div className="absolute right-12 top-1/3 font-display text-[280px] leading-none text-gold-500/5">☰</div>
-        <div className="absolute bottom-32 left-12 font-display text-[200px] leading-none text-gold-500/5">☵</div>
+        <div className="absolute right-12 top-1/3 font-display text-[280px] leading-none text-gold-500/[0.04]">☰</div>
+        <div className="absolute bottom-32 left-12 font-display text-[200px] leading-none text-gold-500/[0.04]">☵</div>
       </div>
 
       {/* 顶部导航 */}
@@ -149,19 +151,19 @@ export default function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-3">
             <FeatureCard
-              icon={<Layers className="h-5 w-5" />}
+              icon={<Orbit className="h-5 w-5" />}
               title="六十四卦 · 三百八十四爻"
               description="完整收录通行本卦辞、彖传、象传、爻辞、小象传；乾坤附《文言》。"
               hue="gold"
             />
             <FeatureCard
-              icon={<Compass className="h-5 w-5" />}
+              icon={<Wand className="h-5 w-5" />}
               title="三种起卦法"
               description="硬币法应日常，蓍草法从古礼，手动选卦研学理。各得其所。"
               hue="jade"
             />
             <FeatureCard
-              icon={<BookText className="h-5 w-5" />}
+              icon={<Pulse className="h-5 w-5" />}
               title="五种卦变关系"
               description="本卦、之卦、互卦、错卦、综卦，层层推演，由象达意。"
               hue="vermilion"
@@ -198,6 +200,13 @@ function FeaturedHexagram({ id, name, subtitle, detail, hue, offset = false }: {
   hue: 'gold' | 'vermilion' | 'jade'
   offset?: boolean
 }) {
+  const gua = getGuaById(id)
+  const colorMap = {
+    gold: { bg: 'bg-gold-500/10', text: 'text-gold-300', line: 'fill-gold-300', hover: 'group-hover:text-gold-300' },
+    vermilion: { bg: 'bg-vermilion-500/10', text: 'text-vermilion-300', line: 'fill-vermilion-300', hover: 'group-hover:text-vermilion-300' },
+    jade: { bg: 'bg-jade-500/10', text: 'text-jade-300', line: 'fill-jade-300', hover: 'group-hover:text-jade-300' },
+  } as const
+  const colors = colorMap[hue]
   return (
     <Link
       href={`/hexagrams/${id}`}
@@ -209,14 +218,12 @@ function FeaturedHexagram({ id, name, subtitle, detail, hue, offset = false }: {
           <h3 className="mt-2 font-calligraphy text-2xl text-ink-50">{name}</h3>
           <p className="mt-1 font-body text-xs text-ink-400">{subtitle}</p>
         </div>
-        <div className={`flex h-16 w-16 items-center justify-center rounded-full bg-${hue}-500/10`}>
-          <span className={`font-display text-2xl text-${hue}-400`}>
-            {id === 1 ? '☰' : id === 2 ? '☷' : '☵'}
-          </span>
+        <div className={`feature-glyph flex h-20 w-20 items-center justify-center rounded-full ${colors.bg} ring-1 ring-white/5`}>
+          {gua ? <HexagramSymbol gua={gua} size="sm" yangClassName={colors.line} yinClassName="fill-ink-500" /> : null}
         </div>
       </div>
       <p className="mt-6 font-body text-sm leading-relaxed text-ink-300">{detail}</p>
-      <div className="mt-6 flex items-center gap-1.5 font-body text-xs text-ink-400 transition group-hover:text-gold-400">
+      <div className={`mt-6 flex items-center gap-1.5 font-body text-xs text-ink-400 transition ${colors.hover}`}>
         查看详情
         <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
       </div>

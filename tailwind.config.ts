@@ -14,16 +14,16 @@ const config: Config = {
     extend: {
       colors: {
         bagua: {
-          canvas: '#FBF8F0',
-          surface: '#FFFFFF',
-          glass: 'rgba(255,255,255,0.6)',
+          canvas: '#08080A',
+          surface: '#111113',
+          glass: 'rgba(24,24,27,0.72)',
           primary: {
-            DEFAULT: '#6366F1',
-            50: '#EEF2FF',
-            100: '#E0E7FF',
-            500: '#6366F1',
-            600: '#4F46E5',
-            900: '#312E81',
+            DEFAULT: '#DDB35A',
+            50: '#FEF3C7',
+            100: '#FDE68A',
+            500: '#DDB35A',
+            600: '#B8892E',
+            900: '#78350F',
           },
           secondary: {
             DEFAULT: '#10B981',
@@ -39,9 +39,9 @@ const config: Config = {
             600: '#D97706',
             900: '#78350F',
           },
-          text: '#1F2937',
-          muted: '#6B7280',
-          border: 'rgba(229,231,235,0.5)',
+          text: '#F5F5F4',
+          muted: '#A8A29E',
+          border: 'rgba(255,255,255,0.12)',
         },
         // 深色博物馆主题 - 墨色/金/玉/朱/琥珀
         ink: {
@@ -94,8 +94,8 @@ const config: Config = {
         pill: '9999px',
       },
       boxShadow: {
-        soft: '0 4px 20px rgba(99,102,241,0.08)',
-        glow: '0 0 40px rgba(99,102,241,0.15)',
+        soft: '0 4px 20px rgba(0,0,0,0.28)',
+        glow: '0 0 40px rgba(221,179,90,0.14)',
         gold: '0 4px 20px rgba(245,158,11,0.15)',
         jade: '0 4px 20px rgba(16,185,129,0.15)',
         inset: 'inset 0 1px 2px rgba(0,0,0,0.05)',

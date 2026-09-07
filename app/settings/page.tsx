@@ -1,11 +1,28 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Settings as SettingsIcon } from '@/components/icons'
 
 export default function SettingsPage() {
   const [defaultMethod, setDefaultMethod] = useState<'coins' | 'yarrow' | 'manual'>('coins')
   const [showAnimation, setShowAnimation] = useState(true)
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('bagua-settings') ?? '{}') as {
+        defaultMethod?: 'coins' | 'yarrow' | 'manual'
+        showAnimation?: boolean
+      }
+      if (saved.defaultMethod) setDefaultMethod(saved.defaultMethod)
+      if (typeof saved.showAnimation === 'boolean') setShowAnimation(saved.showAnimation)
+    } catch {
+      // Ignore malformed local settings and keep the defaults.
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('bagua-settings', JSON.stringify({ defaultMethod, showAnimation }))
+  }, [defaultMethod, showAnimation])
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -83,6 +100,26 @@ export default function SettingsPage() {
               <p>数据：64 卦经典 + 现代解读</p>
               <p className="mt-3 text-xs">© 2026 bagua · 仅供文化学习参考</p>
             </div>
+          </div>
+
+          <div className="glass-card rounded-card p-6 animate-fade-up stagger-4">
+            <h2 className="mb-3 font-display text-lg font-bold text-bagua-text">数据管理</h2>
+            <p className="font-body text-sm leading-relaxed text-bagua-muted">
+              起卦记录默认保存在本机，并在 Supabase 配置可用时自动同步。
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm('确定清空本机设置吗？起卦记录不会被删除。')) {
+                  localStorage.removeItem('bagua-settings')
+                  setDefaultMethod('coins')
+                  setShowAnimation(true)
+                }
+              }}
+              className="mt-4 rounded-button border border-bagua-border/50 px-4 py-2 text-sm text-bagua-muted transition hover:border-bagua-primary/60 hover:text-bagua-primary"
+            >
+              恢复默认设置
+            </button>
           </div>
         </div>
       </section>

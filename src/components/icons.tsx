@@ -253,3 +253,32 @@ export const HexagramPattern = (props: IconProps) => (
     <rect x="17" y="17" width="4" height="4" />
   </svg>
 )
+
+/** Orbital ring used for the depth/constellation visual language. */
+export const Orbit = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <ellipse cx="12" cy="12" rx="9" ry="4.5" transform="rotate(-25 12 12)" />
+    <ellipse cx="12" cy="12" rx="9" ry="4.5" transform="rotate(25 12 12)" opacity="0.55" />
+    <circle cx="12" cy="12" r="2" fill="currentColor" />
+    <circle cx="19.6" cy="8.7" r="1" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/** Ritual wand / spark icon for the guided casting action. */
+export const Wand = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <path d="M5 19 L16.5 7.5" />
+    <path d="M4 20 L7 19 L5 17 Z" fill="currentColor" stroke="none" />
+    <path d="M17.5 3.5 L18 5.5 L20 6 L18 6.5 L17.5 8.5 L17 6.5 L15 6 L17 5.5 Z" />
+    <path d="M13 3 L13.5 4.5 M21 10 L19.5 10.5" opacity="0.65" />
+  </svg>
+)
+
+/** Pulse mark for the live interpretation / changing-line feature. */
+export const Pulse = (props: IconProps) => (
+  <svg {...baseProps} {...props}>
+    <path d="M3 12 H7 L9.5 5 L14 19 L16.5 12 H21" />
+    <circle cx="9.5" cy="5" r="1" fill="currentColor" stroke="none" />
+    <circle cx="14" cy="19" r="1" fill="currentColor" stroke="none" />
+  </svg>
+)

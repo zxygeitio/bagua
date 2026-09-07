@@ -135,9 +135,12 @@ export default function HistoryPage() {
                           </>
                         )}
                       </div>
+                      {r.notes && (
+                        <p className="mt-2 truncate font-body text-xs text-bagua-muted/80">备注：{r.notes}</p>
+                      )}
                     </div>
                   </Link>
-                  <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
+                  <div className="flex items-center gap-1 md:opacity-0 md:transition-opacity md:group-hover:opacity-100">
                     <button onClick={() => toggleFavorite(r.id)} className="rounded-full p-2 text-bagua-muted transition hover:bg-bagua-canvas hover:text-bagua-accent">
                       <Star className={`h-4 w-4 ${r.favorite ? 'fill-bagua-accent text-bagua-accent' : ''}`} />
                     </button>
