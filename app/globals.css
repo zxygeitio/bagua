@@ -83,6 +83,47 @@
     background-color: var(--paper-canvas);
   }
 
+  .paper-hero {
+    isolation: isolate;
+  }
+
+  .paper-particles {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.72;
+  }
+
+  .paper-particle {
+    position: absolute;
+    top: var(--particle-y);
+    left: var(--particle-x);
+    width: var(--particle-size);
+    height: calc(var(--particle-size) * 0.72);
+    border: 1px solid rgba(178, 58, 42, 0.34);
+    background: rgba(201, 165, 106, 0.32);
+    transform: rotate(var(--particle-rotate));
+    animation: paper-float var(--particle-duration) ease-in-out var(--particle-delay) infinite;
+    will-change: transform, opacity;
+  }
+
+  .paper-hero::after {
+    content: '';
+    position: absolute;
+    top: 14%;
+    right: 8%;
+    width: min(36vw, 24rem);
+    height: min(36vw, 24rem);
+    z-index: -1;
+    border: 1px solid rgba(178, 58, 42, 0.1);
+    border-radius: 50%;
+    box-shadow: 0 0 0 16px rgba(178, 58, 42, 0.025), 0 0 0 32px rgba(178, 58, 42, 0.018);
+    animation: paper-breathe 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
   .pixel-grid {
     pointer-events: none;
     position: absolute;
@@ -273,6 +314,30 @@
   .paper-depth {
     transform: translateZ(14px);
     transform-style: preserve-3d;
+  }
+
+  @keyframes paper-float {
+    0%,
+    100% {
+      opacity: 0.28;
+      transform: translate3d(0, 0, 0) rotate(var(--particle-rotate));
+    }
+    50% {
+      opacity: 0.78;
+      transform: translate3d(10px, -14px, 0) rotate(calc(var(--particle-rotate) + 18deg));
+    }
+  }
+
+  @keyframes paper-breathe {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.96) rotate(-2deg);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.02) rotate(2deg);
+    }
   }
 
   .paper-panel--quiet {
@@ -819,6 +884,11 @@ main {
     transform: none !important;
     transition: none !important;
     will-change: auto;
+  }
+
+  .paper-particle,
+  .paper-hero::after {
+    animation: none;
   }
 
   .paper-stack::before,

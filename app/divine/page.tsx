@@ -9,6 +9,7 @@ import { performDivination } from '@/services/divination.service'
 import { useHistoryStore } from '@/store/history'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
+import { PaperParticles } from '@/components/shared/PaperParticles'
 
 type Method = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
 type PreviewLine = Pick<Line, 'yinYang' | 'isChanging'>
@@ -101,7 +102,8 @@ export default function DivinePage() {
 
   return (
     <SiteShell eyebrow="CAST / 01">
-      <main className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
+      <main className="paper-hero relative mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
+        <PaperParticles />
         <div className="enter-up mb-10 max-w-2xl">
           <h1 className="font-display text-5xl leading-none tracking-[0.06em] md:text-6xl">起卦</h1>
           <p className="prose-body mt-4 text-bagua-muted">

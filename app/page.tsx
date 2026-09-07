@@ -22,6 +22,7 @@ import {
 } from '@/components/icons'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
+import { PaperParticles } from '@/components/shared/PaperParticles'
 import { getGuaById } from '@/lib/iching'
 
 const FEATURED = [1, 2, 11, 24, 64]
@@ -63,7 +64,8 @@ export default function HomePage() {
     <SiteShell>
       <main>
         {/* ========== Hero ========== */}
-        <section className="relative mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-20">
+        <section className="paper-hero relative mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-20">
+          <PaperParticles />
           <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
             {/* 左：标题 + CTA */}
             <div>
