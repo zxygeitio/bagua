@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+  /* 全局 SVG 图标对齐修复：与文字基线对齐 */
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+}
+
+@layer base {
   html {
     scroll-behavior: smooth;
   }
