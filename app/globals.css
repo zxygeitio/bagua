@@ -450,6 +450,18 @@
     image-rendering: pixelated;
     image-rendering: crisp-edges;
   }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--paper-fiber) 0%,
+      var(--paper-wash) 50%,
+      var(--paper-fiber) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+    opacity: 0.5;
+  }
 }
 
 @keyframes enterUp {
@@ -483,6 +495,11 @@
 @keyframes sealFloat {
   0%, 100% { transform: translateY(0) rotate(-1deg); }
   50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .stagger-1 { animation-delay: 0.06s; }
