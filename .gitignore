@@ -40,3 +40,24 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 设计参考图(来自外部 AI 工具,不入库)
+kimiK66-*.png
+*.tmp-image-response.json
+typo-audit-*.png
+audit-*.png
+final-*.png
+mobile-*.png
+local-*.png
+local-after-*.png
+optimized-*.png
+current-*.png
+full-page-*.png
+compass-focus-*.png
+compass-with-*.png
+tab-focus-*.png
+large-compass-*.png
+published-*.png
+.tmp-image-response.json
+.superpowers/
+%SystemDrive%/
