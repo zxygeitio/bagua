@@ -16,7 +16,7 @@
 
 ### 最终交付
 - ✅ 完整 64 卦数据 + Zod schema 校验
-- ✅ 三种起卦算法（硬币法/蓍草法/手动选卦）
+- ✅ 统一硬币法起卦（旧方法仅保留历史记录读取兼容）
 - ✅ 五种卦变关系（本卦/之卦/互卦/错卦/综卦）
 - ✅ 9 个页面（首页/64 卦/详情/起卦/结果/历史/设置/分享/Supabase 云同步）
 - ✅ Supabase 后端集成（匿名用户模式 + 云同步 + 分享链接）
@@ -92,10 +92,9 @@ D:\workspace\bagua\
 │   │   ├── qigua/                    # 起卦算法层
 │   │   │   ├── cast/
 │   │   │   │   ├── coin.ts           # 硬币法
-│   │   │   │   ├── yarrow.ts         # 蓍草法（基数 49 修正版）
-│   │   │   │   ├── manual.ts         # 手动选卦
 │   │   │   │   └── transform.ts      # 卦变关系（错/综/互/之）
 │   │   │   ├── bagua.ts              # 八卦编码
+│   │   │   ├── daily.ts              # 日期种子硬币法
 │   │   │   ├── rng.ts                # 可重放 PRNG（mulberry32）
 │   │   │   └── builder.ts            # 卦象构建器
 │   │   └── supabase/
@@ -123,10 +122,12 @@ D:\workspace\bagua\
 │
 ├── tests/
 │   └── unit/
-│       ├── coin.test.ts              # 硬币法测试（5）
-│       ├── yarrow.test.ts            # 蓍草法测试（3）
+│       ├── coin.test.ts              # 硬币法测试（6）
+│       ├── daily.test.ts             # 每日一卦测试（1）
 │       ├── builder.test.ts           # 构建器测试（7）
-│       └── transform.test.ts         # 卦变测试（9）
+│       ├── transform.test.ts         # 卦变测试（9）
+│       ├── reading.test.ts           # 读卦测试（7）
+│       └── theme.test.ts             # 主题测试（5）
 │
 ├── supabase/
 │   └── schema.sql                    # 数据库 schema（5 表 + RLS）
@@ -161,8 +162,8 @@ D:\workspace\bagua\
 - **算法参考**: godcong/yi（Go，MIT）
 - **UI 参考**: mikhael28/i-ching（oracleofchanges.com）
 
-### 2. 关键 Bug 修复（vs 原 spec）
-- **蓍草法算法**：原 spec 错误（基数 50、方向错），修正为基数 49 + 36→9/24→6
+### 2. 关键决策与修复
+- **起卦方式收敛**：移除蓍草、梅花、时间和手动起卦；正式流程只保留硬币法，旧记录继续可读
 - **文王卦序 ID**：原 spec 用 `upper*8 + lower + 1` 公式错（给出 64 而非 1），改为阴阳爻模式匹配
 - **Frank2333333 数据缺陷**：缺用九用六，改用 tiredcows 主源
 - **Next.js 静态导出**：`/result/[id]` 改为 `/result?id=xxx`（nanoid 无法预生成）
@@ -203,7 +204,7 @@ e2a4117 feat: 视觉升级 v1 - 玻璃拟态 + 更好的设计系统
 | 静态部署 | https://bagua-1lq.pages.dev（73+ 页面） |
 | GitHub | zxygeitio/bagua（私有仓库） |
 | 数据库 | 5 个表 + 严格 RLS（anonymous_id 验证） |
-| 单元测试 | 24/24 通过 |
+| 单元测试 | 35/35 通过 |
 | 数据校验 | 12 项 canary 通过 |
 | TypeScript | 0 错误（strict + noUncheckedIndexedAccess） |
 | 视觉设计 | 商业级（深色专业主题 + 自绘 SVG） |
@@ -212,12 +213,14 @@ e2a4117 feat: 视觉升级 v1 - 玻璃拟态 + 更好的设计系统
 
 ### 🧪 测试覆盖
 ```
-tests/unit/coin.test.ts     → 5 个测试
-tests/unit/yarrow.test.ts   → 3 个测试  
+tests/unit/coin.test.ts     → 6 个测试
+tests/unit/daily.test.ts    → 1 个测试
 tests/unit/builder.test.ts  → 7 个测试
 tests/unit/transform.test.ts → 9 个测试
+tests/unit/reading.test.ts  → 7 个测试
+tests/unit/theme.test.ts    → 5 个测试
 ─────────────────────────────
-总计: 24 个测试，100% 通过
+总计: 35 个测试，100% 通过
 ```
 
 ### 📈 数据质量
@@ -283,7 +286,7 @@ tests/unit/transform.test.ts → 9 个测试
 
 | # | Bug | 修复 |
 |---|------|------|
-| 1 | 蓍草法产出非法余数（27/31/43/45） | 修正为先挂一再揲四 + 强制归奇 5 或 9 |
+| 1 | 起卦方式过多且部分实现缺乏专业复核 | 正式流程收敛为标准三钱六掷硬币法 |
 | 2 | 文王卦序映射错误（全阳=64 而非 1） | 改为阴阳爻模式匹配 |
 | 3 | Frank2333333 缺用九用六 | 改用 tiredcows 主源 |
 | 4 | `/result/[id]` 404（SSG 限制） | 改为 `/result?id=xxx` 单页 |
@@ -335,19 +338,6 @@ tests/unit/transform.test.ts → 9 个测试
 // 总和 9 = 老阳 → 阴变
 
 // 概率分布：37.5% / 37.5% / 12.5% / 12.5%
-```
-
-### 蓍草法
-```typescript
-// 大衍之数五十，其用四十有九（基数 49）
-// 每爻 18 变（3 次"分二、挂一、揲四、归奇"）
-// 余数 → 爻：
-//   36 = 老阴 → 阳变
-//   32 = 少阳
-//   28 = 少阴
-//   24 = 老阳 → 阴变
-
-// 真实概率：6.25% / 43.75% / 31.25% / 18.75%
 ```
 
 ### 卦变关系（5种）

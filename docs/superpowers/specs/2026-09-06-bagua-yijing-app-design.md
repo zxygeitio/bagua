@@ -18,8 +18,7 @@
 | §5.2 目录 | **新增** `src/repositories/`、`src/services/`、`src/lib/qigua/` | 解耦 Store 与 localStorage；编排逻辑集中 |
 | §6.1 八卦 | **不变** | - |
 | §6.2.1 硬币 | **不变** | - |
-| §6.2.2 蓍草 | **修正**：基数 50 → 49；明确 18 变推导 | v1 算法错误 |
-| §6.4 概率分布 | **修正**：少阳 7/16、少阴 5/16、老阳 3/16、老阴 1/16 | v1 描述错误 |
+| §6.2 硬币 | **收敛**：统一采用三钱六掷 | 减少未经专业复核的起卦方式 |
 | §6.5 数据源 | **重写**：tiredcows 维基文库版为主源 + wangxb96 补全 | Frank2333333 无 LICENSE 且缺用九用六 |
 | §7 schema | **扩展**：增加 palace/scenarios/interpretationPack 等字段 | 易学评审建议 |
 | §8.3 起卦页 | **改**：渐进式披露（硬币法为主CTA） | UX 评审建议 |
@@ -45,7 +44,7 @@
 
 打造 `bagua`：
 - **数据完整**：四源投票校验，64卦 + 384爻 + 用九用六 + 386小象（完整十翼结构）
-- **逻辑精确**：硬币/蓍草/手动三种起卦，与 godcong/yi 交叉验证
+- **逻辑精确**：统一采用硬币法起卦，与 godcong/yi 交叉验证
 - **视觉精美**：复刻参考图米黄底色 + 紫绿橙点缀 + 玻璃拟态 + 柔阴影
 - **架构清晰**：Repository + Service 双层抽象，未来可扩展云同步
 
@@ -87,7 +86,7 @@
 | 首页 | 品牌展示 + 双入口 + 特性 | P0 |
 | 64 卦浏览 | 网格 + 搜索 + 筛选 | P0 |
 | 卦象详情 | 径向关系图（本卦居中 + 4变卦环绕） | P0 |
-| 起卦 | 单一CTA + 进阶切换（硬币/蓍草/手动） | P0 |
+| 起卦 | 单一CTA + 硬币法 | P0 |
 | 占卜结果 | 本卦 + 变爻 + 解读 + 建议 | P0 |
 | 本地历史 | 起卦记录、收藏、笔记 | P1 |
 | 高质量解读 | 9大场景 × 64 卦 预置解读 | P0 |
@@ -134,10 +133,7 @@
 │  ║   🎲 快速起卦（约 10 秒）       ║  │  ← 主 CTA（硬币法）
 │  ╚═══════════════════════════════╝  │
 │                                     │
-│  ───────── 想更深入？ ─────────       │
-│                                     │
-│  蓍草揲占（传统，~3 分钟）              │  ← 次级链接
-│  手动选卦（学习模式）                    │  ← 次级链接
+│  三钱六掷，六爻自下而上记录             │
 └─────────────────────────────────────┘
 ```
 
@@ -219,12 +215,8 @@ bagua/
 │   │   │   ├── types.ts
 │   │   │   ├── bagua.ts
 │   │   │   ├── rng.ts                # 可重放 PRNG
-│   │   │   ├── coin.ts               # 硬币法
-│   │   │   ├── dayan.ts              # 蓍草法
-│   │   │   ├── meihua.ts             # 梅花易数
-│   │   │   ├── manual.ts             # 手动选卦
-│   │   │   ├── time.ts               # 时间起卦
-│   │   │   └── transform.ts          # 之/互/错/综
+│   │   │   ├── cast/coin.ts          # 硬币法
+│   │   │   └── cast/transform.ts     # 之/互/错/综
 │   │   └── utils/
 │   │
 │   ├── repositories/                 # 数据持久化抽象
@@ -297,50 +289,7 @@ function castCoins(rng: () => number = Math.random): Line[] {
     const sum = [flip(rng), flip(rng), flip(rng)].reduce((a, b) => a + b, 0);
     lines.push(createLine(sum));
   }
-  return lines.reverse(); // 从初爻到上爻
-}
-```
-
-#### 6.2.2 蓍草法（v2 修正：49 基数）
-
-```typescript
-// 大衍之数五十，其用四十有九（先扣除太极一根作为不变之象）
-// 每爻 18 变（3 次"分二、挂一、揲四、归奇"）
-// 余数 24 = 老阳 (9) → 阳变阴
-// 余数 28 = 少阴 (8)
-// 余数 32 = 少阳 (7)
-// 余数 36 = 老阴 (6) → 阴变阳
-
-function castYarrow(rng: () => number = Math.random): Line[] {
-  const lines: Line[] = [];
-  for (let i = 0; i < 6; i++) {
-    let stalks = 49; // ⚠️ 49，不是 50
-    for (let j = 0; j < 3; j++) {
-      const left = randomInt(rng, 1, stalks - 1);
-      const right = stalks - left;
-      const leftMod = left % 4 || 4;
-      const rightMod = right % 4 || 4;
-      stalks -= leftMod + rightMod + 1; // 减去左余+右余+挂一
-    }
-    lines.push(createLine(stalksRemapped(stalks)));
-  }
-  return lines.reverse();
-}
-
-function stalksRemapped(stalks: number): number {
-  return stalks === 24 ? 9 : stalks === 28 ? 8 : stalks === 32 ? 7 : 6;
-}
-```
-
-#### 6.2.3 手动选卦
-
-```typescript
-function castManual(upper: TrigramName, lower: TrigramName, changingPosition?: number): Line[] {
-  const upperLines = trigramToLines(upper);
-  const lowerLines = trigramToLines(lower);
-  const allLines = [...lowerLines, ...upperLines];
-  if (changingPosition) allLines[changingPosition - 1].isChanging = true;
-  return allLines;
+  return lines; // 已按初爻到上爻记录
 }
 ```
 
@@ -351,12 +300,6 @@ function castManual(upper: TrigramName, lower: TrigramName, changingPosition?: n
 - 7（少阳）= 3/8 = 37.5%
 - 8（少阴）= 3/8 = 37.5%
 - 9（老阳）= 1/8 = 12.5%
-
-**蓍草法**（理论，1次三变）：
-- 少阳 7/16 = 43.75%
-- 少阴 5/16 = 31.25%
-- 老阳 3/16 = 18.75%
-- 老阴 1/16 = 6.25%
 
 ### 6.4 卦变关系
 
@@ -546,7 +489,7 @@ interface StructuralAnalysis {
 interface CastResult {
   id: string;               // uuid
   timestamp: number;
-  method: 'coins' | 'yarrow' | 'manual';
+  method: 'coins';
   question?: string;
   lines: Line[];
   benGuaId: number;
@@ -596,11 +539,10 @@ const useHistoryStore = create<HistoryStore>((set, get) => ({
 // src/services/divination.service.ts
 export async function performDivination(
   method: CastMethod,
-  question?: string,
-  options?: { manualUpper?: TrigramName; manualLower?: TrigramName }
+  question?: string
 ): Promise<CastResult> {
   // 1. 调用 qigua 生成 lines
-  const lines = await runCastMethod(method, options);
+  const lines = castCoins();
   // 2. 构建本卦
   const benGua = buildHexagram(lines);
   // 3. 计算卦变
@@ -710,10 +652,8 @@ test('见龙在田（不是"见龙再田"）', () => {
 - [ ] `src/lib/qigua/types.ts` - 枚举与类型
 - [ ] `src/lib/qigua/rng.ts` - mulberry32 PRNG
 - [ ] `src/lib/qigua/bagua.ts` - 八卦编码
-- [ ] `src/lib/qigua/coin.ts` - 硬币法
-- [ ] `src/lib/qigua/dayan.ts` - 蓍草法（修正版）
-- [ ] `src/lib/qigua/manual.ts` - 手动选卦
-- [ ] `src/lib/qigua/transform.ts` - 卦变（之/互/错/综）
+- [ ] `src/lib/qigua/cast/coin.ts` - 硬币法
+- [ ] `src/lib/qigua/cast/transform.ts` - 卦变（之/互/错/综）
 - [ ] `src/lib/iching/data/hexagrams.json` 接入
 - [ ] `src/lib/iching/interpetations/` 解读内容库
 - [ ] 10000 次 Monte Carlo 分布测试
@@ -735,7 +675,6 @@ test('见龙在田（不是"见龙再田"）', () => {
 
 ### Phase 3：仪式感 + 解读（3 天）
 
-- [ ] `react-countdown-circle-timer` 蓍草仪式
 - [ ] 硬币 3D 翻转动画（CSS `transform: rotateY`）
 - [ ] SVG 卦象组件（Unicode 优先 + SVG 工厂 fallback）
 - [ ] 爻变动画（`scaleX` + `clip-path`）
@@ -779,7 +718,6 @@ test('见龙在田（不是"见龙再田"）', () => {
 |---|------|------|------|
 | 1 | **无 LICENSE 数据源的法律风险**（wangxb96/Frank2333333/sunls2） | 🔴 高 | 发 issue 请求加 MIT/CC0；同时以 tiredcows 为基底，破损处从维基文库（CC BY-SA 4.0）自抓 |
 | 2 | **modernInsight 内容生产延期**（5万字原创） | 🟡 中 | 严格 Phase 0 时间盒；LLM prompt 约束风格；先 P0 级，其他卦占位 |
-| 3 | **蓍草法用户流失**（162 秒仪式） | 🟡 中 | 三档模式（庄重/标准/象征）；节点进度提示；"我已知结果"快速通道（强制 ≥30 秒） |
 | 4 | **中文字体加载阻塞首屏** | 🟡 中 | glyphhanger 子集化；`font-display: swap`；正文系统字体兜底 |
 | 5 | **卦变算法 bug** | 🔴 高 | 64×6 全枚举 golden 测试 + fast-check 属性测试 + 与 godcong/yi 抽样对比 |
 
@@ -842,9 +780,6 @@ test('见龙在田（不是"见龙再田"）', () => {
 | 综卦 | reverse hexagram | 上下颠倒 |
 | 互卦 | nuclear hexagram | 取中间四爻 |
 | 之卦 / 变卦 | changed hexagram | 变爻后形成 |
-| 蓍草 | yarrow stalks | 起卦工具 |
-| 揲占 | yarrow divination | 用蓍草起卦 |
-| 揲 | die | 蓍草分堆计算 |
 | 纳甲 | na-jia | 天干地支装配 |
 | 六亲 | six relations | 父母/兄弟/子孙/妻财/官鬼 |
 | 世应 | shi-ying | 卦中主客爻 |

@@ -34,7 +34,13 @@ export type Scenario =
   | 'self'
 
 /** 起卦方式 */
-export type CastMethod = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
+export type CastMethod = 'coins'
+
+/** 已下线但需要继续读取的历史起卦方式 */
+export type LegacyCastMethod = 'yarrow' | 'manual' | 'meihua' | 'time'
+
+/** 持久化记录允许的起卦方式，包含历史数据 */
+export type StoredCastMethod = CastMethod | LegacyCastMethod
 
 /** 所有场景（用于遍历与全覆盖校验） */
 export const ALL_SCENARIOS: Scenario[] = [
@@ -74,11 +80,11 @@ export const ALL_SIX_RELATIONS: SixRelation[] = ['父母', '兄弟', '子孙', '
 /** 爻位列表 */
 export const ALL_YAO_POSITIONS: YaoPosition[] = [1, 2, 3, 4, 5, 6]
 
-/** 起卦方式中文标签 */
-export const CAST_METHOD_LABELS: Record<CastMethod, string> = {
+/** 起卦方式中文标签，历史方式仅用于展示旧记录 */
+export const CAST_METHOD_LABELS: Record<StoredCastMethod, string> = {
   coins: '铜钱起卦',
-  yarrow: '蓍草起卦',
-  manual: '手动排卦',
-  meihua: '梅花易数',
-  time: '时间起卦',
+  yarrow: '蓍草起卦（历史）',
+  manual: '手动排卦（历史）',
+  meihua: '梅花易数（历史）',
+  time: '时间起卦（历史）',
 }

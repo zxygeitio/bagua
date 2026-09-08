@@ -13,7 +13,6 @@ import {
   Heart,
   HexagramPattern,
   Info,
-  Leaf,
   Question,
   RefreshCw,
   Sparkles,
@@ -22,24 +21,6 @@ import {
 } from '@/components/icons'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { useHistoryStore } from '@/store/history'
-
-type CastMethod = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
-
-interface MethodDef {
-  value: CastMethod
-  Icon: typeof Coins
-  label: string
-  desc: string
-  meta: string
-}
-
-const METHODS: MethodDef[] = [
-  { value: 'coins', Icon: Coins, label: '铜钱', desc: '三钱六掷', meta: '10 秒 · 日常' },
-  { value: 'meihua', Icon: Sparkles, label: '梅花', desc: '以数字或字起卦', meta: '15 秒 · 一念' },
-  { value: 'time', Icon: Wand, label: '此刻', desc: '年⽉⽇时入先天数', meta: '即时 · 顺天' },
-  { value: 'yarrow', Icon: Leaf, label: '蓍草', desc: '大衍揲占', meta: '3 分钟 · 郑重' },
-  { value: 'manual', Icon: HexagramPattern, label: '排卦', desc: '自选上下卦', meta: '自选 · 学习' },
-]
 
 const SCENARIOS: { tag: string; hint: string; color: string }[] = [
   { tag: '事业', hint: '项目推进 / 求职', color: 'text-bagua-wood' },
@@ -51,7 +32,6 @@ const SCENARIOS: { tag: string; hint: string; color: string }[] = [
 ]
 
 export default function SettingsPage() {
-  const [defaultMethod, setDefaultMethod] = useState<CastMethod>('coins')
   const [showAnimation, setShowAnimation] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [syncResult, setSyncResult] = useState<string | null>(null)
@@ -62,10 +42,8 @@ export default function SettingsPage() {
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('bagua-settings') ?? '{}') as {
-        defaultMethod?: CastMethod
         showAnimation?: boolean
       }
-      if (saved.defaultMethod) setDefaultMethod(saved.defaultMethod)
       if (typeof saved.showAnimation === 'boolean') setShowAnimation(saved.showAnimation)
     } catch {
       /* ignore */
@@ -73,8 +51,8 @@ export default function SettingsPage() {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('bagua-settings', JSON.stringify({ defaultMethod, showAnimation }))
-  }, [defaultMethod, showAnimation])
+    localStorage.setItem('bagua-settings', JSON.stringify({ showAnimation }))
+  }, [showAnimation])
 
   const handleSync = async () => {
     setSyncing(true)
@@ -114,52 +92,15 @@ export default function SettingsPage() {
         </header>
 
         {/* 起卦方式 */}
-        <Section
-          index="01"
-          Icon={HexagramPattern}
-          title="默认起卦方式"
-          desc="进入 /divine 时自动选中。"
-        >
-          <div className="space-y-2">
-            {METHODS.map((m) => {
-              const Icon = m.Icon
-              const active = defaultMethod === m.value
-              return (
-                <button
-                  key={m.value}
-                  onClick={() => setDefaultMethod(m.value)}
-                  className={`group flex w-full items-center gap-4 border-4 p-3 text-left transition ${
-                    active
-                      ? 'border-bagua-text bg-bagua-wash shadow-soft'
-                      : 'border-bagua-fiber bg-bagua-surface hover:border-bagua-text'
-                  }`}
-                >
-                  <span
-                    className={`flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text transition ${
-                      active
-                        ? 'bg-bagua-primary text-bagua-surface'
-                        : 'bg-bagua-canvas text-bagua-primary group-hover:bg-bagua-wash'
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div className="flex-1">
-                    <div className="flex items-baseline gap-2">
-                      <span className="font-display text-base tracking-wider">{m.label}</span>
-                      <span className="font-body text-xs text-bagua-muted">{m.desc}</span>
-                    </div>
-                    <p className="mt-0.5 font-mono text-[10px] tracking-widest text-bagua-muted">{m.meta}</p>
-                  </div>
-                  <span
-                    className={`flex h-5 w-5 flex-shrink-0 items-center justify-center border-4 border-bagua-text transition ${
-                      active ? 'bg-bagua-primary' : 'bg-bagua-canvas'
-                    }`}
-                  >
-                    {active && <span className="h-2 w-2 bg-bagua-surface" />}
-                  </span>
-                </button>
-              )
-            })}
+        <Section index="01" Icon={Coins} title="起卦方式" desc="当前仅保留经过校验的硬币法。">
+          <div className="flex items-center gap-4 border-4 border-bagua-text bg-bagua-wash p-4 shadow-soft">
+            <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary text-bagua-surface">
+              <Coins className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-display text-base tracking-wider">铜钱 · 三钱六掷</p>
+              <p className="mt-1 font-body text-xs text-bagua-muted">6 老阴、7 少阳、8 少阴、9 老阳；六爻自下而上记录。</p>
+            </div>
           </div>
         </Section>
 
@@ -255,7 +196,6 @@ export default function SettingsPage() {
               onClick={() => {
                 if (confirm('确定清空本机设置吗？起卦记录不会被删除。')) {
                   localStorage.removeItem('bagua-settings')
-                  setDefaultMethod('coins')
                   setShowAnimation(true)
                 }
               }}
@@ -283,7 +223,7 @@ export default function SettingsPage() {
             <Row label="版本" value="v0.2.0" />
             <Row label="技术栈" value="Next.js 14 · TypeScript · Tailwind" />
             <Row label="数据" value="64 卦经典 + 现代解读" />
-            <Row label="起卦法" value="铜钱 / 蓍草 / 梅花 / 时间 / 手动" />
+            <Row label="起卦法" value="铜钱三钱六掷" />
             <Row label="部署" value="Cloudflare Pages" />
             <Row label="后端" value={isSupabaseConfigured ? 'Supabase (已连接)' : '未启用'} />
           </dl>

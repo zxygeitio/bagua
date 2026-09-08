@@ -1,6 +1,6 @@
 import type { z } from 'zod'
 
-import type { CastMethod, Scenario, YaoPosition, YinYang } from '@/types/iching'
+import type { CastMethod, Scenario, StoredCastMethod, YaoPosition, YinYang } from '@/types/iching'
 
 import type {
   CastRecordSchema,
@@ -39,7 +39,7 @@ export interface Line {
   position: YaoPosition
   yinYang: YinYang
   isChanging: boolean
-  /** 蓍草/硬币原始值：6 老阴 / 7 少阳 / 8 少阴 / 9 老阳 */
+  /** 三钱原始值：6 老阴 / 7 少阳 / 8 少阴 / 9 老阳 */
   value: 6 | 7 | 8 | 9
 }
 
@@ -59,7 +59,8 @@ export interface CastResult {
 }
 
 /** 持久化的历史记录 */
-export interface CastRecord extends CastResult {
+export interface CastRecord extends Omit<CastResult, 'method'> {
+  method: StoredCastMethod
   notes?: string
   favorite: boolean
 }
@@ -75,9 +76,11 @@ export type CastRecordParsed = z.infer<typeof CastRecordSchema>
 
 export type {
   CastMethod,
+  LegacyCastMethod,
   Scenario,
   ShiStatus,
   SixRelation,
+  StoredCastMethod,
   TrigramName,
   WuXing,
   YaoPosition,

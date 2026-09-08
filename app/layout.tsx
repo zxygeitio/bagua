@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     default: '八卦 · 易经占卜',
     template: '%s · bagua',
   },
-  description: '周易草纸刻本 · 三钱成爻，梅花取数。一个面向初学者与读卦者的现代工具。',
+  description: '周易草纸刻本 · 三钱成爻，六爻自下而上。一个面向初学者与读卦者的现代工具。',
   applicationName: '八卦',
-  keywords: ['易经', '占卜', '八卦', '六十四卦', '周易', '起卦', '蓍草', '梅花易数', 'I Ching'],
+  keywords: ['易经', '占卜', '八卦', '六十四卦', '周易', '硬币起卦', 'I Ching'],
   authors: [{ name: 'bagua' }],
   manifest: '/manifest.json',
   icons: {

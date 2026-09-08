@@ -246,7 +246,7 @@ export const Coins = (props: IconProps) => (
   </svg>
 )
 
-/** 蓍草 · 一茎两叶 */
+/** 双叶 · 入门导航 */
 export const Leaf = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M12 21 L12 11" />
@@ -257,7 +257,7 @@ export const Leaf = (props: IconProps) => (
   </svg>
 )
 
-/** 梅花形 · 数字起卦 */
+/** 星花 · 仪式装饰 */
 export const Sparkles = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M12 3.5 L13.4 9.5 L19.5 11 L13.4 12.5 L12 18.5 L10.6 12.5 L4.5 11 L10.6 9.5 Z" />
@@ -267,7 +267,7 @@ export const Sparkles = (props: IconProps) => (
   </svg>
 )
 
-/** 仪式杖 · 时间起卦 */
+/** 仪式杖 · 起卦导航 */
 export const Wand = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M4 20 L17 7" />
@@ -277,7 +277,7 @@ export const Wand = (props: IconProps) => (
   </svg>
 )
 
-/** 手动 · 学习模式 */
+/** 手势 · 卦库导航 */
 export const Hand = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M9 11 L9 5 C9 3.9 9.9 3 11 3 C12.1 3 13 3.9 13 5 L13 12" />
@@ -286,7 +286,7 @@ export const Hand = (props: IconProps) => (
   </svg>
 )
 
-/** 蓍草占 · 列表/排卦 */
+/** 卦象纹样 · 列表装饰 */
 export const HexagramPattern = (props: IconProps) => (
   <svg viewBox="0 0 24 24" shapeRendering="crispEdges" aria-hidden="true" {...props}>
     <rect x="3" y="3" width="18" height="3" fill="currentColor" />

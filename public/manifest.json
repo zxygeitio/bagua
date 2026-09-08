@@ -1,7 +1,7 @@
 {
   "name": "八卦 · 易经占卜",
   "short_name": "八卦",
-  "description": "周易草纸刻本 · 三钱成爻，梅花取数",
+  "description": "周易草纸刻本 · 三钱成爻，六爻自下而上",
   "lang": "zh-CN",
   "start_url": "/",
   "display": "standalone",

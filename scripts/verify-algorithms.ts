@@ -1,10 +1,9 @@
 #!/usr/bin/env tsx
 /**
  * 算法独立验证脚本
- * 验证硬币法、蓍草法、文王卦序映射的正确性
+ * 验证硬币法和文王卦序映射的正确性
  */
 import { castCoins } from '../src/lib/qigua/cast/coin'
-import { castYarrow } from '../src/lib/qigua/cast/yarrow'
 import { buildHexagram } from '../src/lib/qigua/builder'
 
 console.log('═══════════════════════════════════════════════════════════════')
@@ -25,20 +24,7 @@ console.log(`  7 (少阳): ${(cCounts[7]/cTotal*100).toFixed(2)}% (期望 37.5%)
 console.log(`  8 (少阴): ${(cCounts[8]/cTotal*100).toFixed(2)}% (期望 37.5%)`)
 console.log(`  9 (老阳): ${(cCounts[9]/cTotal*100).toFixed(2)}% (期望 12.5%)\n`)
 
-// 2. 蓍草法分布
-const yCounts = { 6: 0, 7: 0, 8: 0, 9: 0 }
-for (let i = 0; i < RUNS; i++) {
-  const lines = castYarrow()
-  for (const l of lines) yCounts[l.value as 6 | 7 | 8 | 9]++
-}
-const yTotal = RUNS * 6
-console.log(`【蓍草法】 ${RUNS} 次 = ${yTotal} 爻 分布:`)
-console.log(`  6 (老阴): ${(yCounts[6]/yTotal*100).toFixed(2)}% (期望 6.25%)`)
-console.log(`  7 (少阳): ${(yCounts[7]/yTotal*100).toFixed(2)}% (期望 43.75%)`)
-console.log(`  8 (少阴): ${(yCounts[8]/yTotal*100).toFixed(2)}% (期望 31.25%)`)
-console.log(`  9 (老阳): ${(yCounts[9]/yTotal*100).toFixed(2)}% (期望 18.75%)\n`)
-
-// 3. 文王卦序正确性
+// 2. 文王卦序正确性
 console.log('【文王卦序】 边界卦验证:')
 const allYang = Array.from({ length: 6 }, (_, i) => ({
   position: (i + 1) as 1|2|3|4|5|6,
@@ -58,7 +44,7 @@ const kun = buildHexagram(allYin)
 console.log(`  全阳 → ID=${qian.id} ${qian.gua.name} (期望 ID=1 乾为天) ${qian.id === 1 ? '✅' : '❌'}`)
 console.log(`  全阴 → ID=${kun.id} ${kun.gua.name} (期望 ID=2 坤为地) ${kun.id === 2 ? '✅' : '❌'}`)
 
-// 4. 64 卦覆盖率（基于 10000 个种子）
+// 3. 64 卦覆盖率（基于 10000 个种子）
 console.log('\n【卦象覆盖】 10000 种子起卦覆盖率:')
 const seen = new Set<string>()
 const idMap = new Map<number, number>()

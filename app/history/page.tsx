@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useHistoryStore } from '@/store/history'
+import { CAST_METHOD_LABELS } from '@/types/iching'
 import { getGuaById, type Scenario } from '@/lib/iching'
 import { SCENARIO_LABELS } from '@/types/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
@@ -316,7 +317,7 @@ function HistoryRow({
           <div className="flex items-center gap-2 truncate font-body text-xs text-bagua-muted">
             <span>{date}</span>
             <span>·</span>
-            <span>{r.method === 'coins' ? '硬币' : r.method === 'yarrow' ? '蓍草' : r.method === 'meihua' ? '梅花' : r.method === 'time' ? '时间' : '手动'}</span>
+                            <span>{CAST_METHOD_LABELS[r.method] ?? '历史起卦'}</span>
             {r.question && (
               <>
                 <span>·</span>

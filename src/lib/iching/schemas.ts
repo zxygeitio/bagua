@@ -45,7 +45,10 @@ export const ScenarioSchema = z.enum([
 ])
 
 /** 起卦方式 */
-export const CastMethodSchema = z.enum(['coins', 'yarrow', 'manual', 'meihua', 'time'])
+export const CastMethodSchema = z.literal('coins')
+
+/** 历史记录中的旧起卦方式，仅允许读取和展示 */
+export const StoredCastMethodSchema = z.enum(['coins', 'yarrow', 'manual', 'meihua', 'time'])
 
 /** 卦 ID 1-64 */
 export const GuaIdSchema = z.number().int().min(1).max(64)
@@ -194,6 +197,7 @@ export const CastResultSchema = z.object({
 })
 
 export const CastRecordSchema = CastResultSchema.extend({
+  method: StoredCastMethodSchema,
   notes: z.string().optional(),
   favorite: z.boolean(),
 })

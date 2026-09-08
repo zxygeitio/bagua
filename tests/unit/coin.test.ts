@@ -3,11 +3,24 @@ import { castCoins, flipOnce } from '@/lib/qigua/cast/coin'
 import { mulberry32 } from '@/lib/qigua/rng'
 
 describe('硬币法', () => {
-  it('flipOnce 返回合法的 Line', () => {
+  it('三钱组合严格映射为 6/7/8/9', () => {
+    const sequence = (values: number[]) => {
+      let index = 0
+      return () => values[index++] ?? 0
+    }
+
+    expect(flipOnce(sequence([0.1, 0.1, 0.1]))).toMatchObject({ value: 6, yinYang: 'yin', isChanging: true })
+    expect(flipOnce(sequence([0.1, 0.1, 0.9]))).toMatchObject({ value: 7, yinYang: 'yang', isChanging: false })
+    expect(flipOnce(sequence([0.1, 0.9, 0.9]))).toMatchObject({ value: 8, yinYang: 'yin', isChanging: false })
+    expect(flipOnce(sequence([0.9, 0.9, 0.9]))).toMatchObject({ value: 9, yinYang: 'yang', isChanging: true })
+  })
+
+  it('flipOnce 返回未落位的合法爻', () => {
     const line = flipOnce()
     expect([6, 7, 8, 9]).toContain(line.value)
     expect(['yang', 'yin']).toContain(line.yinYang)
     expect(typeof line.isChanging).toBe('boolean')
+    expect(line).not.toHaveProperty('position')
   })
 
   it('6 和 9 是变爻', () => {

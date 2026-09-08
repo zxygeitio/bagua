@@ -8,7 +8,7 @@ import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata: Metadata = {
   title: '易学入门',
-  description: '八卦总览、五种起卦法、易经阅读法与常见概念。',
+  description: '八卦总览、硬币起卦法、易经阅读法与常见概念。',
 }
 
 export default function LearnPage() {
@@ -18,7 +18,7 @@ export default function LearnPage() {
         <header className="enter-up">
           <h1 className="font-display text-5xl tracking-[0.06em] md:text-6xl">易学入门</h1>
           <p className="prose-body mt-4 max-w-2xl text-bagua-muted">
-            这里集中了起卦前需要知道的事。先把八卦与起卦方法看一遍，再去起卦，会更顺手。
+            这里集中了起卦前需要知道的事。先把八卦与硬币起卦规则看一遍，再去起卦，会更顺手。
           </p>
         </header>
 
@@ -32,7 +32,7 @@ export default function LearnPage() {
           </div>
         </Section>
 
-        <Section index="02" title="五种起卦法" intro="不同方法对应不同的郑重程度。日常多以硬币法或时间起卦；想要郑重其事，可用蓍草法。">
+        <Section index="02" title="硬币起卦法" intro="三枚铜钱六掷，六爻自下而上记录；6 与 9 为动爻。">
           <MethodCards />
         </Section>
 

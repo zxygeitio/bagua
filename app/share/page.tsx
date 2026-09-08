@@ -95,12 +95,12 @@ function SharePageInner() {
   const date = decoded.t ? new Date(decoded.t).toLocaleString('zh-CN') : ''
   const methodMap: Record<string, string> = {
     coins: '硬币法',
-    yarrow: '蓍草法',
-    manual: '手动选卦',
-    meihua: '梅花易数',
-    time: '时间起卦',
+    yarrow: '蓍草法（历史）',
+    manual: '手动选卦（历史）',
+    meihua: '梅花易数（历史）',
+    time: '时间起卦（历史）',
   }
-  const method = methodMap[decoded.m ?? ''] ?? '手动选卦'
+  const method = methodMap[decoded.m ?? ''] ?? '历史起卦'
 
   return (
     <SiteShell eyebrow="SHARE / 只读">

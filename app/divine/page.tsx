@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Check, ChevronRight, Hand, Leaf, Logo, Sparkles, Wand, Coins } from '@/components/icons'
+import { Check, ChevronRight, Coins, Wand } from '@/components/icons'
 import type { Line, Scenario } from '@/lib/iching'
 import { performDivination } from '@/services/divination.service'
 import { useHistoryStore } from '@/store/history'
@@ -11,19 +11,7 @@ import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
 import { PaperParticles } from '@/components/shared/PaperParticles'
 
-type Method = 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time'
 type PreviewLine = Pick<Line, 'yinYang' | 'isChanging'>
-type Trigram = '乾' | '兑' | '离' | '震' | '巽' | '坎' | '艮' | '坤'
-
-const TRIGRAMS: Trigram[] = ['乾', '兑', '离', '震', '巽', '坎', '艮', '坤']
-
-const METHODS = [
-  { value: 'coins' as const, icon: Coins, title: '快速起卦', desc: '硬币法 · 约 10 秒', longDesc: '适合日常快速占卜', recommended: true },
-  { value: 'yarrow' as const, icon: Leaf, title: '蓍草揲占', desc: '传统揲四法 · 约 3 分钟', longDesc: '传统仪式 · 郑重其事', recommended: false },
-  { value: 'meihua' as const, icon: Sparkles, title: '梅花易数', desc: '以时辰或数字起卦', longDesc: '数字起卦 · 一念成爻', recommended: false },
-  { value: 'time' as const, icon: Wand, title: '此刻之象', desc: '年⽉⽇时成卦', longDesc: '当下即卦 · 顺天应人', recommended: false },
-  { value: 'manual' as const, icon: Hand, title: '手动选卦', desc: '学习模式 · 直接选择', longDesc: '适合学习研究', recommended: false },
-]
 
 const QUESTION_HINTS: { tag: string; hint: string; scenario: Scenario }[] = [
   { tag: '事业', hint: '近期事业发展如何？', scenario: 'career' },
@@ -37,26 +25,14 @@ const QUESTION_HINTS: { tag: string; hint: string; scenario: Scenario }[] = [
 export default function DivinePage() {
   const router = useRouter()
   const addRecord = useHistoryStore((state) => state.addRecord)
+  const method = 'coins' as const
   const [question, setQuestion] = useState('')
   const [scenario, setScenario] = useState<Scenario | undefined>(undefined)
-  const [method, setMethod] = useState<Method>('coins')
-  const [manualUpper, setManualUpper] = useState<Trigram>('乾')
-  const [manualLower, setManualLower] = useState<Trigram>('坤')
-  const [changingPosition, setChangingPosition] = useState('')
   const [isCasting, setIsCasting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentLine, setCurrentLine] = useState<PreviewLine | null>(null)
   const [castLines, setCastLines] = useState<PreviewLine[]>([])
   const [castError, setCastError] = useState('')
-
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('bagua-settings') ?? '{}') as { defaultMethod?: Method }
-      if (saved.defaultMethod) setMethod(saved.defaultMethod)
-    } catch {
-      // Keep defaults when local settings are unavailable.
-    }
-  }, [])
 
   const handleCast = async () => {
     setIsCasting(true)
@@ -74,17 +50,14 @@ export default function DivinePage() {
 
     try {
       const record = await performDivination({
-        method: method as 'coins' | 'yarrow' | 'manual' | 'meihua' | 'time',
+        method,
         question: question.trim() || undefined,
         scenario,
-        manualUpper: method === 'manual' ? manualUpper : undefined,
-        manualLower: method === 'manual' ? manualLower : undefined,
-        changingPosition: method === 'manual' && changingPosition ? Number(changingPosition) as 1 | 2 | 3 | 4 | 5 | 6 : undefined,
       })
       for (let index = 0; index < record.lines.length; index += 1) {
         const line = record.lines[index]
         if (!line) continue
-        if (showAnimation) await new Promise((resolve) => setTimeout(resolve, method === 'yarrow' ? 800 : 500))
+        if (showAnimation) await new Promise((resolve) => setTimeout(resolve, 500))
         const preview = { yinYang: line.yinYang, isChanging: line.isChanging }
         setCurrentLine(preview)
         setCastLines((previous) => [...previous, preview])
@@ -165,65 +138,17 @@ export default function DivinePage() {
 
             <div className="enter-up stagger-2">
               <div className="mb-4 flex items-end justify-between">
-                <h2 className="font-display text-lg tracking-wider">选择起卦方式</h2>
-                <span className="font-display text-[10px] tracking-widest text-bagua-muted">METHOD</span>
+                <h2 className="font-display text-lg tracking-wider">起卦方式</h2>
               </div>
-              <div className="space-y-3">
-                {METHODS.map((item, index) => (
-                  <MethodOption
-                    key={item.value}
-                    index={index}
-                    method={item}
-                    selected={method === item.value}
-                    onClick={() => setMethod(item.value)}
-                    disabled={isCasting}
-                  />
-                ))}
-              </div>
-              {method === 'manual' && (
-                <div className="paper-panel mt-4 grid gap-3 border-4 border-bagua-text p-4 sm:grid-cols-3">
-                  <label className="font-body text-xs text-bagua-muted">
-                    上卦
-                    <select
-                      value={manualUpper}
-                      onChange={(event) => setManualUpper(event.target.value as Trigram)}
-                      disabled={isCasting}
-                      className="field-control mt-2 px-3 py-2 font-display text-sm"
-                    >
-                      {TRIGRAMS.map((trigram) => (
-                        <option key={trigram} value={trigram}>{trigram}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="font-body text-xs text-bagua-muted">
-                    下卦
-                    <select
-                      value={manualLower}
-                      onChange={(event) => setManualLower(event.target.value as Trigram)}
-                      disabled={isCasting}
-                      className="field-control mt-2 px-3 py-2 font-display text-sm"
-                    >
-                      {TRIGRAMS.map((trigram) => (
-                        <option key={trigram} value={trigram}>{trigram}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="font-body text-xs text-bagua-muted">
-                    动爻
-                    <select
-                      value={changingPosition}
-                      onChange={(event) => setChangingPosition(event.target.value)}
-                      disabled={isCasting}
-                      className="field-control mt-2 px-3 py-2 font-display text-sm"
-                    >
-                      <option value="">无动爻</option>
-                      {[1, 2, 3, 4, 5, 6].map((position) => (
-                        <option key={position} value={position}>第 {position} 爻</option>
-                      ))}
-                    </select>
-                  </label>
+              <div className="flex items-center gap-4 border-4 border-bagua-text bg-bagua-wash p-4 shadow-soft">
+                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary text-bagua-surface">
+                  <Coins className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="font-display text-base tracking-wider">硬币法 · 三钱六掷</p>
+                  <p className="mt-1 font-body text-xs text-bagua-muted">当前唯一正式起卦方式，六爻自下而上记录。</p>
                 </div>
-              )}
+              </div>
             </div>
 
             {castError && (
@@ -242,7 +167,7 @@ export default function DivinePage() {
                 <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" />
               </button>
             ) : (
-              <CastProgress method={method} progress={progress} currentLine={currentLine} castLines={castLines} />
+              <CastProgress progress={progress} currentLine={currentLine} castLines={castLines} />
             )}
           </div>
 
@@ -252,7 +177,7 @@ export default function DivinePage() {
             <div className="mt-5 space-y-5 font-body text-sm leading-relaxed text-bagua-text">
               <Step n="1" title="定心">杂念放下，专注意图。</Step>
               <Step n="2" title="起问">默念你所问之事，让问题完整。</Step>
-              <Step n="3" title="投爻">三钱六掷，或揲四求余。</Step>
+              <Step n="3" title="投爻">三钱六掷，六爻自下而上记录。</Step>
               <Step n="4" title="读象">动爻多少，决定读卦辞还是爻辞。</Step>
             </div>
             <div className="mt-6 border-t-4 border-bagua-fiber pt-4">
@@ -282,88 +207,16 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   )
 }
 
-function MethodOption({
-  index,
-  method,
-  selected,
-  onClick,
-  disabled,
-}: {
-  index: number
-  method: typeof METHODS[number]
-  selected: boolean
-  onClick: () => void
-  disabled: boolean
-}) {
-  const Icon = method.icon
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-pressed={selected}
-      style={{ animationDelay: `${index * 80 + 200}ms` }}
-      className={`btn-press group relative flex w-full items-center gap-4 border-4 p-4 text-left transition enter-up ${
-        selected
-          ? 'border-bagua-text bg-bagua-wash shadow-soft'
-          : 'border-bagua-fiber bg-bagua-surface hover:border-bagua-text'
-      } ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-    >
-      <span
-        className={`flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text transition ${
-          selected ? 'bg-bagua-primary text-bagua-surface' : 'bg-bagua-canvas text-bagua-text group-hover:bg-bagua-wash'
-        }`}
-      >
-        <Icon className="h-5 w-5" />
-      </span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="font-display text-base tracking-wider">{method.title}</span>
-          {method.recommended && (
-            <span className="border-2 border-bagua-text bg-bagua-primary px-1.5 py-0.5 font-display text-[9px] tracking-widest text-bagua-surface">
-              推荐
-            </span>
-          )}
-        </div>
-        <div className="mt-1 font-body text-sm text-bagua-text">{method.desc}</div>
-        <div className="mt-0.5 font-body text-xs text-bagua-muted">{method.longDesc}</div>
-      </div>
-      <span
-        className={`flex h-5 w-5 flex-shrink-0 items-center justify-center border-4 border-bagua-text transition ${
-          selected ? 'bg-bagua-primary text-bagua-surface' : 'bg-bagua-canvas text-transparent'
-        }`}
-      >
-        {selected && <Check className="h-3 w-3" />}
-      </span>
-    </button>
-  )
-}
-
 function CastProgress({
-  method,
   progress,
   currentLine,
   castLines,
 }: {
-  method: Method
   progress: number
   currentLine: PreviewLine | null
   castLines: PreviewLine[]
 }) {
-  const labels: Record<Method, string> = {
-    coins: '铜钱翻转中',
-    yarrow: '蓍草揲四中',
-    manual: '卦象生成中',
-    meihua: '以数成卦中',
-    time: '此刻成卦中',
-  }
-  const tip =
-    method === 'yarrow'
-      ? '每变 4 揲，求其余数。9 为老阳、6 为老阴、7 为少阳、8 为少阴。'
-      : method === 'meihua'
-        ? '以时辰或数字起卦，一念成爻。'
-        : method === 'time'
-          ? '年⽉⽇时入先天数，自动成卦。'
-          : '三枚铜钱，依阴阳组合记录为一爻；六爻自下而上，合成完整卦象。'
+  const tip = '三枚铜钱，依阴阳组合记录为一爻；六爻自下而上，合成完整卦象。'
   const positions = ['上爻', '五爻', '四爻', '三爻', '二爻', '初爻']
 
   return (
@@ -371,7 +224,7 @@ function CastProgress({
       <span className="paper-stage-shadow" aria-hidden="true" />
       <div className="paper-panel paper-depth border-4 border-bagua-primary p-6 md:p-8">
         <div className="mb-1 flex items-center justify-between">
-          <div className="font-display text-xl tracking-wider text-bagua-primary">{labels[method]}</div>
+          <div className="font-display text-xl tracking-wider text-bagua-primary">铜钱翻转中</div>
           <span className="font-display text-[10px] tracking-widest text-bagua-muted">
             {String(progress).padStart(2, '0')} / 06
           </span>

@@ -1,7 +1,7 @@
 'use client'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { CastMethod, CastRecord, Line, YaoPosition } from '@/lib/iching'
+import type { CastRecord, Line, StoredCastMethod, YaoPosition } from '@/lib/iching'
 import { cloudHistory, CloudRecord } from '@/repositories/CloudHistoryRepository'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { getAnonymousId } from '@/lib/supabase/identity'
@@ -102,7 +102,7 @@ export const useHistoryStore = create<HistoryState>()(
             merged.set(cr.clientId, {
               id: cr.clientId,
               timestamp: cr.timestamp,
-              method: cr.method as CastMethod,
+              method: cr.method as StoredCastMethod,
               question: cr.question,
               lines: cr.lines as Line[],
               benGuaId: cr.benGuaId,

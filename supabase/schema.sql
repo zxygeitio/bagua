@@ -21,7 +21,8 @@ create table if not exists public.bagua_history (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid not null references public.bagua_users(id) on delete cascade,
   client_id text not null, -- localStorage 的 nanoid
-  method text not null check (method in ('coins', 'yarrow', 'manual')),
+  -- 当前版本只写入 coins；其余值仅为兼容已存在的历史记录与分享链接
+  method text not null check (method in ('coins', 'yarrow', 'manual', 'meihua', 'time')),
   question text,
   ben_gua_id integer not null,
   bian_gua_id integer,

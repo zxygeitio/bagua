@@ -65,7 +65,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                 <span className="font-display text-base tracking-[0.16em]">八卦</span>
               </div>
               <p className="prose-body mt-3 text-xs text-bagua-muted">
-                周易草纸刻本 · 三钱成爻，梅花取数。
+                周易草纸刻本 · 三钱成爻，六爻自下而上。
                 <br />
                 面向初学者与读卦者的现代工具。
               </p>
@@ -102,7 +102,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                 </li>
                 <li>
                   <Link href="/learn" className="font-body text-xs text-bagua-text transition hover:text-bagua-primary">
-                    五种起卦法
+                    硬币起卦法
                   </Link>
                 </li>
                 <li>
