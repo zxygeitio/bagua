@@ -36,7 +36,7 @@ const polarPercent = (radius: number, angle: number) => {
   }
 }
 
-export function BaguaCompass() {
+export function BaguaCompass({ priority = false }: { priority?: boolean }) {
   return (
     <div
       className="bagua-compass"
@@ -50,6 +50,7 @@ export function BaguaCompass() {
         sizes="(max-width: 767px) 86vw, 460px"
         className="compass-plate"
         draggable={false}
+        priority={priority}
       />
 
       <div className="compass-pixel-grain" aria-hidden="true" />
