@@ -10,7 +10,7 @@ export const displayFont = localFont({
 
 export const bodyFont = Noto_Serif_SC({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '700'],
   variable: '--font-body',
   display: 'swap',
 })

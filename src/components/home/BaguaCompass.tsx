@@ -44,7 +44,7 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
       aria-label="先天八卦八方位罗盘：乾南、坤北、离东、坎西"
     >
       <Image
-        src="/textures/bronze-compass-plate.png"
+        src="/textures/bronze-compass-plate.webp"
         alt=""
         fill
         sizes="(max-width: 767px) 86vw, 460px"

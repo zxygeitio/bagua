@@ -40,21 +40,6 @@ export function Reveal({
     const el = ref.current
     if (!el || typeof IntersectionObserver === 'undefined') return
 
-    // 客户端 hydration 后立即检查元素位置
-    const rect = el.getBoundingClientRect()
-    const viewportH = window.innerHeight || document.documentElement.clientHeight
-    const isAlreadyVisible = rect.top < viewportH && rect.bottom > 0
-
-    if (isAlreadyVisible) {
-      // 元素在初始视口内，无需动画
-      triggered.current = true
-      return
-    }
-
-    // 元素在视口外，先标为 "init"（隐藏），等进入时再显示
-    setInitialized(false)
-    setShown(false)
-
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -65,6 +50,10 @@ export function Reveal({
               setShown(true)
             })
             if (once) obs.disconnect()
+          } else if (!e.isIntersecting && !triggered.current) {
+            // 由观察器异步判断视口外元素，避免 hydration 阶段同步触发布局测量。
+            setInitialized(false)
+            setShown(false)
           }
         }
       },

@@ -17,6 +17,7 @@ interface PaperTiltProps {
 export function PaperTilt({ children, className = '', intensity = 5 }: PaperTiltProps) {
   const hostRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<number | null>(null)
+  const boundsRef = useRef<DOMRect | null>(null)
   const targetRef = useRef({ x: 0, y: 0 })
   const reducedMotion = useReducedMotion()
 
@@ -44,7 +45,8 @@ export function PaperTilt({ children, className = '', intensity = 5 }: PaperTilt
     if (reducedMotion || event.pointerType !== 'mouse') return
     const host = hostRef.current
     if (!host) return
-    const rect = host.getBoundingClientRect()
+    const rect = boundsRef.current ?? host.getBoundingClientRect()
+    boundsRef.current = rect
     const x = (event.clientX - rect.left) / rect.width - 0.5
     const y = (event.clientY - rect.top) / rect.height - 0.5
     targetRef.current = {
@@ -56,13 +58,19 @@ export function PaperTilt({ children, className = '', intensity = 5 }: PaperTilt
 
   const handlePointerLeave = () => {
     targetRef.current = { x: 0, y: 0 }
+    boundsRef.current = null
     reset()
+  }
+
+  const handlePointerEnter = () => {
+    if (!reducedMotion) boundsRef.current = hostRef.current?.getBoundingClientRect() ?? null
   }
 
   return (
     <div
       ref={hostRef}
       className={`paper-tilt ${className}`}
+      onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >

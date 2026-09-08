@@ -20,7 +20,7 @@
     background-color: var(--paper-canvas);
     background-image:
       linear-gradient(rgba(231, 211, 164, 0.82), rgba(231, 211, 164, 0.82)),
-      url('/textures/ancient-paper-bg.png'),
+      url('/textures/ancient-paper-bg.webp'),
       repeating-linear-gradient(
         0deg,
         rgba(44, 36, 22, 0.018) 0,
@@ -264,7 +264,7 @@
 
   .paper-panel {
     background-color: var(--paper-surface);
-    background-image: linear-gradient(rgba(240, 224, 185, 0.91), rgba(240, 224, 185, 0.91)), url('/textures/archive-card-paper.png');
+    background-image: linear-gradient(rgba(240, 224, 185, 0.91), rgba(240, 224, 185, 0.91)), url('/textures/archive-card-paper.webp');
     background-size: cover;
     background-position: center;
     border: var(--pixel-step) solid var(--paper-ink);
@@ -377,7 +377,8 @@
     border-bottom: var(--pixel-step) solid var(--paper-ink);
     background: color-mix(in srgb, var(--paper-canvas) 88%, white);
     box-shadow: 0 2px 0 rgba(44, 36, 22, 0.08);
-    backdrop-filter: blur(10px);
+    /* Avoid a full-page backdrop blur during every scroll frame. */
+    backdrop-filter: none;
   }
 
   .site-header::after {
@@ -968,6 +969,22 @@ main {
 @media (prefers-reduced-motion:reduce) { .hero-orbit,.hero-orbit::before,.hero-orbit::after,.compass-light-sweep,.compass-engine-ring,.compass-core-wrap,.compass-core-halo,.status-dot { animation:none !important; } }
 
 @media (max-width: 767px) {
+  body {
+    background-attachment: scroll, scroll, scroll, scroll;
+  }
+
+  main {
+    animation: none;
+  }
+
+  .paper-hero::after,
+  .hero-orbit::before,
+  .hero-orbit::after,
+  .compass-light-sweep,
+  .compass-engine-ring {
+    animation: none;
+  }
+
   .paper-hero > .grid { display:flex; flex-direction:column; gap:1.5rem; }
   .paper-hero .hero-copy { order:1; }
   .paper-hero .archive-index { order:2; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.75rem; border-left:0; border-top:1px solid var(--paper-fiber); border-bottom:1px solid var(--paper-fiber); padding:10px 0; }
@@ -1096,7 +1113,7 @@ main {
   padding: clamp(1.35rem, 4vw, 2rem);
   border: var(--pixel-step) solid var(--paper-ink);
   background-color: var(--paper-surface);
-  background-image: linear-gradient(rgba(237, 218, 174, 0.88), rgba(237, 218, 174, 0.88)), url('/textures/archive-card-paper.png');
+  background-image: linear-gradient(rgba(237, 218, 174, 0.88), rgba(237, 218, 174, 0.88)), url('/textures/archive-card-paper.webp');
   background-position: center;
   background-size: cover;
   box-shadow: 10px 12px 0 rgba(11, 8, 5, 0.42), inset 0 0 0 1px rgba(255, 235, 183, 0.64);

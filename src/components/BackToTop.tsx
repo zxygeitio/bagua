@@ -1,17 +1,34 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { ArrowRight } from '@/components/icons'
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false)
+  const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 600)
+    let lastVisible = false
+
+    const update = () => {
+      frameRef.current = null
+      const nextVisible = window.scrollY > 600
+      if (nextVisible === lastVisible) return
+      lastVisible = nextVisible
+      setVisible(nextVisible)
+    }
+
+    const onScroll = () => {
+      if (frameRef.current === null) frameRef.current = requestAnimationFrame(update)
+    }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+    }
   }, [])
 
   if (!visible) return null
