@@ -6,7 +6,7 @@ import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { getAllHexagrams } from '@/lib/iching'
 import type { TrigramName } from '@/types/iching'
 
-/** 文王八卦序：上卦为方位（先天八卦序：乾兑离震巽坎艮坤 → 1-8） */
+/** 先天八卦方位：上南、下北、左西、右东。 */
 const UPPER_TRIGRAMS: TrigramName[] = ['乾', '兑', '离', '震', '巽', '坎', '艮', '坤']
 
 const POSITIONS: { angle: number; trigram: TrigramName; label: string }[] = [
@@ -14,10 +14,10 @@ const POSITIONS: { angle: number; trigram: TrigramName; label: string }[] = [
   { angle: 45, trigram: '兑', label: '东南' },
   { angle: 90, trigram: '离', label: '东' },
   { angle: 135, trigram: '震', label: '东北' },
-  { angle: 180, trigram: '巽', label: '北' },
-  { angle: 225, trigram: '坎', label: '西北' },
-  { angle: 270, trigram: '艮', label: '西' },
-  { angle: 315, trigram: '坤', label: '西南' },
+  { angle: 180, trigram: '坤', label: '北' },
+  { angle: 225, trigram: '巽', label: '西南' },
+  { angle: 270, trigram: '坎', label: '西' },
+  { angle: 315, trigram: '艮', label: '西北' },
 ]
 
 /**

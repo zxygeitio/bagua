@@ -1,161 +1,153 @@
 'use client'
 
+import { useId } from 'react'
 import Link from 'next/link'
 
-import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
-import { getGuaById } from '@/lib/iching'
+import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
+import type { TrigramName } from '@/lib/qigua/types'
 
 /**
- * 先天八卦方位 · 乾南（内圈居中下） / 坤北（内圈居中上） / 离东（右） / 坎西（左）
- * 为视觉清晰，仅取四正卦环绕中心太极
+ * 先天八卦方位：上南、下北、左西、右东。
+ * 这里保留中国传统罗盘的“南上”阅读方式，并在每个方位同时显示卦名、卦符与方向。
  */
-const POSITIONS: { guaId: number; angle: number; label: string; desc: string }[] = [
-  { guaId: 1, angle: 0, label: '乾', desc: '南 · 天' },     // 顶部 = 先天南
-  { guaId: 2, angle: 180, label: '坤', desc: '北 · 地' },   // 底部 = 先天北
-  { guaId: 30, angle: 90, label: '离', desc: '东 · 火' },   // 右
-  { guaId: 5, angle: 270, label: '坎', desc: '西 · 水' },   // 左
+const POSITIONS: Array<{
+  angle: number
+  trigram: TrigramName
+  guaId: number
+  direction: string
+  element: string
+}> = [
+  { angle: 0, trigram: '乾', guaId: 1, direction: '南', element: '天 · 金' },
+  { angle: 45, trigram: '兑', guaId: 58, direction: '东南', element: '泽 · 金' },
+  { angle: 90, trigram: '离', guaId: 30, direction: '东', element: '火 · 火' },
+  { angle: 135, trigram: '震', guaId: 51, direction: '东北', element: '雷 · 木' },
+  { angle: 180, trigram: '坤', guaId: 2, direction: '北', element: '地 · 土' },
+  { angle: 225, trigram: '巽', guaId: 57, direction: '西南', element: '风 · 木' },
+  { angle: 270, trigram: '坎', guaId: 29, direction: '西', element: '水 · 水' },
+  { angle: 315, trigram: '艮', guaId: 52, direction: '西北', element: '山 · 土' },
 ]
 
-/**
- * 先天八卦方位图（精简版 · 仅四正卦）
- * 视觉：单层圆环 + 四正卦 + 中心太极
- */
+const polar = (center: number, radius: number, angle: number) => {
+  const rad = ((angle - 90) * Math.PI) / 180
+  return {
+    x: center + radius * Math.cos(rad),
+    y: center + radius * Math.sin(rad),
+  }
+}
+
 export function BaguaCompass() {
-  const size = 360
+  const size = 420
   const center = size / 2
-  const radius = 130
+  const radius = 145
+  const id = useId().replace(/:/g, '')
+  const ids = {
+    core: `compass-core-${id}`,
+    scan: `compass-scan-${id}`,
+    glow: `compass-glow-${id}`,
+  }
 
   return (
-    <div className="relative mx-auto w-full max-w-[420px]">
-      <svg viewBox={`0 0 ${size} ${size}`} className="bagua-compass w-full" role="img" aria-label="先天八卦四正位罗盘">
+    <div className="relative mx-auto w-full max-w-[460px]">
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="bagua-compass w-full"
+        role="img"
+        aria-label="先天八卦八方位罗盘：乾南、坤北、离东、坎西"
+      >
         <defs>
-          <radialGradient id="compass-core" cx="50%" cy="42%" r="64%"><stop offset="0%" stopColor="var(--paper-surface)" /><stop offset="70%" stopColor="var(--paper-wash)" /><stop offset="100%" stopColor="var(--paper-fiber)" /></radialGradient>
-          <linearGradient id="compass-scan" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="var(--paper-cinnabar)" stopOpacity="0" /><stop offset="46%" stopColor="var(--paper-gold)" stopOpacity="0.72" /><stop offset="100%" stopColor="var(--paper-gold)" stopOpacity="0" /></linearGradient>
-          <filter id="compass-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+          <radialGradient id={ids.core} cx="50%" cy="42%" r="64%">
+            <stop offset="0%" stopColor="var(--paper-surface)" />
+            <stop offset="70%" stopColor="var(--paper-wash)" />
+            <stop offset="100%" stopColor="var(--paper-fiber)" />
+          </radialGradient>
+          <linearGradient id={ids.scan} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--paper-cinnabar)" stopOpacity="0" />
+            <stop offset="46%" stopColor="var(--paper-gold)" stopOpacity="0.78" />
+            <stop offset="100%" stopColor="var(--paper-gold)" stopOpacity="0" />
+          </linearGradient>
+          <filter id={ids.glow} x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="2.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        {/* 装饰双圆 · 慢速旋转（外环） */}
-        <g
-          style={{
-            transformOrigin: `${center}px ${center}px`,
-            transformBox: 'fill-box',
-            animation: 'spin-slow 60s linear infinite',
-          }}
-        >
-          <circle
-            cx={center}
-            cy={center}
-            r={radius + 30}
-            fill="none"
-            stroke="var(--paper-gold)"
-            strokeWidth="1"
-            opacity="0.4"
-            strokeDasharray="2 6"
-          />
+
+        <g className="compass-orbit compass-orbit--outer" style={{ transformOrigin: `${center}px ${center}px` }}>
+          <circle cx={center} cy={center} r={radius + 38} fill="none" stroke="var(--paper-gold)" strokeWidth="1" opacity="0.48" strokeDasharray="2 7" />
+          <circle cx={center} cy={center} r={radius + 27} fill="none" stroke="var(--paper-fiber)" strokeWidth="1" opacity="0.42" />
         </g>
-        <g
-          style={{
-            transformOrigin: `${center}px ${center}px`,
-            transformBox: 'fill-box',
-            animation: 'spin-slow-reverse 80s linear infinite',
-          }}
-        >
-          <circle
-            cx={center}
-            cy={center}
-            r={radius - 30}
-            fill="none"
-            stroke="var(--paper-fiber)"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            opacity="0.5"
-          />
+        <g className="compass-orbit compass-orbit--inner" style={{ transformOrigin: `${center}px ${center}px` }}>
+          <circle cx={center} cy={center} r={radius - 28} fill="none" stroke="var(--paper-fiber)" strokeWidth="1" strokeDasharray="3 5" opacity="0.62" />
+          <circle cx={center} cy={center} r={radius - 48} fill="none" stroke="var(--paper-gold)" strokeWidth="1" opacity="0.28" />
         </g>
-        <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          fill="url(#compass-core)"
-          stroke="var(--paper-ink)"
-          strokeWidth="1.5"
-          opacity="0.7"
+
+        <circle cx={center} cy={center} r={radius + 8} fill={`url(#${ids.core})`} stroke="var(--paper-ink)" strokeWidth="1.5" opacity="0.84" />
+        <circle cx={center} cy={center} r={radius - 12} fill="none" stroke="var(--paper-ink)" strokeWidth="0.8" opacity="0.32" />
+        <path
+          className="compass-scan"
+          d={`M${center} ${center} L${center} ${center - radius - 42} A${radius + 42} ${radius + 42} 0 0 1 ${center + radius + 42} ${center} Z`}
+          fill={`url(#${ids.scan})`}
+          opacity="0.25"
+          filter={`url(#${ids.glow})`}
         />
 
-        <path className="compass-scan" d={`M${center} ${center} L${center} ${center - radius - 30} A${radius + 30} ${radius + 30} 0 0 1 ${center + radius + 30} ${center} Z`} fill="url(#compass-scan)" opacity="0.22" filter="url(#compass-glow)" />
-        <line x1={center} y1={center - radius - 18} x2={center} y2={center + radius + 18} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.3" />
-        <line x1={center - radius - 18} y1={center} x2={center + radius + 18} y2={center} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.3" />
+        <line x1={center} y1={center - radius - 19} x2={center} y2={center + radius + 19} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.28" />
+        <line x1={center - radius - 19} y1={center} x2={center + radius + 19} y2={center} stroke="var(--paper-cinnabar)" strokeWidth="0.8" opacity="0.28" />
 
-        {/* 四正位刻度线 */}
-        {[0, 90, 180, 270].map((a) => (
-          <line
-            key={a}
-            x1={center + (radius - 8) * Math.cos(((a - 90) * Math.PI) / 180)}
-            y1={center + (radius - 8) * Math.sin(((a - 90) * Math.PI) / 180)}
-            x2={center + (radius + 8) * Math.cos(((a - 90) * Math.PI) / 180)}
-            y2={center + (radius + 8) * Math.sin(((a - 90) * Math.PI) / 180)}
-            stroke="var(--paper-ink)"
-            strokeWidth="1.5"
-            opacity="0.6"
-          />
-        ))}
+        {POSITIONS.map((position) => {
+          const inner = polar(center, radius - 14, position.angle)
+          const outer = polar(center, radius + 14, position.angle)
+          return (
+            <line
+              key={`${position.trigram}-tick`}
+              x1={inner.x}
+              y1={inner.y}
+              x2={outer.x}
+              y2={outer.y}
+              stroke="var(--paper-ink)"
+              strokeWidth={position.angle % 90 === 0 ? 2 : 1}
+              opacity={position.angle % 90 === 0 ? 0.62 : 0.35}
+            />
+          )
+        })}
 
-        {/* 四方字标（位于外圆外） */}
-        <text x={center} y="22" textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="2">南</text>
-        <text x={size - 18} y={center + 4} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="2">东</text>
-        <text x={center} y={size - 10} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="2">北</text>
-        <text x="18" y={center + 4} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="2">西</text>
+        <text x={center} y="31" textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="3">南 · 天</text>
+        <text x={size - 20} y={center + 4} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="3">东</text>
+        <text x={center} y={size - 18} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="3">北 · 地</text>
+        <text x="20" y={center + 4} textAnchor="middle" fontSize="11" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="3">西</text>
+
+        <g className="compass-core" transform={`translate(${center} ${center})`}>
+          <circle r="45" fill="var(--paper-wash)" stroke="var(--paper-ink)" strokeWidth="1.5" />
+          <path d="M0 -44 C-18 -44 -27 -30 -27 -15 C-27 0 -15 14 0 14 C15 14 27 0 27 -15 C27 -30 18 -44 0 -44Z" fill="var(--paper-cinnabar)" opacity="0.9" />
+          <path d="M0 44 C18 44 27 30 27 15 C27 0 15 -14 0 -14 C-15 -14 -27 0 -27 15 C-27 30 -18 44 0 44Z" fill="var(--paper-ink)" opacity="0.88" />
+          <circle cy="-15" r="3.5" fill="var(--paper-surface)" />
+          <circle cy="15" r="3.5" fill="var(--paper-wash)" />
+        </g>
       </svg>
 
-      {/* 四正卦：HTML 浮层（保证文本清晰 + 完美对齐） */}
-      {POSITIONS.map((p) => {
-        const rad = ((p.angle - 90) * Math.PI) / 180
-        const xPct = ((center + radius * Math.cos(rad)) / size) * 100
-        const yPct = ((center + radius * Math.sin(rad)) / size) * 100
-        const gua = getGuaById(p.guaId)
+      {POSITIONS.map((position) => {
+        const point = polar(center, radius, position.angle)
         return (
           <Link
-            key={p.guaId}
-            href={`/hexagrams/${p.guaId}`}
-            style={{ left: `${xPct}%`, top: `${yPct}%` }}
+            key={position.trigram}
+            href={`/hexagrams/${position.guaId}`}
+            style={{ left: `${(point.x / size) * 100}%`, top: `${(point.y / size) * 100}%` }}
             className="compass-node group absolute flex w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-transform duration-300 hover:scale-110"
-            title={p.desc}
+            title={`${position.trigram} · ${position.direction} · ${position.element}`}
+            aria-label={`${position.trigram}卦，${position.direction}，${position.element}`}
           >
-            <span className="flex h-12 w-12 items-center justify-center border-4 border-bagua-text bg-bagua-surface font-display text-xl leading-none text-bagua-text transition group-hover:rotate-6 group-hover:bg-bagua-primary group-hover:text-bagua-surface">
-              {p.label}
+            <span className="flex h-12 w-12 items-center justify-center border-2 border-bagua-text bg-bagua-surface text-2xl leading-none text-bagua-text shadow-[3px_3px_0_rgba(44,36,22,.16)] transition group-hover:-translate-y-1 group-hover:border-bagua-primary group-hover:bg-bagua-primary group-hover:text-bagua-surface">
+              {TRIGRAM_SYMBOLS[position.trigram]}
             </span>
-            {gua && (
-              <div className="mt-1.5 flex h-4 w-12 items-center justify-center">
-                <HexagramSymbol gua={gua} size="sm" />
-              </div>
-            )}
+            <span className="mt-1 font-display text-[11px] tracking-[0.16em] text-bagua-text group-hover:text-bagua-primary">
+              {position.trigram}
+            </span>
+            <span className="font-body text-[9px] text-bagua-muted">{position.direction}</span>
           </Link>
         )
       })}
-
-      {/* 中心太极 · 浮动 + 旋转 */}
-      <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{
-          animation: 'float-y 6s ease-in-out infinite',
-        }}
-      >
-        <div className="compass-core flex h-20 w-20 items-center justify-center rounded-full border-2 border-bagua-text bg-bagua-wash shadow-soft">
-          <svg viewBox="0 0 24 24" className="h-14 w-14 text-bagua-primary">
-            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
-            <path
-              d="M12 3 C8.5 3 6 6 6 9 C6 12 8.5 15 12 15 C15.5 15 18 12 18 9 C18 6 15.5 3 12 3 Z"
-              fill="currentColor"
-            />
-            <path
-              d="M12 21 C15.5 21 18 18 18 15 C18 12 15.5 9 12 9 C8.5 9 6 12 6 15 C6 18 8.5 21 12 21 Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-            />
-            <circle cx="12" cy="6" r="1.2" fill="currentColor" />
-            <circle cx="12" cy="18" r="1.2" fill="currentColor" />
-          </svg>
-        </div>
-      </div>
     </div>
   )
 }

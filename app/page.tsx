@@ -115,11 +115,11 @@ export default function HomePage() {
 
             <Reveal delay={180} direction="scale">
               <div className="instrument-stage">
-                <div className="instrument-label"><span>先天 · 四正位</span><span>仪器读数 / 08</span></div>
+                <div className="instrument-label"><span>先天 · 八方位</span><span>仪器读数 / 08</span></div>
                 <PaperTilt className="paper-stage" intensity={4.5}>
                   <div className="paper-stack paper-depth p-3 md:p-4"><BaguaCompass /></div>
                 </PaperTilt>
-                <div className="instrument-foot"><span>乾南 / 坤北 / 离东 / 坎西</span><span className="font-display">BAGUA · 01</span></div>
+                <div className="instrument-foot"><span>乾南 / 坤北 / 离东 / 坎西</span><span className="font-display">BAGUA · 08</span></div>
               </div>
             </Reveal>
           </div>
