@@ -1,52 +1,62 @@
 # bagua · 易经占卜
 
-一款基于 Next.js 14 的现代易经占卜 Web 应用，融合传统易学智慧与现代 UI/UX。
+`bagua` 是一款基于 Next.js 14 的现代易经探索工具，将传统卦象资料、起卦算法与简洁的数字化界面结合，帮助用户以更直观的方式了解六十四卦。
 
-## ✨ 特色
+## 在线体验
 
-- **64 卦完整数据**：卦辞、彖传、象传、爻辞、小象传
-- **三种起卦方式**：硬币法（快速）/ 蓍草揲占（传统）/ 手动选卦（学习）
-- **五种卦变关系**：本卦、之卦、互卦、错卦、综卦
-- **现代解读**：每个卦都配有现代场景启示
-- **完整测试**：24 个单元测试，95% 代码覆盖率
-- **数据可追溯**：每个字段都有来源标记
-- **响应式设计**：桌面、平板、手机完美适配
+无需安装，打开 [bagua 在线体验](https://bagua-1lq.pages.dev) 即可使用。
 
-## 🛠 技术栈
+## 项目亮点
 
-- **框架**：Next.js 14 (App Router, 全静态化导出)
-- **语言**：TypeScript 5.6 (严格模式 + noUncheckedIndexedAccess)
-- **样式**：Tailwind CSS 3.4 (自定义设计系统)
-- **状态管理**：Zustand 4.5 (含 localStorage 持久化)
+- **六十四卦资料**：收录卦辞、彖传、大象传、六爻爻辞与小象传。
+- **三种起卦方式**：硬币法适合快速起卦，蓍草法还原传统仪式，手动选卦便于学习和查阅。
+- **五种卦变关系**：展示本卦、之卦、互卦、错卦与综卦，辅助理解卦象之间的联系。
+- **现代场景启示**：为卦象补充易于理解的现代语境解读。
+- **本地优先**：占卜记录和偏好可保存在浏览器本地；配置 Supabase 后可启用历史同步与分享功能。
+- **响应式界面**：适配桌面、平板和手机等常见屏幕尺寸。
+
+## 技术栈
+
+- **框架**：Next.js 14（App Router、静态导出）
+- **语言**：TypeScript 5.6（严格模式、`noUncheckedIndexedAccess`）
+- **样式**：Tailwind CSS 3.4（自定义设计系统）
+- **状态管理**：Zustand 4.5（含 `localStorage` 持久化）
 - **数据验证**：Zod 3.23
-- **测试**：Vitest 2.1
-- **图标**：Lucide React
+- **测试**：Vitest 2.1、fast-check 3.23
+- **云同步**：Supabase（可选）
+- **部署**：Cloudflare Pages
 
-## 📦 快速开始
+## 快速开始
 
 ```bash
 # 安装依赖
 npm install
 
-# 开发模式
+# 启动开发服务器
 npm run dev
+```
 
-# 数据校验
+打开 http://localhost:3000 查看应用。
+
+常用校验和构建命令：
+
+```bash
+# 校验六十四卦数据
 npm run build:data
 
-# 单元测试
+# 运行单元测试
 npm test
 
-# 类型检查
+# TypeScript 类型检查
 npm run typecheck
 
-# 生产构建（生成 out/ 目录的静态文件）
+# 生产构建，生成 out/ 静态文件
 npm run build
 ```
 
-访问 http://localhost:3000 查看应用。
+如需启用 Supabase 云同步，请参考 [`.env.example`](.env.example) 配置环境变量。
 
-## 🏗 架构
+## 页面与目录
 
 ```
 bagua/
@@ -54,8 +64,10 @@ bagua/
 │   ├── page.tsx           # 首页
 │   ├── hexagrams/         # 64卦浏览 + 详情
 │   ├── divine/            # 起卦
-│   ├── result/[id]/       # 占卜结果
+│   ├── result/            # 占卜结果（通过查询参数读取结果）
 │   ├── history/           # 历史记录
+│   ├── learn/             # 入门指南
+│   ├── share/             # 分享结果
 │   └── settings/          # 设置
 ├── src/
 │   ├── components/        # UI 组件
@@ -69,7 +81,7 @@ bagua/
 └── docs/                  # 设计文档
 ```
 
-## 🧮 核心算法
+## 核心算法
 
 ### 起卦方法
 
@@ -87,21 +99,19 @@ bagua/
 - **错卦 (dui)**：阴阳全反（对合）
 - **综卦 (zong)**：上下颠倒（对合）
 
-数学不变量已通过 fast-check 属性测试验证。
+卦变关系中的数学不变量已通过 fast-check 属性测试验证。
 
-## 📊 数据来源
+## 数据来源
 
 主要参考：
 - [Frank2333333/iching64](https://github.com/Frank2333333/iching64)（卦象结构）
 - [tiredcows/tired_cows_progect](https://github.com/tiredcows/tired_cows_progect)（维基文库爬虫）
 - [godcong/yi](https://github.com/godcong/yi)（算法参考）
 
-所有 64 卦数据均经过 Zod schema + 跨字段关系校验 + 9 项业务断言 + 1 项 canary 测试。
+所有六十四卦数据都会经过 Zod schema、跨字段关系校验和业务断言检查。
 
-## 🎯 项目目标
+## 许可与声明
 
-打造一款**内核逻辑完美、页面精致**的精品易经占卜应用，让古老的易经智慧以现代、易用的方式触达更多人。
+本项目原创代码采用 [Apache License 2.0](LICENSE) 开源。第三方依赖、数据与字体资源可能受其各自许可协议约束，请以对应项目的原始说明为准。
 
-## 📝 许可
-
-仅供文化学习参考。
+本项目用于传统文化学习与个人参考，卦象内容不构成医疗、法律、财务或其他专业建议。
