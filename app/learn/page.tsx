@@ -7,7 +7,7 @@ import { TrigramOverview } from '@/components/learn/TrigramCard'
 import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata: Metadata = {
-  title: '易学入门 · bagua',
+  title: '易学入门',
   description: '八卦总览、五种起卦法、易经阅读法与常见概念。',
 }
 

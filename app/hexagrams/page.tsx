@@ -2,7 +2,7 @@ import { HexagramGrid } from '@/components/hexagram/HexagramGrid'
 import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata = {
-  title: '六十四卦 · bagua',
+  title: '六十四卦',
 }
 
 export default function HexagramsPage() {

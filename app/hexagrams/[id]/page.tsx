@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SiteShell } from '@/components/shared/SiteShell'
@@ -12,6 +13,19 @@ interface PageProps {
 
 export function generateStaticParams() {
   return Array.from({ length: 64 }, (_, i) => ({ id: String(i + 1) }))
+}
+
+export function generateMetadata({ params }: PageProps): Metadata {
+  const gua = getGuaById(parseInt(params.id, 10))
+  if (!gua) return { title: '卦象不存在' }
+
+  return {
+    title: `${gua.name}（第${gua.id}卦）`,
+    description: `${gua.name}（${gua.pronunciation}）卦辞：${gua.guaci} 了解卦象、彖传、象传与六爻爻辞。`,
+    keywords: [
+      ...new Set([gua.name, gua.chineseName, gua.pronunciation, '易经', '六十四卦', ...gua.keywords]),
+    ],
+  }
 }
 
 const RELATION_DESCS = {
