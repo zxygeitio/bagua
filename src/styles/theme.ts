@@ -10,6 +10,7 @@ export const PAPER = {
   ink: '#2C2416',
   muted: '#6E5A3C',
   cinnabar: '#B23A2A',
+  gold: '#B78C3E',
   rule: '#2C2416',
   wash: '#DCC59A',
 } as const

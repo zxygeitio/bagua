@@ -1,4 +1,8 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 
 import { BaguaCompass } from '@/components/home/BaguaCompass'
 import { DailyOracle } from '@/components/hexagram/DailyOracle'
@@ -19,6 +23,7 @@ import {
   Water,
   Wood,
   Wand,
+  X,
 } from '@/components/icons'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
@@ -60,6 +65,28 @@ const SCENARIO_CARDS = [
 ] as const
 
 export default function HomePage() {
+  const [activeMethod, setActiveMethod] = useState<number | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const activeShortcut = activeMethod === null ? null : METHOD_SHORTCUTS[activeMethod]
+
+  useEffect(() => {
+    if (activeMethod === null) return
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setActiveMethod(null)
+    }
+
+    document.addEventListener('keydown', closeOnEscape)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    requestAnimationFrame(() => closeButtonRef.current?.focus())
+
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [activeMethod])
+
   return (
     <SiteShell>
       <main>
@@ -67,7 +94,7 @@ export default function HomePage() {
         <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
           <PaperParticles />
           <div className="hero-orbit" aria-hidden="true" />
-          <div className="grid items-center gap-10 lg:grid-cols-[0.72fr_1.2fr_1fr] lg:gap-12">
+          <div className="grid items-center gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-10">
             <Reveal direction="left">
               <aside className="archive-index border-l-2 border-bagua-primary/60 pl-4 md:pl-5">
                 <p className="font-display text-[10px] tracking-[0.34em] text-bagua-primary">ARCHIVE / 01</p>
@@ -140,11 +167,14 @@ export default function HomePage() {
                 const Icon = m.Icon
                 return (
                   <Reveal key={m.href} delay={i * 100} direction="up">
-                    <Link
-                      href={m.href}
-                      className="paper-panel lift group flex items-center gap-4 p-5"
+                    <button
+                      type="button"
+                      onClick={() => setActiveMethod(i)}
+                      className="ritual-card paper-panel group flex w-full items-center gap-4 p-5 text-left"
+                      aria-haspopup="dialog"
+                      aria-label={`查看${m.title}详情`}
                     >
-                      <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-wash text-bagua-primary transition group-hover:scale-110 group-hover:rotate-3">
+                      <span className="ritual-card__seal flex h-12 w-12 flex-shrink-0 items-center justify-center text-bagua-primary">
                         <Icon className="h-6 w-6" />
                       </span>
                       <div className="flex-1 min-w-0">
@@ -162,8 +192,8 @@ export default function HomePage() {
                           {m.desc}
                         </p>
                       </div>
-                      <ArrowRight className="h-4 w-4 flex-shrink-0 text-bagua-muted transition group-hover:translate-x-1 group-hover:text-bagua-primary" />
-                    </Link>
+                      <span className="ritual-card__open font-display text-[10px] tracking-[0.16em] text-bagua-muted">阅览</span>
+                    </button>
                   </Reveal>
                 )
               })}
@@ -274,7 +304,64 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      {activeShortcut ? (
+        <MethodInspector
+          method={activeShortcut}
+          closeButtonRef={closeButtonRef}
+          onClose={() => setActiveMethod(null)}
+        />
+      ) : null}
     </SiteShell>
+  )
+}
+
+function MethodInspector({
+  method,
+  closeButtonRef,
+  onClose,
+}: {
+  method: (typeof METHOD_SHORTCUTS)[number]
+  closeButtonRef: RefObject<HTMLButtonElement>
+  onClose: () => void
+}) {
+  const Icon = method.Icon
+  const details = method.href === '/divine'
+    ? ['三枚铜钱，六次投掷', '自动记录阴阳与动爻', '生成本卦、变卦与纳甲排盘']
+    : method.href === '/learn'
+      ? ['先天方位与八卦象义', '从卦辞进入读卦方法', '按主题建立学习路径']
+      : ['六十四卦完整索引', '卦辞、彖传与象传对照', '按五行与上下卦浏览']
+
+  return (
+    <div className="ritual-dialog-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="ritual-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ritual-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="ritual-dialog__orbit" aria-hidden="true" />
+        <button ref={closeButtonRef} type="button" className="ritual-dialog__close" onClick={onClose} aria-label="关闭详情">
+          <X className="h-4 w-4" />
+        </button>
+        <div className="ritual-dialog__header">
+          <span className="ritual-dialog__seal"><Icon className="h-8 w-8" /></span>
+          <div>
+            <p className="section-kicker">仪式索引 / 0{METHOD_SHORTCUTS.indexOf(method) + 1}</p>
+            <h2 id="ritual-dialog-title" className="mt-2 font-display text-2xl tracking-[0.16em] text-bagua-text">{method.title}</h2>
+          </div>
+        </div>
+        <div className="ritual-dialog__rule" />
+        <p className="prose-body mt-5 text-bagua-muted">{method.desc}。把此刻的问题整理成可读的线索，再进入相应的工具或篇章。</p>
+        <ol className="ritual-dialog__steps">
+          {details.map((detail, index) => <li key={detail}><span>0{index + 1}</span>{detail}</li>)}
+        </ol>
+        <div className="mt-7 flex items-center justify-between gap-4 border-t border-bagua-fiber pt-4">
+          <span className="font-display text-[10px] tracking-[0.14em] text-bagua-muted">BAGUA / ARCHIVE</span>
+          <Link href={method.href} className="btn-primary" onClick={onClose}>进入{method.title}<ArrowRight className="h-4 w-4" /></Link>
+        </div>
+      </section>
+    </div>
   )
 }
 
