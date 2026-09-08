@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 
 import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
 import type { TrigramName } from '@/lib/qigua/types'
@@ -37,8 +38,27 @@ const polarPercent = (radius: number, angle: number) => {
 }
 
 export function BaguaCompass({ priority = false }: { priority?: boolean }) {
+  const compassRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = compassRef.current
+    if (!element || typeof IntersectionObserver === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) element.dataset.inView = String(entry.isIntersecting)
+      },
+      { rootMargin: '120px' },
+    )
+    observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div
+      ref={compassRef}
+      data-in-view="true"
       className="bagua-compass"
       role="img"
       aria-label="先天八卦八方位罗盘：乾南、坤北、离东、坎西"

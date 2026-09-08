@@ -7,9 +7,20 @@ import { ArrowRight } from '@/components/icons'
 export function BackToTop() {
   const [visible, setVisible] = useState(false)
   const frameRef = useRef<number | null>(null)
+  const scrollIdleRef = useRef<number | null>(null)
 
   useEffect(() => {
     let lastVisible = false
+    const root = document.documentElement
+
+    const markScrolling = () => {
+      if (!root.classList.contains('is-scrolling')) root.classList.add('is-scrolling')
+      if (scrollIdleRef.current !== null) window.clearTimeout(scrollIdleRef.current)
+      scrollIdleRef.current = window.setTimeout(() => {
+        root.classList.remove('is-scrolling')
+        scrollIdleRef.current = null
+      }, 120)
+    }
 
     const update = () => {
       frameRef.current = null
@@ -20,6 +31,7 @@ export function BackToTop() {
     }
 
     const onScroll = () => {
+      markScrolling()
       if (frameRef.current === null) frameRef.current = requestAnimationFrame(update)
     }
 
@@ -28,6 +40,8 @@ export function BackToTop() {
     return () => {
       window.removeEventListener('scroll', onScroll)
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+      if (scrollIdleRef.current !== null) window.clearTimeout(scrollIdleRef.current)
+      root.classList.remove('is-scrolling')
     }
   }, [])
 
