@@ -18,6 +18,25 @@
 
   body {
     background-color: var(--paper-canvas);
+    color: var(--paper-ink);
+    font-family: var(--font-body), 'Noto Serif SC', 'Songti SC', serif;
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-leading);
+    letter-spacing: var(--type-body-tracking);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* 纸质背景改为固定合成层：
+   * 原先挂在 body 上随文档绘制（cover 尺寸 = 整篇文档），滚动时每帧重绘整屏纹理。
+   * fixed 层只按视口大小栅格化一次，滚动期间完全走合成器。 */
+  .paper-canvas-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--paper-canvas);
     background-image:
       linear-gradient(rgba(231, 211, 164, 0.82), rgba(231, 211, 164, 0.82)),
       url('/textures/ancient-paper-bg.webp'),
@@ -37,16 +56,7 @@
       );
     background-size: cover, cover, auto, auto;
     background-position: center, center, center, center;
-    /* Fixed multi-layer backgrounds force a full viewport repaint on scroll. */
     background-attachment: scroll, scroll, scroll, scroll;
-    color: var(--paper-ink);
-    font-family: var(--font-body), 'Noto Serif SC', 'Songti SC', serif;
-    font-size: var(--type-body-size);
-    line-height: var(--type-body-leading);
-    letter-spacing: var(--type-body-tracking);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    min-height: 100vh;
   }
 
   h1,
@@ -118,7 +128,7 @@
     background: rgba(201, 165, 106, 0.32);
     transform: rotate(var(--particle-rotate));
     animation: paper-float var(--particle-duration) ease-in-out var(--particle-delay) infinite;
-    will-change: transform, opacity;
+    will-change: auto;
   }
 
   .paper-hero::after {
@@ -309,9 +319,15 @@
 
   .paper-stage {
     perspective: 900px;
-    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1), filter 220ms ease;
+    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
     transform-style: preserve-3d;
-    will-change: transform;
+    will-change: auto;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .paper-stage:hover {
+      will-change: transform;
+    }
   }
 
   .paper-stage-shadow {
@@ -595,6 +611,23 @@
 }
 
 @layer utilities {
+  /* 视口外跳过渲染（layout/paint），长列表滚动只处理可见部分 */
+  .cv-auto {
+    content-visibility: auto;
+  }
+
+  .cis-xs {
+    contain-intrinsic-size: auto 110px;
+  }
+
+  .cis-s {
+    contain-intrinsic-size: auto 360px;
+  }
+
+  .cis-m {
+    contain-intrinsic-size: auto 640px;
+  }
+
   .scrollbar-thin {
     scrollbar-width: thin;
   }
@@ -764,19 +797,17 @@
 /* ====================================================================
  * 页面切换动画
  * ==================================================================== */
-@keyframes page-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 跨文档 View Transition（Chrome/Edge 渐进增强）：
+ * 静态导出是 MPA，切页本为整页替换；开启后由浏览器做旧页截图→新页淡入，
+ * 掉帧感大幅降低。不支持的浏览器自动忽略，页面仍由局部入场动效呈现。 */
+@view-transition {
+  navigation: auto;
 }
 
-main {
-  animation: page-fade-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
 }
 
 /* ====================================================================
@@ -904,6 +935,24 @@ html.is-scrolling .ritual-dialog-backdrop {
   animation-play-state: paused !important;
 }
 
+/* 路由切换时优先保证新页面及时完成布局，切换结束后由 SiteShell 移除该标记。 */
+html.is-navigating .paper-particle,
+html.is-navigating .paper-hero,
+html.is-navigating .hero-orbit,
+html.is-navigating .status-dot,
+html.is-navigating .compass-light-sweep,
+html.is-navigating .compass-engine-ring,
+html.is-navigating .compass-core-wrap,
+html.is-navigating .compass-core-halo,
+html.is-navigating .glow-pulse,
+html.is-navigating .enter-up,
+html.is-navigating .stamp,
+html.is-navigating .skeleton,
+html.is-navigating .spin-slow,
+html.is-navigating .spin-slow-reverse {
+  animation: none !important;
+}
+
 html.is-scrolling .paper-hero::after,
 html.is-scrolling .hero-orbit::before,
 html.is-scrolling .hero-orbit::after,
@@ -965,7 +1014,7 @@ html.is-scrolling .ritual-dialog__orbit {
 .instrument-label,.instrument-foot { display:flex; justify-content:space-between; gap:1rem; font-family:var(--font-display),ui-monospace,monospace; font-size:10px; letter-spacing:.16em; color:var(--paper-muted); }
 .instrument-label { margin:0 0 10px; }
 .instrument-foot { margin-top:12px; padding-top:10px; border-top:1px solid var(--paper-fiber); }
-.bagua-compass { position:relative; width:100%; max-width:460px; aspect-ratio:1; margin-inline:auto; isolation:isolate; overflow:hidden; border-radius:50%; filter:drop-shadow(0 16px 18px rgba(44,36,22,.22)) drop-shadow(0 0 16px rgba(183,140,62,.14)); transform:translateZ(0); }
+.bagua-compass { position:relative; width:100%; max-width:460px; aspect-ratio:1; margin-inline:auto; isolation:isolate; overflow:hidden; border-radius:50%; box-shadow:0 16px 18px rgba(44,36,22,.22), 0 0 16px rgba(183,140,62,.14); transform:translateZ(0); }
 .bagua-compass[data-in-view='false'] .compass-light-sweep,
 .bagua-compass[data-in-view='false'] .compass-engine-ring,
 .bagua-compass[data-in-view='false'] .compass-core-wrap,
@@ -988,12 +1037,12 @@ html.is-scrolling .ritual-dialog__orbit {
 .compass-taiji-css::before { top:0; background:#34261b; box-shadow:inset 0 0 0 8px #d7b56f; }
 .compass-taiji-css::after { bottom:0; background:#d7b56f; box-shadow:inset 0 0 0 8px #34261b; }
 .compass-core-caption { position:absolute; top:87%; padding:2px 5px; color:#3d2a19; background:rgba(222,192,132,.9); border:1px solid rgba(62,43,25,.62); font-family:var(--font-display),ui-monospace,monospace; font-size:7px; letter-spacing:.18em; white-space:nowrap; }
-.compass-node { --node-size:clamp(38px,11.4%,52px); position:absolute; left:var(--compass-x); top:var(--compass-y); z-index:7; display:flex; flex-direction:column; align-items:center; width:var(--node-size); color:#2f2117; transform:translate(-50%,-50%) translateZ(18px); transform-style:preserve-3d; filter:drop-shadow(2px 4px 0 rgba(31,22,14,.25)); transition:transform 260ms cubic-bezier(.2,.8,.2,1),filter 260ms ease; }
-.compass-node__symbol { display:grid; place-items:center; width:100%; aspect-ratio:1; border-radius:50%; border:2px solid rgba(65,43,23,.88); color:#2d2119; background:radial-gradient(circle at 38% 28%,rgba(255,241,199,.96),rgba(208,167,95,.9) 68%,rgba(113,73,34,.94)); box-shadow:inset 0 0 0 2px rgba(247,217,151,.58),inset 0 -5px 8px rgba(58,37,19,.22),0 0 9px rgba(224,173,70,.22); font-family:'Noto Serif Symbols','Segoe UI Symbol',serif; font-size:clamp(20px,5.2vw,28px); line-height:1; text-shadow:0 1px rgba(255,235,185,.35); }
+.compass-node { --node-size:clamp(38px,11.4%,52px); position:absolute; left:var(--compass-x); top:var(--compass-y); z-index:7; display:flex; flex-direction:column; align-items:center; width:var(--node-size); color:#2f2117; transform:translate(-50%,-50%) translateZ(18px); transform-style:preserve-3d; transition:transform 260ms cubic-bezier(.2,.8,.2,1); }
+.compass-node__symbol { display:grid; place-items:center; width:100%; aspect-ratio:1; border-radius:50%; border:2px solid rgba(65,43,23,.88); color:#2d2119; background:radial-gradient(circle at 38% 28%,rgba(255,241,199,.96),rgba(208,167,95,.9) 68%,rgba(113,73,34,.94)); box-shadow:inset 0 0 0 2px rgba(247,217,151,.58),inset 0 -5px 8px rgba(58,37,19,.22),0 0 9px rgba(224,173,70,.22),2px 4px 0 rgba(31,22,14,.25); font-family:'Noto Serif Symbols','Segoe UI Symbol',serif; font-size:clamp(20px,5.2vw,28px); line-height:1; text-shadow:0 1px rgba(255,235,185,.35); }
 .compass-node__meta { position:absolute; top:calc(100% - 1px); display:flex; align-items:center; gap:3px; padding:2px 4px; color:#f4deb0; background:rgba(45,31,19,.88); border:1px solid rgba(203,153,67,.62); white-space:nowrap; box-shadow:1px 2px 0 rgba(27,18,12,.28); }
 .compass-node__meta b { font-family:var(--font-display),ui-monospace,monospace; font-size:8px; font-weight:500; letter-spacing:.08em; }
 .compass-node__meta i { color:#d8bb82; font-family:var(--font-body),serif; font-size:7px; font-style:normal; }
-@media (hover:hover) and (pointer:fine) { .compass-node:hover { z-index:10; transform:translate(-50%,-55%) translateZ(30px) scale(1.13); filter:drop-shadow(3px 7px 2px rgba(31,22,14,.32)) drop-shadow(0 0 8px rgba(229,177,75,.28)); } .compass-node:hover .compass-node__symbol { color:#6f251c; border-color:#8e3227; } }
+@media (hover:hover) and (pointer:fine) { .compass-node:hover { z-index:10; transform:translate(-50%,-55%) translateZ(30px) scale(1.13); } .compass-node:hover .compass-node__symbol { color:#6f251c; border-color:#8e3227; box-shadow:inset 0 0 0 2px rgba(247,217,151,.58),inset 0 -5px 8px rgba(58,37,19,.22),0 0 9px rgba(224,173,70,.22),3px 7px 2px rgba(31,22,14,.32),0 0 12px rgba(229,177,75,.28); } }
 .ritual-step { position:relative; }
 .ritual-step::after { content:''; position:absolute; right:-1px; top:50%; width:5px; height:5px; border-radius:50%; background:var(--paper-gold); opacity:.6; }
 .ritual-step:last-child::after { display:none; }
@@ -1006,14 +1055,6 @@ html.is-scrolling .ritual-dialog__orbit {
 @media (prefers-reduced-motion:reduce) { .hero-orbit,.hero-orbit::before,.hero-orbit::after,.compass-light-sweep,.compass-engine-ring,.compass-core-wrap,.compass-core-halo,.status-dot { animation:none !important; } }
 
 @media (max-width: 767px) {
-  body {
-    background-attachment: scroll, scroll, scroll, scroll;
-  }
-
-  main {
-    animation: none;
-  }
-
   .paper-hero::after,
   .hero-orbit::before,
   .hero-orbit::after,

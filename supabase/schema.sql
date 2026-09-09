@@ -41,22 +41,54 @@ create table if not exists public.bagua_history (
 create index if not exists idx_bagua_history_user on public.bagua_history(user_id, created_at desc);
 create index if not exists idx_bagua_history_favorite on public.bagua_history(user_id, favorite);
 
--- RLS 策略
+-- RLS 策略（v2：身份头关联，2026-09-09 收紧）
+-- 客户端通过 supabase-js global.headers 发送 `x-anonymous-id`，
+-- PostgREST 将其暴露为 GUC `request.header.x-anonymous-id`，策略据此定位用户。
+-- 旧版策略 using(true) 等于对持 anon key 的任何人全开读写，已废弃。
+
+-- 身份辅助函数：当前请求对应的 bagua_users.id（无法识别时返回 NULL，策略判定为拒绝）
+create or replace function public.current_bagua_user_id()
+returns uuid
+language sql
+stable
+as $$
+  select id from public.bagua_users
+  where anonymous_id = nullif(current_setting('request.header.x-anonymous-id', true), '')
+  limit 1
+$$;
+
+-- bagua_users：RLS 开启；只允许以自己的匿名身份注册/读取
+alter table public.bagua_users enable row level security;
+
+drop policy if exists "users_select_any" on public.bagua_users;
+create policy "users_select_own" on public.bagua_users
+  for select using (
+    anonymous_id = nullif(current_setting('request.header.x-anonymous-id', true), '')
+  );
+
+create policy "users_insert_self" on public.bagua_users
+  for insert with check (
+    anonymous_id = nullif(current_setting('request.header.x-anonymous-id', true), '')
+  );
+
 alter table public.bagua_history enable row level security;
 
--- 用户只能读/写自己的记录（基于 anonymous_id claim）
--- 由于我们使用匿名 ID，作为 public read 简化处理
+drop policy if exists "history_select_own" on public.bagua_history;
+drop policy if exists "history_insert_own" on public.bagua_history;
+drop policy if exists "history_update_own" on public.bagua_history;
+drop policy if exists "history_delete_own" on public.bagua_history;
+
 create policy "history_select_own" on public.bagua_history
-  for select using (true); -- 简化：所有用户可读自己的记录（应用层用 user_id 过滤）
+  for select using (user_id = public.current_bagua_user_id());
 
 create policy "history_insert_own" on public.bagua_history
-  for insert with check (true);
+  for insert with check (user_id = public.current_bagua_user_id());
 
 create policy "history_update_own" on public.bagua_history
-  for update using (true);
+  for update using (user_id = public.current_bagua_user_id());
 
 create policy "history_delete_own" on public.bagua_history
-  for delete using (true);
+  for delete using (user_id = public.current_bagua_user_id());
 
 -- 收藏标签
 create table if not exists public.bagua_tags (
@@ -86,10 +118,17 @@ create table if not exists public.bagua_shares (
 create index if not exists idx_bagua_shares_code on public.bagua_shares(short_code);
 
 alter table public.bagua_shares enable row level security;
+-- 分享链接设计为公开可读（short_code 不可枚举）
 create policy "shares_select_public" on public.bagua_shares
   for select using (true);
+-- 只有记录本人能生成分享链接
 create policy "shares_insert_own" on public.bagua_shares
-  for insert with check (true);
+  for insert with check (
+    exists (
+      select 1 from public.bagua_history h
+      where h.id = history_id and h.user_id = public.current_bagua_user_id()
+    )
+  );
 
 -- 用户首次访问时自动创建匿名账户
 -- 在应用层调用 supabase.from('bagua_users').upsert({ anonymous_id })

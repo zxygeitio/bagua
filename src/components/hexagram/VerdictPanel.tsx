@@ -13,9 +13,13 @@ export function VerdictPanel({ rule, verdicts }: VerdictPanelProps) {
         朱熹断法 · {rule.title} · {rule.count} 动
       </p>
       <p className="mt-2 font-body text-sm text-bagua-muted">{rule.explain}</p>
+      <p className="mt-1 font-body text-[11px] text-bagua-muted/70">规则出处：{rule.sourceRef}</p>
       <ol className="mt-6 space-y-5">
         {verdicts.map((verdict) => (
-          <li key={`${verdict.label}-${verdict.position ?? 'g'}`} className={verdict.primary ? '' : 'opacity-70'}>
+          <li
+            key={`${verdict.label}-${verdict.position ?? 'g'}`}
+            className={verdict.primary ? '' : 'opacity-70'}
+          >
             <p className="font-display text-[11px] tracking-[0.2em] text-bagua-primary">
               {verdict.primary ? '主占' : '次看'} · {verdict.label}
             </p>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 import { BackToTop } from '@/components/BackToTop'
 import { KeyboardHelp } from '@/components/KeyboardHelp'
@@ -22,12 +23,52 @@ interface SiteShellProps {
   eyebrow?: string
 }
 
+function getRouteEyebrow(pathname: string): string | undefined {
+  const path = pathname.replace(/\/$/, '') || '/'
+  if (path === '/divine') return 'CAST / 01'
+  if (path === '/hexagrams') return 'HEXAGRAMS / 02'
+  if (path.startsWith('/hexagrams/')) {
+    const id = Number(path.split('/')[2])
+    return Number.isInteger(id) && id >= 1 && id <= 64
+      ? `GUA ${String(id).padStart(2, '0')} / 64`
+      : undefined
+  }
+  if (path === '/learn') return 'LEARN / 03'
+  if (path === '/learn/lab') return 'LAB / 概率实验室'
+  if (path === '/learn/order') return 'ORDER / 卦序结构'
+  if (path === '/settings') return 'SETTINGS / 04'
+  if (path === '/history') return 'HISTORY / 05'
+  if (path === '/share') return 'SHARE / 只读'
+  return undefined
+}
+
 export function SiteShell({ children, eyebrow }: SiteShellProps) {
   const pathname = usePathname()
   useKeyboardShortcuts()
+  const resolvedEyebrow = eyebrow ?? getRouteEyebrow(pathname)
+
+  useEffect(() => {
+    document.documentElement.classList.remove('is-navigating')
+  }, [pathname])
+
+  const markNavigation = (event: React.PointerEvent<HTMLDivElement>) => {
+    const target = event.target instanceof Element ? event.target.closest('a[href]') : null
+    const href = target?.getAttribute('href')
+    if (!href?.startsWith('/')) return
+    const next = new URL(href, window.location.href)
+    if (
+      next.origin === window.location.origin &&
+      (next.pathname !== window.location.pathname ||
+        next.search !== window.location.search ||
+        next.hash !== window.location.hash)
+    ) {
+      document.documentElement.classList.add('is-navigating')
+      window.setTimeout(() => document.documentElement.classList.remove('is-navigating'), 450)
+    }
+  }
 
   return (
-    <div className="paper-root">
+    <div className="paper-root" onPointerDown={markNavigation}>
       <div className="pixel-grid" aria-hidden="true" />
       <header className="site-header">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-6">
@@ -39,7 +80,13 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
             {NAV.map((item) => {
               const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
               return (
-                <Link key={item.href} href={item.href} data-active={active} className="nav-link">
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={false}
+                  data-active={active}
+                  className="nav-link"
+                >
                   {item.label}
                 </Link>
               )
@@ -47,9 +94,9 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
           </nav>
         </div>
       </header>
-      {eyebrow ? (
+      {resolvedEyebrow ? (
         <p className="mx-auto max-w-6xl px-4 pt-6 font-display text-[11px] tracking-[0.28em] text-bagua-muted md:px-6">
-          {eyebrow}
+          {resolvedEyebrow}
         </p>
       ) : null}
       <div className="relative z-[1] pb-20 md:pb-0">{children}</div>
@@ -70,7 +117,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                 面向初学者与读卦者的现代工具。
               </p>
               <p className="mt-3 font-display text-[10px] tracking-[0.2em] text-bagua-muted">
-                v0.2.0 · 2026
+                v2.3.0 · 2026
               </p>
             </div>
 
@@ -82,6 +129,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className="font-body text-xs text-bagua-text transition hover:text-bagua-primary"
                     >
                       {item.label}
@@ -96,22 +144,38 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
               <p className="font-display text-[10px] tracking-[0.28em] text-bagua-muted">学习</p>
               <ul className="mt-3 space-y-1.5">
                 <li>
-                  <Link href="/learn" className="font-body text-xs text-bagua-text transition hover:text-bagua-primary">
+                  <Link
+                    href="/learn"
+                    prefetch={false}
+                    className="font-body text-xs text-bagua-text transition hover:text-bagua-primary"
+                  >
                     八卦总览
                   </Link>
                 </li>
                 <li>
-                  <Link href="/learn" className="font-body text-xs text-bagua-text transition hover:text-bagua-primary">
+                  <Link
+                    href="/learn"
+                    prefetch={false}
+                    className="font-body text-xs text-bagua-text transition hover:text-bagua-primary"
+                  >
                     硬币起卦法
                   </Link>
                 </li>
                 <li>
-                  <Link href="/learn" className="font-body text-xs text-bagua-text transition hover:text-bagua-primary">
+                  <Link
+                    href="/learn"
+                    prefetch={false}
+                    className="font-body text-xs text-bagua-text transition hover:text-bagua-primary"
+                  >
                     卦辞读法
                   </Link>
                 </li>
                 <li>
-                  <Link href="/hexagrams" className="font-body text-xs text-bagua-text transition hover:text-bagua-primary">
+                  <Link
+                    href="/hexagrams"
+                    prefetch={false}
+                    className="font-body text-xs text-bagua-text transition hover:text-bagua-primary"
+                  >
                     64 卦库
                   </Link>
                 </li>
@@ -126,7 +190,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                   <HexagramPattern className="h-3 w-3" />
                   64 卦完整数据
                 </li>
-                <li className="font-body text-xs text-bagua-text">5 种起卦算法</li>
+                <li className="font-body text-xs text-bagua-text">2 种当前起卦法</li>
                 <li className="font-body text-xs text-bagua-text">5 种卦变关系</li>
                 <li className="font-body text-xs text-bagua-text">384 爻 + 彖象传</li>
               </ul>
@@ -134,9 +198,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
           </div>
 
           <div className="mt-8 flex flex-col gap-2 border-t-2 border-bagua-fiber/40 pt-5 md:flex-row md:items-center md:justify-between">
-            <p className="font-body text-[11px] text-bagua-muted">
-              八卦 · 仅供文化学习与学术研究
-            </p>
+            <p className="font-body text-[11px] text-bagua-muted">八卦 · 仅供文化学习与学术研究</p>
             <p className="font-mono text-[10px] tracking-widest text-bagua-muted">
               Built with Next.js · Cloudflare Pages
             </p>
@@ -149,7 +211,13 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
           const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
           const Icon = item.Icon
           return (
-            <Link key={item.href} href={item.href} data-active={active} className="nav-link">
+            <Link
+              key={item.href}
+              href={item.href}
+              prefetch={false}
+              data-active={active}
+              className="nav-link"
+            >
               <Icon className="nav-link__icon" aria-hidden="true" />
               {item.label}
             </Link>

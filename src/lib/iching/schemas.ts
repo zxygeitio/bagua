@@ -45,7 +45,7 @@ export const ScenarioSchema = z.enum([
 ])
 
 /** 起卦方式 */
-export const CastMethodSchema = z.literal('coins')
+export const CastMethodSchema = z.enum(['coins', 'yarrow'])
 
 /** 历史记录中的旧起卦方式，仅允许读取和展示 */
 export const StoredCastMethodSchema = z.enum(['coins', 'yarrow', 'manual', 'meihua', 'time'])
@@ -56,6 +56,13 @@ export const GuaIdSchema = z.number().int().min(1).max(64)
 /* ------------------------------------------------------------------ *
  * 单爻
  * ------------------------------------------------------------------ */
+
+/** 用九/用六通爻辞（仅乾坤两卦，v2.1.0 勘误 G1 补录） */
+export const YongEntrySchema = z.object({
+  label: z.union([z.literal('用九'), z.literal('用六')]),
+  text: z.string().min(2, '用辞不可为空'),
+  xiangZhuan: z.string().min(2, '用辞小象不可为空'),
+})
 
 export const YaoSchema = z.object({
   position: YaoPositionSchema,
@@ -93,7 +100,7 @@ export const StructuralAnalysisSchema = z.object({
       position: YaoPositionSchema,
       partner: YaoPositionSchema,
       type: z.string().min(1),
-    })
+    }),
   ),
 })
 
@@ -146,6 +153,7 @@ export const GuaSchema = z.object({
   xiangTuan: z.string().optional(),
   wenYan: z.string().optional(),
   yaos: z.array(YaoSchema).length(6),
+  yong: YongEntrySchema.optional(),
   shangGua: TrigramNameSchema,
   xiaGua: TrigramNameSchema,
   duiGua: GuaIdSchema,

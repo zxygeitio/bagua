@@ -272,7 +272,11 @@ export const Wand = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <path d="M4 20 L17 7" />
     <path d="M3 21 L7 19.5 L4.5 17 Z" fill="currentColor" stroke="none" />
-    <path d="M17 5 L18 7 L20 8 L18 9 L17 11 L16 9 L14 8 L16 7 Z" fill="currentColor" stroke="none" />
+    <path
+      d="M17 5 L18 7 L20 8 L18 9 L17 11 L16 9 L14 8 L16 7 Z"
+      fill="currentColor"
+      stroke="none"
+    />
     <path d="M20 5 L20.5 6" opacity="0.6" />
   </svg>
 )
@@ -402,7 +406,11 @@ export const Water = (props: IconProps) => (
 export const Taiji = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <circle cx="12" cy="12" r="9" />
-    <path d="M12 3 C8.5 3 6 6 6 9 C6 12 8.5 15 12 15 C15.5 15 18 12 18 9 C18 6 15.5 3 12 3 Z" fill="currentColor" stroke="none" />
+    <path
+      d="M12 3 C8.5 3 6 6 6 9 C6 12 8.5 15 12 15 C15.5 15 18 12 18 9 C18 6 15.5 3 12 3 Z"
+      fill="currentColor"
+      stroke="none"
+    />
     <path d="M12 21 C15.5 21 18 18 18 15 C18 12 15.5 9 12 9 C8.5 9 6 12 6 15 C6 18 8.5 21 12 21 Z" />
     <circle cx="12" cy="6" r="1.4" fill="currentColor" stroke="none" />
     <circle cx="12" cy="18" r="1.4" fill="currentColor" stroke="none" />
@@ -423,7 +431,11 @@ export const Stamp = (props: IconProps) => (
 export const CompassRose = (props: IconProps) => (
   <svg {...baseProps} {...props}>
     <circle cx="12" cy="12" r="9" />
-    <path d="M12 3 L13.5 11 L21 12 L13.5 13 L12 21 L10.5 13 L3 12 L10.5 11 Z" fill="currentColor" fillOpacity="0.25" />
+    <path
+      d="M12 3 L13.5 11 L21 12 L13.5 13 L12 21 L10.5 13 L3 12 L10.5 11 Z"
+      fill="currentColor"
+      fillOpacity="0.25"
+    />
     <path d="M3 12 L21 12 M12 3 L12 21" opacity="0.3" />
     <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
   </svg>

@@ -61,3 +61,4 @@ published-*.png
 .tmp-image-response.json
 .superpowers/
 %SystemDrive%/
+__pycache__/

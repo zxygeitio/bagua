@@ -42,7 +42,10 @@ function createLine(sum: number): UnpositionedLine {
 
 export type CoinFace = 2 | 3
 
-export function flipThree(rng: () => number = Math.random): { coins: CoinFace[]; line: UnpositionedLine } {
+export function flipThree(rng: () => number = Math.random): {
+  coins: CoinFace[]
+  line: UnpositionedLine
+} {
   const coins: CoinFace[] = [flip(rng), flip(rng), flip(rng)]
   const sum = coins.reduce((total, face) => total + face, 0)
   return { coins, line: createLine(sum) }

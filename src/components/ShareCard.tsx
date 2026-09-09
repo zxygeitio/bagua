@@ -74,6 +74,9 @@ export function ShareCard({ gua, question, scenario, date, onClose }: ShareCardP
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="卦象分享卡"
         className="relative max-h-[90vh] w-full max-w-md overflow-y-auto bg-bagua-canvas"
         onClick={(e) => e.stopPropagation()}
       >
@@ -123,12 +126,7 @@ export function ShareCard({ gua, question, scenario, date, onClose }: ShareCardP
 }
 
 /** 卡片画布 — 实际显示 + 截屏时复用 */
-function ShareCardCanvas({
-  gua,
-  question,
-  scenario,
-  date,
-}: ShareCardCanvasProps) {
+function ShareCardCanvas({ gua, question, scenario, date }: ShareCardCanvasProps) {
   return (
     <svg
       viewBox="0 0 800 1000"
@@ -141,10 +139,27 @@ function ShareCardCanvas({
     >
       {/* 边框 */}
       <rect x="20" y="20" width="760" height="960" fill="none" stroke="#2C2416" strokeWidth="6" />
-      <rect x="32" y="32" width="736" height="936" fill="none" stroke="#2C2416" strokeWidth="2" opacity="0.4" />
+      <rect
+        x="32"
+        y="32"
+        width="736"
+        height="936"
+        fill="none"
+        stroke="#2C2416"
+        strokeWidth="2"
+        opacity="0.4"
+      />
 
       {/* 顶部 — 站点标识 + 卦象 ID */}
-      <text x="400" y="90" textAnchor="middle" fontSize="20" fill="#B23A2A" fontFamily="serif" letterSpacing="6">
+      <text
+        x="400"
+        y="90"
+        textAnchor="middle"
+        fontSize="20"
+        fill="#B23A2A"
+        fontFamily="serif"
+        letterSpacing="6"
+      >
         周 易 · 草 纸 刻 本
       </text>
       <line x1="100" y1="110" x2="700" y2="110" stroke="#2C2416" strokeWidth="1.5" opacity="0.5" />
@@ -154,11 +169,29 @@ function ShareCardCanvas({
         <HexagramSvg gua={gua} size="lg" />
       </g>
 
-      <text x="400" y="380" textAnchor="middle" fontSize="48" fill="#2C2416" fontFamily="serif" fontWeight="500" letterSpacing="8">
+      <text
+        x="400"
+        y="380"
+        textAnchor="middle"
+        fontSize="48"
+        fill="#2C2416"
+        fontFamily="serif"
+        fontWeight="500"
+        letterSpacing="8"
+      >
         {gua.name}
       </text>
-      <text x="400" y="410" textAnchor="middle" fontSize="14" fill="#6E5A3C" fontFamily="serif" letterSpacing="3">
-        {gua.pronunciation} · #{gua.id.toString().padStart(2, '0')} / 64 · {gua.shangGua}上{gua.xiaGua}下 · 五行{gua.wuxing}
+      <text
+        x="400"
+        y="410"
+        textAnchor="middle"
+        fontSize="14"
+        fill="#6E5A3C"
+        fontFamily="serif"
+        letterSpacing="3"
+      >
+        {gua.pronunciation} · #{gua.id.toString().padStart(2, '0')} / 64 · {gua.shangGua}上
+        {gua.xiaGua}下 · 五行{gua.wuxing}
       </text>
 
       <line x1="100" y1="450" x2="700" y2="450" stroke="#2C2416" strokeWidth="1.5" opacity="0.5" />
@@ -184,7 +217,16 @@ function ShareCardCanvas({
       {/* 问题 */}
       {question && (
         <>
-          <line x1="100" y1="610" x2="700" y2="610" stroke="#2C2416" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" />
+          <line
+            x1="100"
+            y1="610"
+            x2="700"
+            y2="610"
+            stroke="#2C2416"
+            strokeWidth="1"
+            opacity="0.3"
+            strokeDasharray="4 4"
+          />
           <text x="80" y="655" fontSize="14" fill="#B23A2A" fontFamily="serif" letterSpacing="3">
             问
           </text>
@@ -205,7 +247,16 @@ function ShareCardCanvas({
       )}
 
       {/* 现代启示 */}
-      <line x1="100" y1="780" x2="700" y2="780" stroke="#2C2416" strokeWidth="1" opacity="0.3" strokeDasharray="4 4" />
+      <line
+        x1="100"
+        y1="780"
+        x2="700"
+        y2="780"
+        stroke="#2C2416"
+        strokeWidth="1"
+        opacity="0.3"
+        strokeDasharray="4 4"
+      />
       <text x="80" y="820" fontSize="14" fill="#B23A2A" fontFamily="serif" letterSpacing="3">
         现 代 启 示
       </text>
@@ -229,7 +280,15 @@ function ShareCardCanvas({
       <text x="80" y="955" fontSize="11" fill="#6E5A3C" fontFamily="sans-serif" letterSpacing="2">
         {scenario ? SCENARIO_LABELS[scenario] : '起卦'} · {date}
       </text>
-      <text x="720" y="955" textAnchor="end" fontSize="11" fill="#B23A2A" fontFamily="serif" letterSpacing="2">
+      <text
+        x="720"
+        y="955"
+        textAnchor="end"
+        fontSize="11"
+        fill="#B23A2A"
+        fontFamily="serif"
+        letterSpacing="2"
+      >
         bagua.pages.dev
       </text>
     </svg>
@@ -258,21 +317,20 @@ function HexagramSvg({ gua, size = 'md' }: { gua: Pick<Gua, 'yaos'>; size: Hexag
         const fill = yao.isChanging ? '#B23A2A' : '#2C2416'
         if (isYang) {
           return (
-            <rect
-              key={i}
-              x={0}
-              y={y}
-              width={preset.width}
-              height={preset.stroke}
-              fill={fill}
-            />
+            <rect key={i} x={0} y={y} width={preset.width} height={preset.stroke} fill={fill} />
           )
         }
         const segWidth = (preset.width - preset.yinBreak) / 2
         return (
           <g key={i}>
             <rect x={0} y={y} width={segWidth} height={preset.stroke} fill={fill} />
-            <rect x={segWidth + preset.yinBreak} y={y} width={segWidth} height={preset.stroke} fill={fill} />
+            <rect
+              x={segWidth + preset.yinBreak}
+              y={y}
+              width={segWidth}
+              height={preset.stroke}
+              fill={fill}
+            />
           </g>
         )
       })}
@@ -342,7 +400,8 @@ function buildCardInner(
   const preset = hexagramPixelMetrics('lg')
   const rowHeight = preset.stroke + preset.gap
   const totalHeight = rowHeight * 6 - preset.gap
-  const yaoSvg = [...gua.yaos].reverse()
+  const yaoSvg = [...gua.yaos]
+    .reverse()
     .map((yao, i) => {
       const y = i * rowHeight
       const isYang = yao.yinYang === 'yang'

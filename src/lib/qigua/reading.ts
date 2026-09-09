@@ -8,13 +8,21 @@ import type { YaoPosition } from './types'
 export const YONG_JIU = '见群龙无首，吉。'
 export const YONG_LIU = '利永贞。'
 
-export type ReadingId = 'ben-guaci' | 'ben-yao' | 'ben-and-bian' | 'bian-yao' | 'bian-guaci' | 'yong'
+export type ReadingId =
+  | 'ben-guaci'
+  | 'ben-yao'
+  | 'ben-and-bian'
+  | 'bian-yao'
+  | 'bian-guaci'
+  | 'yong'
 
 export interface ChangingRule {
   id: ReadingId
   count: number
   title: string
   explain: string
+  /** 规则出处（UI 标注用） */
+  sourceRef: string
   /** 主读爻位，靠前的为主 */
   primaryPositions: YaoPosition[]
   target: 'ben' | 'bian' | 'both' | 'yong'
@@ -31,6 +39,9 @@ export interface Verdict {
 const YAO_LABEL_YANG = ['初九', '九二', '九三', '九四', '九五', '上九'] as const
 const YAO_LABEL_YIN = ['初六', '六二', '六三', '六四', '六五', '上六'] as const
 
+/** 变占规则统一出处：朱熹《易学启蒙·考变占》（docs/REFERENCES.md R15） */
+const SOURCE_REF = '朱熹《易学启蒙·考变占》'
+
 export function yaoLabel(position: YaoPosition, yinYang: 'yang' | 'yin'): string {
   return yinYang === 'yang' ? YAO_LABEL_YANG[position - 1]! : YAO_LABEL_YIN[position - 1]!
 }
@@ -42,7 +53,9 @@ function asPositions(values: number[]): YaoPosition[] {
 export function changingRule(changing: readonly YaoPosition[], benGuaId?: number): ChangingRule {
   const unique = [...new Set(changing)].sort((a, b) => a - b)
   const count = unique.length
-  const unchanged = asPositions([1, 2, 3, 4, 5, 6].filter((pos) => !unique.includes(pos as YaoPosition)))
+  const unchanged = asPositions(
+    [1, 2, 3, 4, 5, 6].filter((pos) => !unique.includes(pos as YaoPosition)),
+  )
 
   if (count === 0) {
     return {
@@ -50,6 +63,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: '静卦',
       explain: '六爻皆静，以本卦卦辞为占。',
+      sourceRef: SOURCE_REF,
       primaryPositions: [],
       target: 'ben',
     }
@@ -60,6 +74,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: '一爻动',
       explain: '以本卦动爻爻辞为占。',
+      sourceRef: SOURCE_REF,
       primaryPositions: [unique[0]!],
       target: 'ben',
     }
@@ -71,16 +86,24 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: '二爻动',
       explain: '读本卦两动爻，以上爻为主。',
+      sourceRef: SOURCE_REF,
       primaryPositions: [upper!, lower!],
       target: 'ben',
     }
   }
   if (count === 3) {
+    // 《易学启蒙·考变占》："三爻变，则占本卦及之卦之彖辞，而以本卦为贞，之卦为悔。
+    // 前十卦主贞，后十卦主悔。"——三爻动共二十种情形，其中十种初爻亦动
+    // 为"前十卦"（以本卦为主），十种初爻静为"后十卦"（以之卦为主）。
+    const benPrimary = unique.includes(1)
     return {
       id: 'ben-and-bian',
       count,
-      title: '三爻动',
-      explain: '本卦为贞，之卦为悔，兼看两卦卦辞。',
+      title: benPrimary ? '三爻动 · 前十卦主贞' : '三爻动 · 后十卦主悔',
+      explain: benPrimary
+        ? '本卦为贞，之卦为悔，兼看两卦卦辞；初爻亦动，属前十卦，以本卦为主。'
+        : '本卦为贞，之卦为悔，兼看两卦卦辞；初爻静，属后十卦，以之卦为主。',
+      sourceRef: SOURCE_REF,
       primaryPositions: [],
       target: 'both',
     }
@@ -92,6 +115,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: '四爻动',
       explain: '用之卦两不变爻，以下爻为主。',
+      sourceRef: SOURCE_REF,
       primaryPositions: asPositions([lower ?? 0, upper ?? 0]),
       target: 'bian',
     }
@@ -102,6 +126,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: '五爻动',
       explain: '用之卦中唯一不变之爻。',
+      sourceRef: SOURCE_REF,
       primaryPositions: unchanged,
       target: 'bian',
     }
@@ -113,6 +138,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
       count,
       title: benGuaId === 1 ? '用九' : '用六',
       explain: benGuaId === 1 ? '乾卦六爻皆变，以用九为占。' : '坤卦六爻皆变，以用六为占。',
+      sourceRef: SOURCE_REF,
       primaryPositions: [],
       target: 'yong',
     }
@@ -122,6 +148,7 @@ export function changingRule(changing: readonly YaoPosition[], benGuaId?: number
     count,
     title: '六爻皆变',
     explain: '不以本卦为占，专看之卦卦辞。',
+    sourceRef: SOURCE_REF,
     primaryPositions: [],
     target: 'bian',
   }
@@ -133,7 +160,7 @@ export function assembleReading(input: {
   changing: readonly YaoPosition[]
 }): { rule: ChangingRule; verdicts: Verdict[] } {
   const rule = changingRule(input.changing, input.ben.id)
-  const host = rule.target === 'bian' ? input.bian ?? input.ben : input.ben
+  const host = rule.target === 'bian' ? (input.bian ?? input.ben) : input.ben
 
   if (rule.id === 'yong') {
     const isQian = input.ben.id === 1
@@ -153,7 +180,9 @@ export function assembleReading(input: {
   if (rule.id === 'ben-guaci') {
     return {
       rule,
-      verdicts: [{ label: '本卦卦辞', text: input.ben.guaci, source: input.ben.name, primary: true }],
+      verdicts: [
+        { label: '本卦卦辞', text: input.ben.guaci, source: input.ben.name, primary: true },
+      ],
     }
   }
 
@@ -166,11 +195,23 @@ export function assembleReading(input: {
   }
 
   if (rule.id === 'ben-and-bian') {
+    // 前十卦主贞（初爻动→本卦为主），后十卦主悔（初爻静→之卦为主）
+    const benPrimary = input.changing.includes(1)
     const verdicts: Verdict[] = [
-      { label: '贞 · 本卦卦辞', text: input.ben.guaci, source: input.ben.name, primary: true },
+      {
+        label: '贞 · 本卦卦辞',
+        text: input.ben.guaci,
+        source: input.ben.name,
+        primary: benPrimary,
+      },
     ]
     if (input.bian) {
-      verdicts.push({ label: '悔 · 之卦卦辞', text: input.bian.guaci, source: input.bian.name, primary: true })
+      verdicts.push({
+        label: '悔 · 之卦卦辞',
+        text: input.bian.guaci,
+        source: input.bian.name,
+        primary: !benPrimary,
+      })
     }
     return { rule, verdicts }
   }

@@ -31,8 +31,15 @@ export function HexagramMandala() {
 
   // 按上卦分组
   const grouped = useMemo(() => {
-    const map: Record<TrigramName, typeof allHexagrams[number][]> = {
-      乾: [], 兑: [], 离: [], 震: [], 巽: [], 坎: [], 艮: [], 坤: [],
+    const map: Record<TrigramName, (typeof allHexagrams)[number][]> = {
+      乾: [],
+      兑: [],
+      离: [],
+      震: [],
+      巽: [],
+      坎: [],
+      艮: [],
+      坤: [],
     }
     for (const g of allHexagrams) {
       if (g.shangGua in map) {
@@ -49,7 +56,7 @@ export function HexagramMandala() {
   const hexRadius = (sectionRadius + innerRadius) / 2
 
   // 计算每个 hexagram 的位置（更宽分布）
-  const placedHexagrams: Array<{ gua: typeof allHexagrams[number]; x: number; y: number }> = []
+  const placedHexagrams: Array<{ gua: (typeof allHexagrams)[number]; x: number; y: number }> = []
   POSITIONS.forEach((p) => {
     const guas = grouped[p.trigram]
     guas.forEach((g, j) => {
@@ -67,8 +74,22 @@ export function HexagramMandala() {
       <svg viewBox={`0 0 ${size} ${size}`} className="w-full">
         {/* 背景圆 */}
         <circle cx={center} cy={center} r={sectionRadius + 30} fill="var(--paper-surface)" />
-        <circle cx={center} cy={center} r={sectionRadius} fill="none" stroke="var(--paper-fiber)" strokeWidth="2" />
-        <circle cx={center} cy={center} r={innerRadius} fill="var(--paper-canvas)" stroke="var(--paper-ink)" strokeWidth="2" />
+        <circle
+          cx={center}
+          cy={center}
+          r={sectionRadius}
+          fill="none"
+          stroke="var(--paper-fiber)"
+          strokeWidth="2"
+        />
+        <circle
+          cx={center}
+          cy={center}
+          r={innerRadius}
+          fill="var(--paper-canvas)"
+          stroke="var(--paper-ink)"
+          strokeWidth="2"
+        />
 
         {/* 8 个分隔线 */}
         {POSITIONS.map((p, i) => {
@@ -94,11 +115,28 @@ export function HexagramMandala() {
         {/* 中心太极图 */}
         <g transform={`translate(${center} ${center})`}>
           <circle r="50" fill="var(--paper-wash)" stroke="var(--paper-ink)" strokeWidth="2" />
-          <path d="M0 -45 C-15 -45 -25 -30 -25 -15 C-25 0 -15 15 0 15 C15 15 25 0 25 -15 C25 -30 15 -45 0 -45 Z" fill="var(--paper-cinnabar)" />
-          <path d="M0 45 C15 45 25 30 25 15 C25 0 15 -15 0 -15 C-15 -15 -25 0 -25 15 C-25 30 -15 45 0 45 Z" fill="none" stroke="var(--paper-ink)" strokeWidth="1.5" />
+          <path
+            d="M0 -45 C-15 -45 -25 -30 -25 -15 C-25 0 -15 15 0 15 C15 15 25 0 25 -15 C25 -30 15 -45 0 -45 Z"
+            fill="var(--paper-cinnabar)"
+          />
+          <path
+            d="M0 45 C15 45 25 30 25 15 C25 0 15 -15 0 -15 C-15 -15 -25 0 -25 15 C-25 30 -15 45 0 45 Z"
+            fill="none"
+            stroke="var(--paper-ink)"
+            strokeWidth="1.5"
+          />
           <circle cx="0" cy="-22" r="3" fill="var(--paper-cinnabar)" />
           <circle cx="0" cy="22" r="3" fill="var(--paper-ink)" />
-          <text y="75" textAnchor="middle" fontSize="9" fill="var(--paper-ink)" fontFamily="serif" letterSpacing="3">64 卦</text>
+          <text
+            y="75"
+            textAnchor="middle"
+            fontSize="9"
+            fill="var(--paper-ink)"
+            fontFamily="serif"
+            letterSpacing="3"
+          >
+            64 卦
+          </text>
         </g>
 
         {/* 8 个上卦分块标签（外侧） */}
@@ -109,10 +147,23 @@ export function HexagramMandala() {
           const y = center + labelRadius * Math.sin(rad)
           return (
             <g key={p.trigram} transform={`translate(${x} ${y})`}>
-              <text textAnchor="middle" fontSize="16" fill="var(--paper-ink)" fontFamily="serif" fontWeight="500">
+              <text
+                textAnchor="middle"
+                fontSize="16"
+                fill="var(--paper-ink)"
+                fontFamily="serif"
+                fontWeight="500"
+              >
                 {p.trigram}
               </text>
-              <text y="14" textAnchor="middle" fontSize="9" fill="var(--paper-muted)" fontFamily="serif" letterSpacing="2">
+              <text
+                y="14"
+                textAnchor="middle"
+                fontSize="9"
+                fill="var(--paper-muted)"
+                fontFamily="serif"
+                letterSpacing="2"
+              >
                 {p.label}
               </text>
             </g>
@@ -130,7 +181,10 @@ export function HexagramMandala() {
               onMouseLeave={() => setHover(null)}
               style={{ cursor: 'pointer' }}
             >
-              <g transform={`translate(${x} ${y}) scale(${isHover ? 1.8 : 1})`} style={{ transition: 'transform 200ms' }}>
+              <g
+                transform={`translate(${x} ${y}) scale(${isHover ? 1.8 : 1})`}
+                style={{ transition: 'transform 200ms' }}
+              >
                 <HexagramMini gua={gua} highlighted={isHover} />
               </g>
             </a>
@@ -141,7 +195,8 @@ export function HexagramMandala() {
       {/* 悬停提示 */}
       {hover && (
         <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 border-2 border-bagua-text bg-bagua-canvas px-3 py-1 font-display text-sm tracking-widest text-bagua-text shadow-soft">
-          #{hover.toString().padStart(2, '0')} · {allHexagrams.find(g => g.id === hover)?.name ?? ''}
+          #{hover.toString().padStart(2, '0')} ·{' '}
+          {allHexagrams.find((g) => g.id === hover)?.name ?? ''}
         </div>
       )}
     </div>
@@ -149,7 +204,13 @@ export function HexagramMandala() {
 }
 
 /** 迷你卦象（更大尺寸） */
-function HexagramMini({ gua, highlighted }: { gua: { yaos: { yinYang: 'yang' | 'yin' }[] }; highlighted: boolean }) {
+function HexagramMini({
+  gua,
+  highlighted,
+}: {
+  gua: { yaos: { yinYang: 'yang' | 'yin' }[] }
+  highlighted: boolean
+}) {
   const lines = [...gua.yaos].reverse()
   return (
     <g>

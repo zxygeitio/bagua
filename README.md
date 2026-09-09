@@ -22,7 +22,7 @@
 - **样式**：Tailwind CSS 3.4（自定义设计系统）
 - **状态管理**：Zustand 4.5（含 `localStorage` 持久化）
 - **数据验证**：Zod 3.23
-- **测试**：Vitest 2.1、fast-check 3.23
+- **测试**：Vitest 2.1、fast-check 3.23（单元 + 属性测试，103 例）、Playwright 1.48（E2E 冒烟）
 - **云同步**：Supabase（可选）
 - **部署**：Cloudflare Pages
 
@@ -52,6 +52,9 @@ npm run typecheck
 
 # 生产构建，生成 out/ 静态文件
 npm run build
+
+# E2E 冒烟测试（需先 build 生成 out/）
+npm run test:e2e
 ```
 
 如需启用 Supabase 云同步，请参考 [`.env.example`](.env.example) 配置环境变量。
@@ -76,20 +79,23 @@ bagua/
 │   │   └── qigua/         # 起卦算法层
 │   ├── services/          # 业务编排
 │   └── store/             # Zustand 状态
-├── scripts/               # 数据迁移与校验
-├── tests/                 # 单元测试
-└── docs/                  # 设计文档
+├── scripts/               # 数据校验与零依赖静态预览服务器
+├── tests/                 # 单元测试（tests/unit）与 E2E 冒烟（tests/e2e）
+└── docs/                  # 设计文档（含 REFERENCES 权威出处、ERRATA 校勘记）
 ```
 
 ## 核心算法
 
 ### 起卦方法
 
-| 方法 | 复杂度 | 概率分布 | 适用场景 |
-|------|--------|---------|---------|
-| 硬币法 | O(6) | 少阳37.5%/少阴37.5%/老阳12.5%/老阴12.5% | 日常快速占卜 |
+| 方法     | 复杂度 | 概率分布                                   | 适用场景               |
+| -------- | ------ | ------------------------------------------ | ---------------------- |
+| 硬币法   | O(6)   | 少阳37.5%/少阴37.5%/老阳12.5%/老阴12.5%    | 日常快速占卜           |
+| 大衍筮法 | O(18)  | 老阴6.25%/少阳31.25%/少阴43.75%/老阳18.75% | 学术模式与传统程序对照 |
 
 硬币法约定：字面记 3，背面记 2；三枚硬币之和为 6、7、8、9，分别对应老阴、少阳、少阴、老阳。六爻按初爻到上爻自下而上记录，6 和 9 为动爻。
+
+大衍筮法按朱熹《周易本义·筮仪》的分二、挂一、揲四、归奇程序模拟；本项目采用四种归奇组合等概率的常用理想化模型。
 
 ### 卦变关系
 
@@ -101,14 +107,25 @@ bagua/
 
 卦变关系中的数学不变量已通过 fast-check 属性测试验证。
 
-## 数据来源
+## 数据来源与学术依据
 
-主要参考：
-- [Frank2333333/iching64](https://github.com/Frank2333333/iching64)（卦象结构）
-- [tiredcows/tired_cows_progect](https://github.com/tiredcows/tired_cows_progect)（维基文库爬虫）
-- [godcong/yi](https://github.com/godcong/yi)（算法参考）
+- 经文底本：维基文库《周易》
+- 数据结构参考：[Frank2333333/iching64](https://github.com/Frank2333333/iching64)
+- 算法参考：[godcong/yi](https://github.com/godcong/yi)
+
+起卦概率、卦序编码、经文校勘所依据的 18 条权威文献（含《周易本义·筮仪》、十三经注疏、Knuth《TAOCP》卦序研究等）逐条登记在 [`docs/REFERENCES.md`](docs/REFERENCES.md)；经文异文校勘记见 [`docs/ERRATA.md`](docs/ERRATA.md)。
 
 所有六十四卦数据都会经过 Zod schema、跨字段关系校验和业务断言检查。
+
+## 部署
+
+本项目为纯静态导出（`npm run build` 产出 `out/` 目录），可部署到任意静态托管：
+
+- **Cloudflare Pages**：构建命令 `npm run build`，输出目录 `out`
+- **Vercel / Netlify / GitHub Pages**：同样按静态站点配置即可
+- **本地预览**：`node scripts/serve-static.mjs out 4174`（零依赖静态服务器，支持 clean URL）
+
+云同步为可选功能：未配置 Supabase 时应用完全可用，数据仅存浏览器本地。
 
 ## 许可与声明
 

@@ -100,7 +100,8 @@ export function HexagramGrid() {
           <Link
             key={gua.id}
             href={`/hexagrams/${gua.id}`}
-            className="group flex flex-col items-center bg-bagua-canvas px-2 py-3 transition hover:bg-bagua-surface"
+            prefetch={false}
+            className="group flex flex-col items-center bg-bagua-canvas px-2 py-3 transition hover:bg-bagua-surface cv-auto cis-xs"
           >
             <span className="font-display text-[10px] text-bagua-muted">
               {gua.id.toString().padStart(2, '0')}

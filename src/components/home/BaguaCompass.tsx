@@ -78,10 +78,18 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
       <div className="compass-engine-ring compass-engine-ring--outer" aria-hidden="true" />
       <div className="compass-engine-ring compass-engine-ring--inner" aria-hidden="true" />
 
-      <span className="compass-bearing compass-bearing--south" aria-hidden="true">南</span>
-      <span className="compass-bearing compass-bearing--east" aria-hidden="true">东</span>
-      <span className="compass-bearing compass-bearing--north" aria-hidden="true">北</span>
-      <span className="compass-bearing compass-bearing--west" aria-hidden="true">西</span>
+      <span className="compass-bearing compass-bearing--south" aria-hidden="true">
+        南
+      </span>
+      <span className="compass-bearing compass-bearing--east" aria-hidden="true">
+        东
+      </span>
+      <span className="compass-bearing compass-bearing--north" aria-hidden="true">
+        北
+      </span>
+      <span className="compass-bearing compass-bearing--west" aria-hidden="true">
+        西
+      </span>
 
       <div className="compass-core-wrap" aria-hidden="true">
         <div className="compass-core-halo" />
@@ -100,6 +108,7 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
           <Link
             key={position.trigram}
             href={`/hexagrams/${position.guaId}`}
+            prefetch={false}
             style={style}
             className="compass-node"
             title={`${position.trigram} · ${position.direction} · ${position.element}`}

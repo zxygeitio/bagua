@@ -18,7 +18,7 @@ import { getGuaById, getAllHexagrams } from '@/lib/iching/data-access'
 
 /** 单卦 → 6 爻阴阳数组（初爻到上爻） */
 function linesToYinYang(lines: { yinYang: YinYang }[]): YinYang[] {
-  return lines.map(l => l.yinYang)
+  return lines.map((l) => l.yinYang)
 }
 
 /** 6 爻阴阳数组 → 卦 ID（按阴阳爻模式匹配） */
@@ -32,8 +32,8 @@ function yinYangToGuaId(yaos: YinYang[]): number {
 
 /** 之卦：本卦 + 变爻 → 新卦 */
 export function getBianGua(lines: Line[]): { id: number; lines: Line[] } | null {
-  const newYinYang: YinYang[] = lines.map(l =>
-    l.isChanging ? (l.yinYang === 'yang' ? 'yin' : 'yang') : l.yinYang
+  const newYinYang: YinYang[] = lines.map((l) =>
+    l.isChanging ? (l.yinYang === 'yang' ? 'yin' : 'yang') : l.yinYang,
   )
   const id = yinYangToGuaId(newYinYang)
   const newLines: Line[] = newYinYang.map((yy, i) => ({
@@ -48,10 +48,10 @@ export function getBianGua(lines: Line[]): { id: number; lines: Line[] } | null 
 /** 互卦：取 2-3-4 为下，3-4-5 为上 */
 export function getHuGua(lines: Line[]): { id: number; lines: Line[] } {
   if (lines.length !== 6) throw new Error('互卦需要 6 爻')
-  const lower: Line[] = [lines[1]!, lines[2]!, lines[3]!]  // position 2,3,4
-  const upper: Line[] = [lines[2]!, lines[3]!, lines[4]!]  // position 3,4,5
+  const lower: Line[] = [lines[1]!, lines[2]!, lines[3]!] // position 2,3,4
+  const upper: Line[] = [lines[2]!, lines[3]!, lines[4]!] // position 3,4,5
   const huYaos: Line[] = [...lower, ...upper]
-  const id = yinYangToGuaId(huYaos.map(l => l.yinYang))
+  const id = yinYangToGuaId(huYaos.map((l) => l.yinYang))
   return { id, lines: huYaos }
 }
 
@@ -59,7 +59,7 @@ export function getHuGua(lines: Line[]): { id: number; lines: Line[] } {
 export function getDuiGua(hexagramId: number): number {
   const gua = getGuaById(hexagramId)
   if (!gua) throw new Error(`卦 ${hexagramId} 不存在`)
-  const flipped: YinYang[] = gua.yaos.map(y => (y.yinYang === 'yang' ? 'yin' : 'yang'))
+  const flipped: YinYang[] = gua.yaos.map((y) => (y.yinYang === 'yang' ? 'yin' : 'yang'))
   return yinYangToGuaId(flipped)
 }
 
@@ -67,7 +67,7 @@ export function getDuiGua(hexagramId: number): number {
 export function getZongGua(hexagramId: number): number {
   const gua = getGuaById(hexagramId)
   if (!gua) throw new Error(`卦 ${hexagramId} 不存在`)
-  const reversed: YinYang[] = [...gua.yaos].reverse().map(y => y.yinYang)
+  const reversed: YinYang[] = [...gua.yaos].reverse().map((y) => y.yinYang)
   return yinYangToGuaId(reversed)
 }
 
@@ -87,7 +87,7 @@ export function computeTransforms(benGuaId: number, lines: Line[]): HexagramTran
     dui: getDuiGua(benGuaId),
     zong: getZongGua(benGuaId),
   }
-  if (lines.some(l => l.isChanging)) {
+  if (lines.some((l) => l.isChanging)) {
     const bian = getBianGua(lines)
     if (bian) result.bian = bian.id
   }

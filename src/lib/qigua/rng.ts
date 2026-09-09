@@ -5,7 +5,7 @@
 export function mulberry32(seed: number): () => number {
   let a = seed | 0
   return function () {
-    a = (a + 0x6D2B79F5) | 0
+    a = (a + 0x6d2b79f5) | 0
     let t = a
     t = Math.imul(t ^ (t >>> 15), t | 1)
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
@@ -25,7 +25,7 @@ export function seedFromString(str: string): number {
 
 /** 基于 Date.now 生成非确定性 seed */
 export function randomSeed(): number {
-  return (Math.random() * 0xFFFFFFFF) >>> 0
+  return (Math.random() * 0xffffffff) >>> 0
 }
 
 /** 整数随机数 [min, max] */

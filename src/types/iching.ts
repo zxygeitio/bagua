@@ -34,10 +34,10 @@ export type Scenario =
   | 'self'
 
 /** 起卦方式 */
-export type CastMethod = 'coins'
+export type CastMethod = 'coins' | 'yarrow'
 
 /** 已下线但需要继续读取的历史起卦方式 */
-export type LegacyCastMethod = 'yarrow' | 'manual' | 'meihua' | 'time'
+export type LegacyCastMethod = 'manual' | 'meihua' | 'time'
 
 /** 持久化记录允许的起卦方式，包含历史数据 */
 export type StoredCastMethod = CastMethod | LegacyCastMethod
@@ -83,7 +83,7 @@ export const ALL_YAO_POSITIONS: YaoPosition[] = [1, 2, 3, 4, 5, 6]
 /** 起卦方式中文标签，历史方式仅用于展示旧记录 */
 export const CAST_METHOD_LABELS: Record<StoredCastMethod, string> = {
   coins: '铜钱起卦',
-  yarrow: '蓍草起卦（历史）',
+  yarrow: '大衍筮法',
   manual: '手动排卦（历史）',
   meihua: '梅花易数（历史）',
   time: '时间起卦（历史）',

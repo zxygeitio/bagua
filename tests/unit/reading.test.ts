@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { getGuaById } from '@/lib/iching'
-import {
-  YONG_JIU,
-  YONG_LIU,
-  assembleReading,
-  changingRule,
-} from '@/lib/qigua/reading'
+import { YONG_JIU, YONG_LIU, assembleReading, changingRule } from '@/lib/qigua/reading'
 
 describe('朱熹变爻断法', () => {
   it('0 动：用本卦卦辞', () => {
@@ -57,8 +52,12 @@ describe('朱熹变爻断法', () => {
 
   it('6 动乾用九、坤用六，其余用之卦卦辞', () => {
     expect(changingRule([1, 2, 3, 4, 5, 6], 1).id).toBe('yong')
-    expect(assembleReading({ ben: getGuaById(1)!, changing: [1, 2, 3, 4, 5, 6] }).verdicts[0]?.text).toBe(YONG_JIU)
-    expect(assembleReading({ ben: getGuaById(2)!, changing: [1, 2, 3, 4, 5, 6] }).verdicts[0]?.text).toBe(YONG_LIU)
+    expect(
+      assembleReading({ ben: getGuaById(1)!, changing: [1, 2, 3, 4, 5, 6] }).verdicts[0]?.text,
+    ).toBe(YONG_JIU)
+    expect(
+      assembleReading({ ben: getGuaById(2)!, changing: [1, 2, 3, 4, 5, 6] }).verdicts[0]?.text,
+    ).toBe(YONG_LIU)
     const other = assembleReading({
       ben: getGuaById(3)!,
       bian: getGuaById(4),
@@ -66,5 +65,59 @@ describe('朱熹变爻断法', () => {
     })
     expect(other.rule.id).toBe('bian-guaci')
     expect(other.verdicts[0]?.text).toBe(getGuaById(4)!.guaci)
+  })
+})
+
+describe('变占规则出处与三爻动细分（B3）', () => {
+  it('每条规则都标注《易学启蒙·考变占》出处', () => {
+    const cases: [number[], number?][] = [
+      [[], 1],
+      [[3], 1],
+      [[1, 4], 1],
+      [[2, 4, 6], 1],
+      [[1, 2, 3, 4], 1],
+      [[1, 2, 3, 4, 5], 1],
+      [[1, 2, 3, 4, 5, 6], 1],
+      [[1, 2, 3, 4, 5, 6], 3],
+    ]
+    for (const [changing, benId] of cases) {
+      expect(changingRule(changing as never, benId).sourceRef).toBe('朱熹《易学启蒙·考变占》')
+    }
+  })
+
+  it('三爻动·初爻亦动为前十卦，主贞（本卦为主）', () => {
+    const ben = getGuaById(1)!
+    const bian = getGuaById(10)!
+    const { rule, verdicts } = assembleReading({ ben, bian, changing: [1, 3, 5] })
+    expect(rule.title).toContain('前十卦')
+    expect(verdicts.find((v) => v.label.startsWith('贞'))?.primary).toBe(true)
+    expect(verdicts.find((v) => v.label.startsWith('悔'))?.primary).toBe(false)
+  })
+
+  it('三爻动·初爻静为后十卦，主悔（之卦为主）', () => {
+    const ben = getGuaById(1)!
+    const bian = getGuaById(10)!
+    const { rule, verdicts } = assembleReading({ ben, bian, changing: [2, 4, 6] })
+    expect(rule.title).toContain('后十卦')
+    expect(verdicts.find((v) => v.label.startsWith('悔'))?.primary).toBe(true)
+    expect(verdicts.find((v) => v.label.startsWith('贞'))?.primary).toBe(false)
+  })
+
+  it('三爻动二十种情形中恰有十种初爻动（前十卦）', () => {
+    // C(6,3)=20，其中含初爻的组合 C(5,2)=10
+    let withChu = 0
+    for (let a = 1; a <= 4; a++)
+      for (let b = a + 1; b <= 5; b++)
+        for (let c = b + 1; c <= 6; c++) {
+          const rule = changingRule([a, b, c] as never)
+          expect(rule.id).toBe('ben-and-bian')
+          if (a === 1) {
+            expect(rule.title).toContain('前十卦')
+            withChu++
+          } else {
+            expect(rule.title).toContain('后十卦')
+          }
+        }
+    expect(withChu).toBe(10)
   })
 })

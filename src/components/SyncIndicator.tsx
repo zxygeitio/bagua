@@ -5,9 +5,9 @@ import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { Cloud, CloudOff, Loader2, Check } from '@/components/icons'
 
 export function SyncIndicator() {
-  const status = useHistoryStore(s => s.cloudSyncStatus)
-  const loadFromCloud = useHistoryStore(s => s.loadFromCloud)
-  const records = useHistoryStore(s => s.records)
+  const status = useHistoryStore((s) => s.cloudSyncStatus)
+  const loadFromCloud = useHistoryStore((s) => s.loadFromCloud)
+  const records = useHistoryStore((s) => s.records)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {

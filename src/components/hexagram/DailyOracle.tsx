@@ -61,9 +61,7 @@ export function DailyOracle() {
           <HexagramSymbol gua={gua} size="md" />
         </div>
         <div className="flex-1">
-          <div className="font-display text-2xl tracking-widest text-bagua-text">
-            {gua.name}
-          </div>
+          <div className="font-display text-2xl tracking-widest text-bagua-text">{gua.name}</div>
           <p className="mt-0.5 font-body text-xs text-bagua-muted">
             #{gua.id.toString().padStart(2, '0')} / 64 · {gua.pronunciation}
           </p>
