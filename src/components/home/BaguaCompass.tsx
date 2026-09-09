@@ -1,9 +1,6 @@
-'use client'
-
 import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
 
 import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
 import type { TrigramName } from '@/lib/qigua/types'
@@ -11,6 +8,10 @@ import type { TrigramName } from '@/lib/qigua/types'
 /**
  * 先天八卦方位采用传统罗盘的南上读法：乾南、坤北、离东、坎西。
  * 器物底图只提供材质；卦符、文字与链接由代码叠加，确保方位准确。
+ *
+ * 这是 Server Component：8 个卦象的位置在模块加载时一次性计算，
+ * 无客户端副作用，无需 `useState/useEffect/useRef`。
+ * 视口外的渲染由浏览器通过 `.bagua-compass` 的 `content-visibility: auto` 自动跳过。
  */
 const POSITIONS: Array<{
   angle: number
@@ -38,30 +39,10 @@ const polarPercent = (radius: number, angle: number) => {
 }
 
 export function BaguaCompass({ priority = false }: { priority?: boolean }) {
-  const compassRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const element = compassRef.current
-    if (!element || typeof IntersectionObserver === 'undefined') return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry) element.dataset.inView = String(entry.isIntersecting)
-      },
-      { rootMargin: '120px' },
-    )
-    observer.observe(element)
-
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <div
-      ref={compassRef}
-      data-in-view="true"
+    <nav
       className="bagua-compass"
-      role="img"
-      aria-label="先天八卦八方位罗盘：乾南、坤北、离东、坎西"
+      aria-label="先天八卦方位索引：乾南、坤北、离东、坎西"
     >
       <Image
         src="/textures/bronze-compass-plate.webp"
@@ -86,7 +67,6 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
       <div className="compass-core-wrap" aria-hidden="true">
         <div className="compass-core-halo" />
         <div className="compass-taiji-css" />
-        <span className="compass-core-caption">阴阳枢机</span>
       </div>
 
       {POSITIONS.map((position) => {
@@ -103,9 +83,8 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
             style={style}
             className="compass-node"
             title={`${position.trigram} · ${position.direction} · ${position.element}`}
-            aria-label={`${position.trigram}卦，${position.direction}，${position.element}`}
           >
-            <span className="compass-node__symbol">{TRIGRAM_SYMBOLS[position.trigram]}</span>
+            <span className="compass-node__symbol" aria-hidden="true">{TRIGRAM_SYMBOLS[position.trigram]}</span>
             <span className="compass-node__meta">
               <b>{position.trigram}</b>
               <i>{position.direction}</i>
@@ -113,6 +92,6 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
           </Link>
         )
       })}
-    </div>
+    </nav>
   )
 }
