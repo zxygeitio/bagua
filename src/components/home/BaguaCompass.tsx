@@ -70,7 +70,7 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
       </div>
 
       {POSITIONS.map((position) => {
-        const point = polarPercent(35.35, position.angle)
+        const point = polarPercent(35.5, position.angle)
         const style = {
           '--compass-x': `${point.x}%`,
           '--compass-y': `${point.y}%`,
