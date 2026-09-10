@@ -39,7 +39,10 @@ export function useKeyboardShortcuts() {
     const onKey = (e: KeyboardEvent) => {
       // 忽略在输入框 / textarea 中的按键
       const target = e.target as HTMLElement | null
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+      if (
+        target &&
+        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+      ) {
         return
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return

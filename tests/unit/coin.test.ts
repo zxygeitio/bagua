@@ -9,10 +9,26 @@ describe('硬币法', () => {
       return () => values[index++] ?? 0
     }
 
-    expect(flipOnce(sequence([0.1, 0.1, 0.1]))).toMatchObject({ value: 6, yinYang: 'yin', isChanging: true })
-    expect(flipOnce(sequence([0.1, 0.1, 0.9]))).toMatchObject({ value: 7, yinYang: 'yang', isChanging: false })
-    expect(flipOnce(sequence([0.1, 0.9, 0.9]))).toMatchObject({ value: 8, yinYang: 'yin', isChanging: false })
-    expect(flipOnce(sequence([0.9, 0.9, 0.9]))).toMatchObject({ value: 9, yinYang: 'yang', isChanging: true })
+    expect(flipOnce(sequence([0.1, 0.1, 0.1]))).toMatchObject({
+      value: 6,
+      yinYang: 'yin',
+      isChanging: true,
+    })
+    expect(flipOnce(sequence([0.1, 0.1, 0.9]))).toMatchObject({
+      value: 7,
+      yinYang: 'yang',
+      isChanging: false,
+    })
+    expect(flipOnce(sequence([0.1, 0.9, 0.9]))).toMatchObject({
+      value: 8,
+      yinYang: 'yin',
+      isChanging: false,
+    })
+    expect(flipOnce(sequence([0.9, 0.9, 0.9]))).toMatchObject({
+      value: 9,
+      yinYang: 'yang',
+      isChanging: true,
+    })
   })
 
   it('flipOnce 返回未落位的合法爻', () => {
@@ -60,9 +76,36 @@ describe('硬币法', () => {
     for (let seed = 1; seed <= 10000 && seen.size < 64; seed++) {
       const rng = mulberry32(seed)
       const lines = castCoins(rng)
-      const signature = lines.map(l => l.yinYang === 'yang' ? '1' : '0').join('')
+      const signature = lines.map((l) => (l.yinYang === 'yang' ? '1' : '0')).join('')
       seen.add(signature)
     }
     expect(seen.size).toBeGreaterThanOrEqual(64)
+  })
+})
+
+import { flipThree } from '@/lib/qigua/cast/coin'
+
+describe('硬币法概率属性测试（B1）', () => {
+  it('40000 爻经卡方检验收敛到 2:6:6:2（R1/R4 理论分布）', () => {
+    // 学术基准：docs/REFERENCES.md R4（乔宗方/姜桂芝），硬币法老阳老阴各 1/8
+    const N = 40000
+    const rng = mulberry32(20260909)
+    const counts: Record<number, number> = { 6: 0, 7: 0, 8: 0, 9: 0 }
+    for (let i = 0; i < N; i++) {
+      const line = flipThree(rng).line
+      counts[line.value!] = (counts[line.value!] ?? 0) + 1
+    }
+    const expected: Record<number, number> = { 6: 1 / 8, 7: 3 / 8, 8: 3 / 8, 9: 1 / 8 }
+    let chi2 = 0
+    for (const v of [6, 7, 8, 9]) {
+      const e = N * expected[v]!
+      chi2 += (counts[v]! - e) ** 2 / e
+    }
+    // df=3，p=0.05 临界值 7.815；种子固定则结果确定
+    expect(chi2).toBeLessThan(7.815)
+    // 硬币法老阳:老阴 = 1:1（与大衍法 3:1 结构不同，R4）
+    const ratio = counts[9]! / counts[6]!
+    expect(ratio).toBeGreaterThan(0.85)
+    expect(ratio).toBeLessThan(1.15)
   })
 })

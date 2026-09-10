@@ -27,7 +27,7 @@ function main() {
   const relCheck = validateHexagramRelationships(hexagrams)
   if (!relCheck.valid) {
     console.error('❌ 关系校验失败:')
-    relCheck.errors.forEach(e => console.error('  -', e))
+    relCheck.errors.forEach((e) => console.error('  -', e))
     process.exit(1)
   }
   console.log('✅ 卦变关系引用全部有效')
@@ -35,14 +35,17 @@ function main() {
   // 3. 业务断言
   const assertions = [
     { name: '64卦完整', pass: hexagrams.length === 64 },
-    { name: '卦辞全部非空', pass: hexagrams.every(g => g.guaci.length >= 2) },
-    { name: '彖传全部非空', pass: hexagrams.every(g => g.tuanZhuan.length >= 2) },
-    { name: '大象传全部非空', pass: hexagrams.every(g => g.daXiangZhuan.length >= 2) },
-    { name: '每卦6爻完整', pass: hexagrams.every(g => g.yaos.length === 6) },
-    { name: '爻辞384条', pass: hexagrams.every(g => g.yaos.every(y => y.text.length >= 2)) },
-    { name: '小象传完整', pass: hexagrams.every(g => g.yaos.every(y => y.xiangZhuan.length >= 2)) },
-    { name: 'ID唯一性', pass: new Set(hexagrams.map(g => g.id)).size === 64 },
-    { name: '卦ID连续1-64', pass: hexagrams.every(g => g.id >= 1 && g.id <= 64) },
+    { name: '卦辞全部非空', pass: hexagrams.every((g) => g.guaci.length >= 2) },
+    { name: '彖传全部非空', pass: hexagrams.every((g) => g.tuanZhuan.length >= 2) },
+    { name: '大象传全部非空', pass: hexagrams.every((g) => g.daXiangZhuan.length >= 2) },
+    { name: '每卦6爻完整', pass: hexagrams.every((g) => g.yaos.length === 6) },
+    { name: '爻辞384条', pass: hexagrams.every((g) => g.yaos.every((y) => y.text.length >= 2)) },
+    {
+      name: '小象传完整',
+      pass: hexagrams.every((g) => g.yaos.every((y) => y.xiangZhuan.length >= 2)),
+    },
+    { name: 'ID唯一性', pass: new Set(hexagrams.map((g) => g.id)).size === 64 },
+    { name: '卦ID连续1-64', pass: hexagrams.every((g) => g.id >= 1 && g.id <= 64) },
   ]
 
   // Canary 测试
@@ -52,7 +55,10 @@ function main() {
     console.error('❌ 卦1缺失')
     process.exit(1)
   }
-  assertions.push({ name: 'Canary: 见龙在田（非"再田"）', pass: qian2.text.includes('见龙在田') && !qian2.text.includes('见龙再') })
+  assertions.push({
+    name: 'Canary: 见龙在田（非"再田"）',
+    pass: qian2.text.includes('见龙在田') && !qian2.text.includes('见龙再'),
+  })
 
   let failed = 0
   for (const a of assertions) {

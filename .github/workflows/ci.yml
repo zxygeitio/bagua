@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: 质量门禁（typecheck / lint / data / test）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: 安装依赖
+        run: npm ci
+      - name: 类型检查（tsc --noEmit）
+        run: npm run typecheck
+      - name: 代码风格（eslint）
+        run: npm run lint
+      - name: 易经数据校验（64 卦 schema + 完整性）
+        run: npm run build:data
+      - name: 单元测试（vitest）
+        run: npm test
+
+  build:
+    name: 构建门禁（next build 静态导出）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: 安装依赖
+        run: npm ci
+      - name: 生产构建
+        run: npm run build

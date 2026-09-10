@@ -8,8 +8,8 @@ export const PAPER = {
   surface: '#F3E6C4',
   fiber: '#C9A56A',
   ink: '#2C2416',
-  muted: '#6E5A3C',
-  cinnabar: '#B23A2A',
+  muted: '#655037',
+  cinnabar: '#A33222',
   gold: '#B78C3E',
   rule: '#2C2416',
   wash: '#DCC59A',
@@ -20,11 +20,11 @@ export const PAPER = {
  *  木 林  火 朱  土 沙  金 铜  水 墨
  */
 export const WUXING = {
-  wood: '#5C7A3A',   // 林绿
-  fire: '#B23A2A',   // 朱砂 (与 primary 一致)
-  earth: '#A6773A',  // 沙棕
-  metal: '#9A7A3A',  // 铜褐
-  water: '#3A5C7A',  // 墨青
+  wood: '#4A632F', // 林绿（暗化至 WCAG AA 4.5:1）
+  fire: '#A33222', // 朱砂 (与 primary 一致，WCAG AA)
+  earth: '#765529', // 沙棕（暗化至 WCAG AA）
+  metal: '#6E582A', // 铜褐（暗化至 WCAG AA）
+  water: '#3A5C7A', // 墨青
 } as const
 
 export const PIXEL = {

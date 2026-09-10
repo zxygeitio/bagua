@@ -46,7 +46,13 @@ vi.mock('@/lib/iching/data-access', () => {
 })
 
 // 动态 import 必须放在 mock 之后
-import { getDuiGua, getZongGua, getBianGua, getHuGua, computeTransforms } from '@/lib/qigua/cast/transform'
+import {
+  getDuiGua,
+  getZongGua,
+  getBianGua,
+  getHuGua,
+  computeTransforms,
+} from '@/lib/qigua/cast/transform'
 import { castCoins } from '@/lib/qigua/cast/coin'
 import { mulberry32 } from '@/lib/qigua/rng'
 
@@ -71,8 +77,14 @@ function linesToGuaId(lines: Line[]): number {
   const matched = findHexagramByYaos(yaos)
   if (matched !== undefined) return matched
   // 回退到公式
-  const upper = yaos.slice(3).map(y => (y === 'yang' ? '1' : '0')).join('')
-  const lower = yaos.slice(0, 3).map(y => (y === 'yang' ? '1' : '0')).join('')
+  const upper = yaos
+    .slice(3)
+    .map((y) => (y === 'yang' ? '1' : '0'))
+    .join('')
+  const lower = yaos
+    .slice(0, 3)
+    .map((y) => (y === 'yang' ? '1' : '0'))
+    .join('')
   return parseInt(upper, 2) * 8 + parseInt(lower, 2) + 1
 }
 
@@ -81,7 +93,7 @@ function buildLinesFromGua(id: number, changingPos: YaoPosition | null): Line[] 
   return yaos.map((yy, i) => ({
     position: (i + 1) as YaoPosition,
     yinYang: yy,
-    isChanging: changingPos === (i + 1),
+    isChanging: changingPos === i + 1,
     value: 7 as 6 | 7 | 8 | 9,
   }))
 }
@@ -92,7 +104,7 @@ describe('卦变关系', () => {
       fc.property(fc.integer({ min: 1, max: 64 }), (id) => {
         return getDuiGua(getDuiGua(id)) === id
       }),
-      { numRuns: 100 }
+      { numRuns: 100 },
     )
   })
 
@@ -101,7 +113,7 @@ describe('卦变关系', () => {
       fc.property(fc.integer({ min: 1, max: 64 }), (id) => {
         return getZongGua(getZongGua(id)) === id
       }),
-      { numRuns: 100 }
+      { numRuns: 100 },
     )
   })
 
@@ -112,7 +124,7 @@ describe('卦变关系', () => {
       if (bian) {
         const originalId = linesToGuaId(lines)
         const changedPositions = lines
-          .map((l, i) => (l.isChanging ? (i + 1) as YaoPosition : null))
+          .map((l, i) => (l.isChanging ? ((i + 1) as YaoPosition) : null))
           .filter((p): p is YaoPosition => p !== null)
         // 把 bian 的 lines 在已变位置标记为变爻（恢复）
         const reBianLines: Line[] = bian.lines.map((l, i) => ({
@@ -132,7 +144,7 @@ describe('卦变关系', () => {
     for (let id = 1; id <= 64; id++) {
       const lines = buildLinesFromGua(id, null)
       const hu = getHuGua(lines)
-      const yaos = lines.map(l => l.yinYang)
+      const yaos = lines.map((l) => l.yinYang)
       // 下卦: position 2,3,4 (index 1,2,3) → yaos[1], yaos[2], yaos[3]
       const lower = [yaos[1]!, yaos[2]!, yaos[3]!] as YinYang[]
       // 上卦: position 3,4,5 (index 2,3,4) → yaos[2], yaos[3], yaos[4]
@@ -151,7 +163,7 @@ describe('卦变关系', () => {
     for (let id = 1; id <= 64; id++) {
       const dui = getDuiGua(id)
       const yaos = computeYaos(id)
-      const flipped = yaos.map(y => (y === 'yang' ? 'yin' : 'yang'))
+      const flipped = yaos.map((y) => (y === 'yang' ? 'yin' : 'yang'))
       const expected = findHexagramByYaos(flipped) ?? -1
       if (dui !== expected) mismatches++
     }
@@ -194,7 +206,7 @@ describe('卦变关系', () => {
     expect(transforms.zong).toBeLessThanOrEqual(64)
     expect(transforms.hu).toBeGreaterThanOrEqual(1)
     expect(transforms.hu).toBeLessThanOrEqual(64)
-    if (lines.some(l => l.isChanging)) {
+    if (lines.some((l) => l.isChanging)) {
       expect(transforms.bian).toBeDefined()
     } else {
       expect(transforms.bian).toBeUndefined()
@@ -221,7 +233,7 @@ describe('卦变关系', () => {
           t.hu <= 64
         )
       }),
-      { numRuns: 50 }
+      { numRuns: 50 },
     )
   })
 })

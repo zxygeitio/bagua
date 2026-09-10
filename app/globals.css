@@ -18,6 +18,25 @@
 
   body {
     background-color: var(--paper-canvas);
+    color: var(--paper-ink);
+    font-family: var(--font-body), 'Noto Serif SC', 'Songti SC', serif;
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-leading);
+    letter-spacing: var(--type-body-tracking);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* 纸质背景改为固定合成层：
+   * 原先挂在 body 上随文档绘制（cover 尺寸 = 整篇文档），滚动时每帧重绘整屏纹理。
+   * fixed 层只按视口大小栅格化一次，滚动期间完全走合成器。 */
+  .paper-canvas-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--paper-canvas);
     background-image:
       linear-gradient(rgba(231, 211, 164, 0.82), rgba(231, 211, 164, 0.82)),
       url('/textures/ancient-paper-bg.webp'),
@@ -37,7 +56,6 @@
       );
     background-size: cover, cover, auto, auto;
     background-position: center, center, center, center;
-    /* Fixed multi-layer backgrounds force a full viewport repaint on scroll. */
     background-attachment: scroll, scroll, scroll, scroll;
     color: var(--paper-ink);
     font-family: var(--font-song), var(--font-body), 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', 'STSong', serif;
@@ -118,7 +136,7 @@
     background: rgba(201, 165, 106, 0.32);
     transform: rotate(var(--particle-rotate));
     animation: paper-float var(--particle-duration) ease-in-out var(--particle-delay) infinite;
-    will-change: transform, opacity;
+    will-change: auto;
   }
 
   .paper-hero::after {
@@ -309,9 +327,15 @@
 
   .paper-stage {
     perspective: 900px;
-    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1), filter 220ms ease;
+    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
     transform-style: preserve-3d;
-    will-change: transform;
+    will-change: auto;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .paper-stage:hover {
+      will-change: transform;
+    }
   }
 
   .paper-stage-shadow {
@@ -599,6 +623,23 @@
 }
 
 @layer utilities {
+  /* 视口外跳过渲染（layout/paint），长列表滚动只处理可见部分 */
+  .cv-auto {
+    content-visibility: auto;
+  }
+
+  .cis-xs {
+    contain-intrinsic-size: auto 110px;
+  }
+
+  .cis-s {
+    contain-intrinsic-size: auto 360px;
+  }
+
+  .cis-m {
+    contain-intrinsic-size: auto 640px;
+  }
+
   .scrollbar-thin {
     scrollbar-width: thin;
   }
@@ -768,19 +809,17 @@
 /* ====================================================================
  * 页面切换动画
  * ==================================================================== */
-@keyframes page-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 跨文档 View Transition（Chrome/Edge 渐进增强）：
+ * 静态导出是 MPA，切页本为整页替换；开启后由浏览器做旧页截图→新页淡入，
+ * 掉帧感大幅降低。不支持的浏览器自动忽略，页面仍由局部入场动效呈现。 */
+@view-transition {
+  navigation: auto;
 }
 
-main {
-  animation: page-fade-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
 }
 
 /* ====================================================================
@@ -908,6 +947,24 @@ html.is-scrolling .ritual-dialog-backdrop {
   animation-play-state: paused !important;
 }
 
+/* 路由切换时优先保证新页面及时完成布局，切换结束后由 SiteShell 移除该标记。 */
+html.is-navigating .paper-particle,
+html.is-navigating .paper-hero,
+html.is-navigating .hero-orbit,
+html.is-navigating .status-dot,
+html.is-navigating .compass-light-sweep,
+html.is-navigating .compass-engine-ring,
+html.is-navigating .compass-core-wrap,
+html.is-navigating .compass-core-halo,
+html.is-navigating .glow-pulse,
+html.is-navigating .enter-up,
+html.is-navigating .stamp,
+html.is-navigating .skeleton,
+html.is-navigating .spin-slow,
+html.is-navigating .spin-slow-reverse {
+  animation: none !important;
+}
+
 html.is-scrolling .paper-hero::after,
 html.is-scrolling .hero-orbit::before,
 html.is-scrolling .hero-orbit::after,
@@ -1005,14 +1062,6 @@ html.is-scrolling .ritual-dialog__orbit {
 @media (prefers-reduced-motion:reduce) { .hero-orbit,.hero-orbit::before,.hero-orbit::after,.compass-light-sweep,.compass-engine-ring,.compass-core-wrap,.compass-core-halo,.status-dot { animation:none !important; } }
 
 @media (max-width: 767px) {
-  body {
-    background-attachment: scroll, scroll, scroll, scroll;
-  }
-
-  main {
-    animation: none;
-  }
-
   .paper-hero::after,
   .hero-orbit::before,
   .hero-orbit::after,

@@ -81,7 +81,7 @@ export function MethodShortcutCards() {
     }
   }, [activeIndex])
 
-  const activeShortcut = activeIndex === null ? null : SHORTCUTS[activeIndex] ?? null
+  const activeShortcut = activeIndex === null ? null : (SHORTCUTS[activeIndex] ?? null)
 
   return (
     <>
@@ -112,20 +112,18 @@ export function MethodShortcutCards() {
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-display text-base tracking-wider">
-                        {m.title}
-                      </span>
+                      <span className="font-display text-base tracking-wider">{m.title}</span>
                       {m.recommended && (
                         <span className="border-2 border-bagua-text bg-bagua-primary px-1.5 py-0.5 font-display text-[9px] tracking-widest text-bagua-surface">
                           推荐
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 font-body text-xs text-bagua-muted">
-                      {m.desc}
-                    </p>
+                    <p className="mt-1 font-body text-xs text-bagua-muted">{m.desc}</p>
                   </div>
-                  <span className="ritual-card__open font-display text-[10px] tracking-[0.16em] text-bagua-muted">阅览</span>
+                  <span className="ritual-card__open font-display text-[10px] tracking-[0.16em] text-bagua-muted">
+                    阅览
+                  </span>
                 </button>
               </Reveal>
             )

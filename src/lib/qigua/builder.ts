@@ -4,6 +4,7 @@
 import type { Line } from './types'
 import type { Gua } from '@/lib/iching/types'
 import { getAllHexagrams } from '@/lib/iching/data-access'
+import { trigramFromLines, TRIGRAM_SYMBOLS } from './bagua'
 
 /** 6 爻阴阳数组 → 卦对象（通过匹配查找） */
 export function findHexagramByLines(yaos: { yinYang: 'yang' | 'yin' }[]): Gua | undefined {
@@ -27,12 +28,12 @@ export function linesToGuaId(lines: Line[]): number {
 
 /** 检查是否有变爻 */
 export function hasChanging(lines: Line[]): boolean {
-  return lines.some(l => l.isChanging)
+  return lines.some((l) => l.isChanging)
 }
 
 /** 获取变爻位置列表 */
 export function getChangingPositions(lines: Line[]): number[] {
-  return lines.filter(l => l.isChanging).map(l => l.position)
+  return lines.filter((l) => l.isChanging).map((l) => l.position)
 }
 
 /** 卦象符号（Unicode） */
@@ -44,22 +45,14 @@ export function getHexagramSymbol(lines: Line[]): string {
 }
 
 function getTrigramSymbol(lines: Line[]): string {
-  // 简单的3爻卦象符号判断
-  const yy = lines.map(l => l.yinYang)
-  if (yy.every(y => y === 'yang')) return '☰'
-  if (yy[0] === 'yang' && yy[1] === 'yang' && yy[2] === 'yin') return '☱'
-  if (yy[0] === 'yang' && yy[1] === 'yin' && yy[2] === 'yang') return '☲'
-  if (yy[0] === 'yin' && yy[1] === 'yang' && yy[2] === 'yang') return '☳'
-  if (yy[0] === 'yin' && yy[1] === 'yin' && yy[2] === 'yang') return '☴'
-  if (yy[0] === 'yang' && yy[1] === 'yin' && yy[2] === 'yin') return '☵'
-  if (yy[0] === 'yin' && yy[1] === 'yang' && yy[2] === 'yin') return '☶'
-  if (yy.every(y => y === 'yin')) return '☷'
-  return '?'
+  // 统一走八卦编码系统（初爻为高位，从下到上），与 bagua.ts 单一事实源
+  const trigram = trigramFromLines(lines.map((l) => l.yinYang))
+  return trigram ? TRIGRAM_SYMBOLS[trigram] : '?'
 }
 
 /** 卦象二进制字符串（初爻到上爻） */
 export function linesToBinary(lines: Line[]): string {
-  return lines.map(l => l.yinYang === 'yang' ? '1' : '0').join('')
+  return lines.map((l) => (l.yinYang === 'yang' ? '1' : '0')).join('')
 }
 
 /** 64卦所有 ID 列表 */

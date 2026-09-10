@@ -19,9 +19,7 @@ export function SectionHeader({ index, title, desc, link }: SectionHeaderProps) 
           <span className="border-2 border-bagua-text bg-bagua-primary px-2 py-0.5 font-display text-[10px] tracking-widest text-bagua-surface">
             {index}
           </span>
-          <h2 className="font-display text-2xl tracking-wider md:text-3xl">
-            {title}
-          </h2>
+          <h2 className="font-display text-2xl tracking-wider md:text-3xl">{title}</h2>
         </div>
         <p className="mt-2 max-w-xl font-body text-xs text-bagua-muted md:text-sm">{desc}</p>
       </div>

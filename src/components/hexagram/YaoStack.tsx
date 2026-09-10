@@ -28,7 +28,9 @@ export function YaoStack({ lines, currentIndex }: YaoStackProps) {
         const isCurrent = currentIndex === lineIndex
         return (
           <li key={label} className="flex items-center gap-3">
-            <span className="w-10 font-display text-[10px] tracking-widest text-bagua-muted">{label}</span>
+            <span className="w-10 font-display text-[10px] tracking-widest text-bagua-muted">
+              {label}
+            </span>
             {line ? (
               <motion.div
                 className={`yao-pixel flex-1 ${line.yinYang === 'yin' ? 'is-yin' : 'is-yang'} ${line.isChanging ? 'is-changing' : ''}`}
@@ -36,7 +38,14 @@ export function YaoStack({ lines, currentIndex }: YaoStackProps) {
                 animate={{ scaleX: 1, opacity: 1 }}
                 transition={{ duration, ease: 'linear' }}
               >
-                {line.yinYang === 'yin' ? <><span /><span /></> : <span />}
+                {line.yinYang === 'yin' ? (
+                  <>
+                    <span />
+                    <span />
+                  </>
+                ) : (
+                  <span />
+                )}
               </motion.div>
             ) : (
               <div className="h-1 flex-1 bg-bagua-fiber/40" />

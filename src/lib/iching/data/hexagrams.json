@@ -46,6 +46,11 @@
         "xiangZhuan": "亢龙有悔，盈不可久也。"
       }
     ],
+    "yong": {
+      "label": "用九",
+      "text": "见群龙无首，吉。",
+      "xiangZhuan": "用九，天德不可为首也。"
+    },
     "shangGua": "乾",
     "xiaGua": "乾",
     "duiGua": 2,
@@ -109,19 +114,19 @@
         "position": 1,
         "yinYang": "yin",
         "text": "履霜，坚冰至。",
-        "xiangZhuan": "履霜坚冰，阴始凝也。"
+        "xiangZhuan": "履霜坚冰，阴始凝也。驯致其道，至坚冰也。"
       },
       {
         "position": 2,
         "yinYang": "yin",
         "text": "直方大，不习无不利。",
-        "xiangZhuan": "六二之动，直以方也。"
+        "xiangZhuan": "六二之动，直以方也。不习无不利，地道光也。"
       },
       {
         "position": 3,
         "yinYang": "yin",
         "text": "含章可贞。或从王事，无成有终。",
-        "xiangZhuan": "含章可贞，以时发也。"
+        "xiangZhuan": "含章可贞，以时发也。或从王事，知光大也。"
       },
       {
         "position": 4,
@@ -142,6 +147,11 @@
         "xiangZhuan": "龙战于野，其道穷也。"
       }
     ],
+    "yong": {
+      "label": "用六",
+      "text": "利永贞。",
+      "xiangZhuan": "用六永贞，以大终也。"
+    },
     "shangGua": "坤",
     "xiaGua": "坤",
     "duiGua": 1,
@@ -204,19 +214,19 @@
         "position": 1,
         "yinYang": "yang",
         "text": "磐桓，利居贞，利建侯。",
-        "xiangZhuan": "虽磐桓，志行正也。"
+        "xiangZhuan": "虽磐桓，志行正也。以贵下贱，大得民也。"
       },
       {
         "position": 2,
         "yinYang": "yin",
         "text": "屯如邅如，乘马班如。匪寇婚媾，女子贞不字，十年乃字。",
-        "xiangZhuan": "六二之难，乘刚也。"
+        "xiangZhuan": "六二之难，乘刚也。十年乃字，反常也。"
       },
       {
         "position": 3,
         "yinYang": "yin",
         "text": "即鹿无虞，惟入于林中。君子几不如舍，往吝。",
-        "xiangZhuan": "即鹿无虞，以从禽也。"
+        "xiangZhuan": "即鹿无虞，以从禽也。君子舍之，往吝穷也。"
       },
       {
         "position": 4,
@@ -406,19 +416,19 @@
         "position": 1,
         "yinYang": "yang",
         "text": "需于郊，利用恒，无咎。",
-        "xiangZhuan": "需于郊，不犯难行也。"
+        "xiangZhuan": "需于郊，不犯难行也。利用恒，无咎；未失常也。"
       },
       {
         "position": 2,
         "yinYang": "yang",
         "text": "需于沙，小有言，终吉。",
-        "xiangZhuan": "需于沙，衍在中也。"
+        "xiangZhuan": "需于沙，衍在中也。虽小有言，以终吉也。"
       },
       {
         "position": 3,
         "yinYang": "yang",
         "text": "需于泥，致寇至。",
-        "xiangZhuan": "需于泥，灾在外也。"
+        "xiangZhuan": "需于泥，灾在外也。自我致寇，敬慎不败也。"
       },
       {
         "position": 4,
@@ -436,7 +446,7 @@
         "position": 6,
         "yinYang": "yin",
         "text": "入于穴，有不速之客三人来，敬之终吉。",
-        "xiangZhuan": "不速之客来，敬之终吉。"
+        "xiangZhuan": "不速之客来，敬之终吉。虽不当位，未大失也。"
       }
     ],
     "shangGua": "坎",
@@ -507,13 +517,13 @@
         "position": 1,
         "yinYang": "yin",
         "text": "不永所事，小有言，终吉。",
-        "xiangZhuan": "不永所事，讼不可长也。"
+        "xiangZhuan": "不永所事，讼不可长也。虽有小言，其辩明也。"
       },
       {
         "position": 2,
         "yinYang": "yang",
         "text": "不克讼，归而逋，其邑人三百户，无眚。",
-        "xiangZhuan": "不克讼，归逋窜也。"
+        "xiangZhuan": "不克讼，归而逋也。自下讼上，患至掇也。"
       },
       {
         "position": 3,
@@ -614,7 +624,7 @@
         "position": 2,
         "yinYang": "yang",
         "text": "在师中，吉，无咎，王三锡命。",
-        "xiangZhuan": "在师中吉，承天宠也。"
+        "xiangZhuan": "在师中吉，承天宠也。王三锡命，怀万邦也。"
       },
       {
         "position": 3,
@@ -632,13 +642,13 @@
         "position": 5,
         "yinYang": "yin",
         "text": "田有禽，利执言，无咎。长子帅师，弟子舆尸，贞凶。",
-        "xiangZhuan": "长子帅师，以中行也。"
+        "xiangZhuan": "长子帅师，以中行也。弟子舆尸，使不当也。"
       },
       {
         "position": 6,
         "yinYang": "yin",
         "text": "大君有命，开国承家，小人勿用。",
-        "xiangZhuan": "大君有命，以正功也。"
+        "xiangZhuan": "大君有命，以正功也。小人勿用，必乱邦也。"
       }
     ],
     "shangGua": "坤",
@@ -733,7 +743,7 @@
         "position": 5,
         "yinYang": "yang",
         "text": "显比，王用三驱，失前禽。邑人不诫，吉。",
-        "xiangZhuan": "显比之吉，位正中也。"
+        "xiangZhuan": "显比之吉，位正中也。舍逆取顺，失前禽也。邑人不诫，上使中也。"
       },
       {
         "position": 6,
@@ -840,7 +850,7 @@
         "position": 6,
         "yinYang": "yang",
         "text": "既雨既处，尚德载，妇贞厉。月几望，君子征凶。",
-        "xiangZhuan": "既雨既处，德积载也。"
+        "xiangZhuan": "既雨既处，德积载也。君子征凶，有所疑也。"
       }
     ],
     "shangGua": "巽",
@@ -923,7 +933,7 @@
         "position": 3,
         "yinYang": "yin",
         "text": "眇能视，跛能履，履虎尾，咥人，凶。武人为于大君。",
-        "xiangZhuan": "咥人之凶，位不当也。"
+        "xiangZhuan": "咥人之凶，位不当也。眇能视，不足以有明也。跛能履，不足以与行也。武人为于大君，志刚也。"
       },
       {
         "position": 4,
@@ -1030,7 +1040,7 @@
         "position": 4,
         "yinYang": "yin",
         "text": "翩翩不富，以其邻，不戒以孚。",
-        "xiangZhuan": "翩翩不富，皆失实也。"
+        "xiangZhuan": "翩翩不富，皆失实也。不戒以孚，中心愿也。"
       },
       {
         "position": 5,
@@ -1226,19 +1236,19 @@
         "position": 3,
         "yinYang": "yang",
         "text": "伏戎于莽，升其高陵，三岁不兴。",
-        "xiangZhuan": "伏戎于莽，敌刚也。"
+        "xiangZhuan": "伏戎于莽，敌刚也。三岁不兴，安行也。"
       },
       {
         "position": 4,
         "yinYang": "yang",
         "text": "乘其墉，弗克攻，吉。",
-        "xiangZhuan": "乘其墉，义弗克也。"
+        "xiangZhuan": "乘其墉，义弗克也。其吉，则困而反则也。"
       },
       {
         "position": 5,
         "yinYang": "yang",
         "text": "同人，先号咷而后笑，大师克相遇。",
-        "xiangZhuan": "同人之先，以中直也。"
+        "xiangZhuan": "同人之先，以中直也。大师相遇，言相克也。"
       },
       {
         "position": 6,
@@ -1333,13 +1343,13 @@
         "position": 4,
         "yinYang": "yang",
         "text": "匪其彭，无咎。",
-        "xiangZhuan": "匪其彭，无咎，明辨皙也。"
+        "xiangZhuan": "匪其彭，无咎，明辨晰也。"
       },
       {
         "position": 5,
         "yinYang": "yin",
         "text": "厥孚交如，威如，吉。",
-        "xiangZhuan": "厥孚交如，信以发志也。"
+        "xiangZhuan": "厥孚交如，信以发志也。威如之吉，易而无备也。"
       },
       {
         "position": 6,
@@ -1446,7 +1456,7 @@
         "position": 6,
         "yinYang": "yin",
         "text": "鸣谦，利用行师，征邑国。",
-        "xiangZhuan": "鸣谦，志未得也。"
+        "xiangZhuan": "鸣谦，志未得也。可用行师，征邑国也。"
       }
     ],
     "shangGua": "坤",
@@ -1541,7 +1551,7 @@
         "position": 5,
         "yinYang": "yin",
         "text": "贞疾，恒不死。",
-        "xiangZhuan": "六五贞疾，乘刚也。"
+        "xiangZhuan": "六五贞疾，乘刚也。恒不死，中未亡也。"
       },
       {
         "position": 6,

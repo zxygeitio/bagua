@@ -47,15 +47,20 @@ export function findGuaByLines(yaos: { yinYang: 'yang' | 'yin' }[]): Gua | undef
   )
 }
 
-/** 搜索卦（按名称/拼音/关键词） */
+/** 搜索卦（按名称/拼音/关键词；拼音忽略声调，"qian" 可命中 "qián"） */
 export function searchHexagrams(query: string): Gua[] {
-  if (!query) return []
+  if (!query || !query.trim()) return []
   const q = query.toLowerCase().trim()
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
   return (hexagramsData as Gua[]).filter(
     (g) =>
       g.name.includes(q) ||
       g.chineseName.includes(q) ||
-      g.pronunciation.toLowerCase().includes(q) ||
+      normalize(g.pronunciation).includes(q) ||
       g.keywords.some((k) => k.includes(q)) ||
       g.categoryTags.some((t) => t.includes(q)),
   )

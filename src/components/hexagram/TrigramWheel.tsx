@@ -12,7 +12,11 @@ interface TrigramWheelProps {
 
 export function TrigramWheel({ value, onChange }: TrigramWheelProps) {
   return (
-    <div className="flex flex-wrap gap-px border-4 border-bagua-text bg-bagua-text" role="group" aria-label="先天八卦">
+    <div
+      className="flex flex-wrap gap-px border-4 border-bagua-text bg-bagua-text"
+      role="group"
+      aria-label="先天八卦"
+    >
       {WHEEL.map((name) => {
         const active = value === name
         return (

@@ -40,7 +40,11 @@ export function HexagramSymbol({
       {ordered.map((yao: { yinYang: YinYang; isChanging?: boolean }, displayIdx: number) => {
         const y = displayIdx * rowHeight
         const isYang = yao.yinYang === 'yang'
-        const fillClass = yao.isChanging ? 'fill-bagua-primary' : isYang ? yangClassName : yinClassName
+        const fillClass = yao.isChanging
+          ? 'fill-bagua-primary'
+          : isYang
+            ? yangClassName
+            : yinClassName
         if (isYang) {
           return (
             <rect
@@ -57,7 +61,14 @@ export function HexagramSymbol({
         const segWidth = (preset.width - preset.yinBreak) / 2
         return (
           <g key={displayIdx}>
-            <rect x={0} y={y} width={segWidth} height={preset.stroke} rx={preset.radius} className={fillClass} />
+            <rect
+              x={0}
+              y={y}
+              width={segWidth}
+              height={preset.stroke}
+              rx={preset.radius}
+              className={fillClass}
+            />
             <rect
               x={segWidth + preset.yinBreak}
               y={y}

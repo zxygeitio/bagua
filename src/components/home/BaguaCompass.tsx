@@ -44,10 +44,7 @@ export function BaguaCompass({
   onSelectTrigram?: (trigram: TrigramName) => void
 }) {
   return (
-    <nav
-      className="bagua-compass"
-      aria-label="先天八卦方位索引：乾南、坤北、离东、坎西"
-    >
+    <nav className="bagua-compass" aria-label="先天八卦方位索引：乾南、坤北、离东、坎西">
       <Image
         src="/textures/bronze-compass-plate.webp"
         alt=""
@@ -63,10 +60,18 @@ export function BaguaCompass({
       <div className="compass-engine-ring compass-engine-ring--outer" aria-hidden="true" />
       <div className="compass-engine-ring compass-engine-ring--inner" aria-hidden="true" />
 
-      <span className="compass-bearing compass-bearing--south" aria-hidden="true">南</span>
-      <span className="compass-bearing compass-bearing--east" aria-hidden="true">东</span>
-      <span className="compass-bearing compass-bearing--north" aria-hidden="true">北</span>
-      <span className="compass-bearing compass-bearing--west" aria-hidden="true">西</span>
+      <span className="compass-bearing compass-bearing--south" aria-hidden="true">
+        南
+      </span>
+      <span className="compass-bearing compass-bearing--east" aria-hidden="true">
+        东
+      </span>
+      <span className="compass-bearing compass-bearing--north" aria-hidden="true">
+        北
+      </span>
+      <span className="compass-bearing compass-bearing--west" aria-hidden="true">
+        西
+      </span>
 
       <div className="compass-core-wrap" aria-hidden="true">
         <div className="compass-core-halo" />
@@ -108,6 +113,7 @@ export function BaguaCompass({
           <Link
             key={position.trigram}
             href={`/hexagrams/${position.guaId}`}
+            prefetch={false}
             style={style}
             data-active={isActive ? 'true' : undefined}
             className="compass-node"
