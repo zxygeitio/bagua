@@ -8,18 +8,6 @@ import { SHORTCUTS } from '@/hooks/useKeyboardShortcuts'
 
 export function KeyboardHelp() {
   const [open, setOpen] = useState(false)
-  const [hint, setHint] = useState(true)
-
-  useEffect(() => {
-    // 首次访问 5 秒后显示提示（之后记住）
-    if (typeof window === 'undefined') return
-    if (localStorage.getItem('bagua:shortcuts:hint') === 'dismissed') {
-      setHint(false)
-    } else {
-      const t = setTimeout(() => setHint(true), 4000)
-      return () => clearTimeout(t)
-    }
-  }, [])
 
   useEffect(() => {
     const openHandler = () => setOpen(true)
@@ -27,29 +15,8 @@ export function KeyboardHelp() {
     return () => window.removeEventListener('bagua:shortcuts:open', openHandler)
   }, [])
 
-  const dismissHint = () => {
-    setHint(false)
-    try {
-      localStorage.setItem('bagua:shortcuts:hint', 'dismissed')
-    } catch {
-      // ignore
-    }
-  }
-
   return (
     <>
-      {hint && !open && (
-        <button
-          type="button"
-          onClick={() => {
-            dismissHint()
-            setOpen(true)
-          }}
-          className="btn-press fixed bottom-20 left-4 z-30 hidden items-center gap-2 border-2 border-bagua-text bg-bagua-surface px-3 py-1.5 font-body text-xs tracking-widest text-bagua-text shadow-soft md:bottom-6 md:flex"
-        >
-          按 <kbd className="border border-bagua-text bg-bagua-canvas px-1.5 py-0.5 font-mono">?</kbd> 看快捷键
-        </button>
-      )}
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-ink-950/60 p-4 backdrop-blur-sm"

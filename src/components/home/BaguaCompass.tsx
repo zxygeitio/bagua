@@ -1,3 +1,5 @@
+'use client'
+
 import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -38,7 +40,15 @@ const polarPercent = (radius: number, angle: number) => {
   }
 }
 
-export function BaguaCompass({ priority = false }: { priority?: boolean }) {
+export function BaguaCompass({
+  priority = false,
+  activeTrigram,
+  onSelectTrigram,
+}: {
+  priority?: boolean
+  activeTrigram?: TrigramName | null
+  onSelectTrigram?: (trigram: TrigramName) => void
+}) {
   return (
     <nav
       className="bagua-compass"
@@ -75,12 +85,25 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
           '--compass-x': `${point.x}%`,
           '--compass-y': `${point.y}%`,
         } as CSSProperties
+        const isActive = activeTrigram === position.trigram
 
         return (
           <Link
             key={position.trigram}
             href={`/hexagrams/${position.guaId}`}
             style={style}
+            data-active={isActive ? 'true' : undefined}
+            onClick={(e) => {
+              if (onSelectTrigram) {
+                e.preventDefault()
+                onSelectTrigram(position.trigram)
+              }
+            }}
+            onMouseEnter={() => {
+              if (onSelectTrigram) {
+                onSelectTrigram(position.trigram)
+              }
+            }}
             className="compass-node"
             title={`${position.trigram} · ${position.direction} · ${position.element}`}
           >

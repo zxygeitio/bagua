@@ -35,16 +35,27 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
             <Logo className="h-7 w-7 text-bagua-primary pixelated" />
             <span className="font-display text-sm tracking-[0.14em]">八卦</span>
           </Link>
-          <nav className="hidden items-center gap-1 md:flex" aria-label="主导航">
-            {NAV.map((item) => {
-              const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
-              return (
-                <Link key={item.href} href={item.href} data-active={active} className="nav-link">
-                  {item.label}
-                </Link>
-              )
-            })}
-          </nav>
+          <div className="hidden items-center gap-3 md:flex">
+            <nav className="flex items-center gap-1" aria-label="主导航">
+              {NAV.map((item) => {
+                const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+                return (
+                  <Link key={item.href} href={item.href} data-active={active} className="nav-link">
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('bagua:shortcuts:open'))}
+              className="btn-press flex h-7 w-7 items-center justify-center border border-bagua-fiber/80 bg-bagua-surface/70 font-mono text-xs text-bagua-muted transition hover:border-bagua-text hover:bg-bagua-wash hover:text-bagua-text"
+              title="快捷键指南 (按 ?)"
+              aria-label="快捷键指南"
+            >
+              ?
+            </button>
+          </div>
         </div>
       </header>
       {eyebrow ? (
@@ -70,7 +81,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                 面向初学者与读卦者的现代工具。
               </p>
               <p className="mt-3 font-display text-[10px] tracking-[0.2em] text-bagua-muted">
-                v0.2.0 · 2026
+                v2.3.0 · 2026
               </p>
             </div>
 
@@ -126,7 +137,7 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
                   <HexagramPattern className="h-3 w-3" />
                   64 卦完整数据
                 </li>
-                <li className="font-body text-xs text-bagua-text">5 种起卦算法</li>
+                <li className="font-body text-xs text-bagua-text">硬币六爻起卦</li>
                 <li className="font-body text-xs text-bagua-text">5 种卦变关系</li>
                 <li className="font-body text-xs text-bagua-text">384 爻 + 彖象传</li>
               </ul>

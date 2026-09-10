@@ -395,18 +395,20 @@
   }
 
   .nav-link {
+    position: relative;
     font-family: var(--font-display), 'Cubic 11', ui-monospace, monospace;
     font-size: 13px;
     letter-spacing: 0.08em;
-    padding: 0.35rem 0.55rem;
+    padding: 0.35rem 0.65rem;
     border: var(--pixel-step) solid transparent;
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
   }
 
   .nav-link[data-active='true'] {
     border-color: var(--paper-ink);
-    background: var(--paper-cinnabar);
-    color: var(--paper-surface);
-    box-shadow: var(--pixel-step) var(--pixel-step) 0 rgba(44, 36, 22, 0.2);
+    background: var(--paper-surface);
+    color: var(--paper-cinnabar);
+    box-shadow: inset 0 -2px 0 var(--paper-cinnabar), var(--pixel-step) var(--pixel-step) 0 rgba(44, 36, 22, 0.15);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -417,7 +419,9 @@
     }
 
     .nav-link[data-active='true']:hover {
-      background: var(--paper-cinnabar);
+      border-color: var(--paper-ink);
+      background: var(--paper-surface);
+      color: var(--paper-cinnabar);
     }
   }
 
@@ -990,6 +994,9 @@ html.is-scrolling .ritual-dialog__orbit {
 .compass-node__meta b { font-family:var(--font-display),ui-monospace,monospace; font-size:8px; font-weight:500; letter-spacing:.08em; }
 .compass-node__meta i { color:#d8bb82; font-family:var(--font-body),serif; font-size:7px; font-style:normal; }
 @media (hover:hover) and (pointer:fine) { .compass-node:hover { z-index:10; transform:translate(-50%,-55%) translateZ(30px) scale(1.13); filter:drop-shadow(3px 7px 2px rgba(31,22,14,.32)) drop-shadow(0 0 8px rgba(229,177,75,.28)); } .compass-node:hover .compass-node__symbol { color:#6f251c; border-color:#8e3227; } }
+.compass-node[data-active='true'] { z-index:12; transform:translate(-50%,-55%) translateZ(32px) scale(1.18); filter:drop-shadow(0 0 16px rgba(183,140,62,.6)) drop-shadow(0 0 8px rgba(178,58,42,.5)); }
+.compass-node[data-active='true'] .compass-node__symbol { color:#6f251c; border-color:#8e3227; box-shadow:inset 0 0 0 2px rgba(255,235,185,.9), 0 0 14px rgba(178,58,42,.6); }
+.compass-node[data-active='true'] .compass-node__meta { background:rgba(142,50,39,.95); border-color:rgba(255,218,136,.85); color:#fff; }
 .ritual-step { position:relative; }
 .ritual-step::after { content:''; position:absolute; right:-1px; top:50%; width:5px; height:5px; border-radius:50%; background:var(--paper-gold); opacity:.6; }
 .ritual-step:last-child::after { display:none; }

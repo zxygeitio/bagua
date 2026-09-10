@@ -24,11 +24,13 @@ const baseProps = {
  * ==================================================================== */
 
 export const Logo = (props: IconProps) => (
-  <svg viewBox="0 0 24 24" shapeRendering="crispEdges" aria-hidden="true" {...props}>
-    {/* 乾卦 ☰ 三阳爻 — Logo */}
-    <rect x="2" y="2" width="20" height="3" fill="currentColor" />
-    <rect x="2" y="10" width="20" height="3" fill="currentColor" />
-    <rect x="2" y="18" width="20" height="3" fill="currentColor" />
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    {/* 传统朱印外框：金石阳刻 */}
+    <rect x="2" y="2" width="20" height="20" rx="3.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
+    {/* 乾卦 ☰ 三阳爻 */}
+    <rect x="5.5" y="6" width="13" height="2.2" rx="0.5" fill="currentColor" />
+    <rect x="5.5" y="10.9" width="13" height="2.2" rx="0.5" fill="currentColor" />
+    <rect x="5.5" y="15.8" width="13" height="2.2" rx="0.5" fill="currentColor" />
   </svg>
 )
 

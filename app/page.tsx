@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { BaguaCompass } from '@/components/home/BaguaCompass'
+import { BaguaInteractiveExplorer } from '@/components/home/BaguaInteractiveExplorer'
 import { DailyOracle } from '@/components/hexagram/DailyOracle'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { MethodShortcutCards } from '@/components/home/MethodShortcutCards'
@@ -21,14 +22,20 @@ import { PaperTilt } from '@/components/shared/PaperTilt'
 import { PaperParticles } from '@/components/shared/PaperParticles'
 import { getGuaById } from '@/lib/iching'
 
-const FEATURED = [1, 2, 11, 24, 64]
+const FEATURED = [
+  { id: 1, phase: '元始', seal: '健', note: '纯阳自强' },
+  { id: 2, phase: '厚载', seal: '顺', note: '含弘光大' },
+  { id: 11, phase: '通泰', seal: '通', note: '小往大来' },
+  { id: 24, phase: '复萌', seal: '生', note: '见天地心' },
+  { id: 64, phase: '未穷', seal: '转', note: '生生不息' },
+] as const
 
 const WUXING = [
-  { tag: '木', gua: 3, color: 'wood', label: '木属', desc: '生发向上' },
-  { tag: '火', gua: 30, color: 'fire', label: '火属', desc: '炎上光明' },
-  { tag: '土', gua: 2, color: 'earth', label: '土属', desc: '厚德载物' },
-  { tag: '金', gua: 1, color: 'metal', label: '金属', desc: '刚毅决断' },
-  { tag: '水', gua: 5, color: 'water', label: '水属', desc: '润下流通' },
+  { tag: '木', gua: 3, color: 'wood', label: '木属', desc: '生发向上', border: 'border-emerald-800/40 hover:border-emerald-700', bg: 'hover:bg-emerald-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,110,60,0.15)]' },
+  { tag: '火', gua: 30, color: 'fire', label: '火属', desc: '炎上光明', border: 'border-rose-800/40 hover:border-rose-700', bg: 'hover:bg-rose-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(178,58,42,0.18)]' },
+  { tag: '土', gua: 2, color: 'earth', label: '土属', desc: '厚德载物', border: 'border-amber-800/40 hover:border-amber-700', bg: 'hover:bg-amber-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(180,120,40,0.16)]' },
+  { tag: '金', gua: 1, color: 'metal', label: '金属', desc: '刚毅决断', border: 'border-yellow-700/50 hover:border-yellow-600', bg: 'hover:bg-yellow-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(200,160,50,0.18)]' },
+  { tag: '水', gua: 5, color: 'water', label: '水属', desc: '润下流通', border: 'border-sky-800/40 hover:border-sky-700', bg: 'hover:bg-sky-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,90,140,0.16)]' },
 ] as const
 
 const WUXING_ICON = { wood: Wood, fire: Fire, earth: Earth, metal: Metal, water: Water } as const
@@ -107,9 +114,8 @@ export default function HomePage() {
           </div>
 
           <Reveal delay={520} direction="up">
-            <div className="mt-12 grid gap-3 border-t border-bagua-fiber pt-4 md:grid-cols-[1fr_auto] md:items-center">
+            <div className="mt-12 border-t border-bagua-fiber pt-6">
               <DailyOracle />
-              <Link href="/hexagrams" className="draw-underline justify-self-start font-display text-xs tracking-[0.16em] text-bagua-primary md:justify-self-end">浏览六十四卦 →</Link>
             </div>
           </Reveal>
         </section>
@@ -130,7 +136,7 @@ export default function HomePage() {
             />
           </Reveal>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {WUXING.map(({ tag, gua: id, color, label, desc }, i) => {
+            {WUXING.map(({ tag, gua: id, color, label, desc, border, bg, glow }, i) => {
               const gua = getGuaById(id)
               const Icon = WUXING_ICON[color as keyof typeof WUXING_ICON]
               const txt = WUXING_TEXT[color as keyof typeof WUXING_TEXT]
@@ -139,16 +145,21 @@ export default function HomePage() {
                 <Reveal key={tag} delay={i * 80} direction="up">
                   <Link
                     href={`/hexagrams/${id}`}
-                    className="paper-panel lift group flex h-full flex-col items-center gap-2 p-5"
+                    className={`paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 p-4 transition-all duration-300 md:p-5 ${border} ${bg} ${glow}`}
                   >
-                    <Icon className={`h-7 w-7 ${txt} transition group-hover:scale-110`} strokeWidth={1.5} />
-                    <div className="font-display text-2xl tracking-widest text-bagua-text">
+                    <div className="flex w-full items-center justify-between">
+                      <span className="font-display text-[10px] tracking-widest text-bagua-muted">
+                        五行 · {tag}
+                      </span>
+                      <Icon className={`h-4 w-4 ${txt} transition group-hover:scale-110`} strokeWidth={1.6} />
+                    </div>
+                    <div className="my-1 font-display text-3xl tracking-widest text-bagua-text transition group-hover:scale-105">
                       {tag}
                     </div>
-                    <div className="my-1">
+                    <div className="my-1 border border-bagua-fiber/60 bg-bagua-canvas p-1.5 shadow-2xs transition group-hover:border-bagua-text">
                       <HexagramSymbol gua={gua} size="sm" />
                     </div>
-                    <div className="font-display text-sm tracking-widest">
+                    <div className="font-display text-sm tracking-widest text-bagua-text group-hover:text-bagua-primary">
                       {gua.name}
                     </div>
                     <p className="text-balance text-center font-body text-[10px] text-bagua-muted">
@@ -171,12 +182,10 @@ export default function HomePage() {
               link={{ href: '/learn', label: '学习更多' }}
             />
           </Reveal>
-          <Reveal delay={200} direction="scale">
-            <PaperTilt className="paper-stack paper-stage">
-              <div className="paper-panel paper-depth flex justify-center px-6 py-12 md:px-12 md:py-16">
-                <BaguaCompass />
-              </div>
-            </PaperTilt>
+          <Reveal delay={200} direction="up">
+            <div className="mt-4">
+              <BaguaInteractiveExplorer />
+            </div>
           </Reveal>
         </section>
 
@@ -191,30 +200,36 @@ export default function HomePage() {
             />
           </Reveal>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-            {FEATURED.map((id, i) => {
+            {FEATURED.map(({ id, phase, seal, note }, i) => {
               const gua = getGuaById(id)
               if (!gua) return null
               return (
                 <Reveal key={id} delay={i * 100} direction="up">
                   <Link
                     href={`/hexagrams/${id}`}
-                    className="paper-panel lift group flex h-full flex-col items-center gap-2 p-5"
+                    className="paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 border-bagua-text bg-bagua-surface p-5 shadow-soft transition-all hover:border-bagua-primary"
                   >
                     <div className="flex w-full items-center justify-between font-display text-[10px] tracking-widest text-bagua-muted">
                       <span>#{id.toString().padStart(2, '0')}</span>
-                      {i === 0 && (
-                        <Star className="h-3 w-3 fill-bagua-primary text-bagua-primary" />
-                      )}
+                      <span className="border border-bagua-fiber bg-bagua-wash px-1.5 py-0.5 text-[9px] text-bagua-primary">
+                        {phase}
+                      </span>
                     </div>
-                    <div className="my-2 transition group-hover:scale-110">
+                    <div className="my-2 border border-bagua-fiber/40 bg-bagua-canvas p-2 shadow-xs transition group-hover:scale-105 group-hover:border-bagua-text">
                       <HexagramSymbol gua={gua} size="md" />
                     </div>
-                    <span className="font-display text-base tracking-widest group-hover:text-bagua-primary">
+                    <span className="font-display text-base tracking-widest text-bagua-text transition group-hover:text-bagua-primary">
                       {gua.name}
+                    </span>
+                    <span className="font-display text-[10px] tracking-wider text-bagua-primary/90">
+                      {note}
                     </span>
                     <p className="text-balance text-center font-body text-[11px] leading-relaxed text-bagua-muted">
                       {gua.guaci}
                     </p>
+                    <span className="absolute bottom-1 right-2 select-none font-display text-2xl font-bold text-bagua-fiber/25 transition group-hover:text-bagua-primary/20">
+                      {seal}
+                    </span>
                   </Link>
                 </Reveal>
               )
