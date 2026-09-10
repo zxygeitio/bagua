@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { MethodShortcutCards } from '@/components/home/MethodShortcutCards'
 import { BaguaCompass } from '@/components/home/BaguaCompass'
 import { BaguaInteractiveExplorer } from '@/components/home/BaguaInteractiveExplorer'
 import { DailyOracle } from '@/components/hexagram/DailyOracle'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
+import { MethodShortcutCards } from '@/components/home/MethodShortcutCards'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeader } from '@/components/home/SectionHeader'
 import { Wand } from '@/components/icons'
@@ -38,41 +38,38 @@ const WUXING = [
 
 export default function HomePage() {
   return (
-    <main>
-      {/* ========== Hero ========== */}
-      <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
-        <PaperParticles />
-        <div className="hero-orbit" aria-hidden="true" />
-        <div className="grid items-center gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-10">
-          <Reveal direction="left">
-            <aside className="archive-index border-l-2 border-bagua-primary/60 pl-4 md:pl-5">
-              <p className="font-display text-[10px] tracking-[0.34em] text-bagua-primary">
-                ARCHIVE / 01
-              </p>
-              <p className="archive-index__title mt-4 font-display text-xs tracking-[0.2em] text-bagua-text">
-                先天方位索引
-              </p>
-              <div className="archive-index__list mt-5 space-y-3 font-body text-xs leading-relaxed text-bagua-muted">
-                <div className="flex items-center justify-between border-b border-bagua-fiber pb-2">
-                  <span>乾 · 南</span>
-                  <span className="font-display text-[10px]">01 / 08</span>
+    <SiteShell>
+      <main>
+        {/* ========== Hero ========== */}
+        <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
+          <PaperParticles />
+          <div className="hero-orbit" aria-hidden="true" />
+          <div className="grid items-center gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-10">
+            <Reveal direction="left">
+              <aside className="archive-index pl-4 md:pl-5">
+                <p className="font-display text-[10px] tracking-[0.34em] text-bagua-primary">ARCHIVE / 01</p>
+                <p className="archive-index__title mt-4 font-display text-xs tracking-[0.2em] text-bagua-text">先天方位索引</p>
+                <div className="archive-index__list mt-5 space-y-3 font-body text-xs leading-relaxed text-bagua-muted">
+                  {/* 先天八卦序数(伏羲八卦次序):乾一、兑二、离三、震四、巽五、坎六、艮七、坤八 */}
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>乾 · 南</span><span className="font-display text-[10px]">一</span></div>
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>坤 · 北</span><span className="font-display text-[10px]">八</span></div>
+                  <div className="flex items-center justify-between border-b border-bagua-fiber pb-2"><span>离 · 东</span><span className="font-display text-[10px]">三</span></div>
+                  <div className="flex items-center justify-between"><span>坎 · 西</span><span className="font-display text-[10px]">六</span></div>
                 </div>
-                <div className="flex items-center justify-between border-b border-bagua-fiber pb-2">
-                  <span>坤 · 北</span>
-                  <span className="font-display text-[10px]">02 / 08</span>
+                <div className="archive-index__status mt-8 border-t border-bagua-fiber pt-4">
+                  <p className="font-display text-[10px] tracking-[0.2em] text-bagua-muted">记录状态</p>
+                  <p className="mt-2 flex items-center gap-2 font-display text-xs text-bagua-text"><span className="status-dot" />可开始起卦</p>
                 </div>
-                <div className="flex items-center justify-between border-b border-bagua-fiber pb-2">
-                  <span>离 · 东</span>
-                  <span className="font-display text-[10px]">03 / 08</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>坎 · 西</span>
-                  <span className="font-display text-[10px]">04 / 08</span>
-                </div>
-              </div>
-              <div className="archive-index__status mt-8 border-t border-bagua-fiber pt-4">
-                <p className="font-display text-[10px] tracking-[0.2em] text-bagua-muted">
-                  记录状态
+              </aside>
+            </Reveal>
+
+            <div className="hero-copy relative z-10">
+              <Reveal direction="up">
+                <p className="section-kicker">周易 · 草纸刻本 · 现代读法</p>
+                <h1 className="mt-5 font-display text-7xl leading-[0.86] tracking-[0.08em] text-bagua-text md:text-[9rem]">八卦</h1>
+                <div className="paper-rule-fade mt-6 max-w-sm" />
+                <p className="prose-body mt-6 max-w-lg text-pretty text-bagua-muted">
+                  让一个问题，进入天地之间。三钱成爻，以六爻记录此刻，再以卦辞读出变化的方向。
                 </p>
               </Reveal>
               <Reveal delay={220} direction="up">
@@ -119,7 +116,7 @@ export default function HomePage() {
               <DailyOracle />
             </div>
           </Reveal>
-        </div>
+        </section>
 
         {/* ========== 入口卡片 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-4 md:px-8">
@@ -186,8 +183,7 @@ export default function HomePage() {
               )
             })}
           </div>
-        </Reveal>
-      </section>
+        </section>
 
         {/* ========== 先天八卦方位 ========== */}
         <section className="mx-auto max-w-6xl px-6 py-10 md:px-8">

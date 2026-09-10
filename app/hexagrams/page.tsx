@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { HexagramGrid } from '@/components/hexagram/HexagramGrid'
+import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata = {
   title: '六十四卦',
