@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Check, ChevronRight, Coins, Wand } from '@/components/icons'
@@ -77,11 +78,22 @@ export default function DivinePage() {
     <SiteShell eyebrow="CAST / 01">
       <main className="paper-hero relative mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
         <PaperParticles />
-        <div className="enter-up mb-10 max-w-2xl">
-          <h1 className="font-display text-5xl leading-none tracking-[0.06em] md:text-6xl">起卦</h1>
-          <p className="prose-body mt-4 text-bagua-muted">
-            先定其心，再观其象。把此刻真正想问的事交给六爻，结果会被保存在历史记录中。
-          </p>
+        <div className="enter-up mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="max-w-2xl">
+            <h1 className="font-display text-5xl leading-none tracking-[0.06em] md:text-6xl">起卦</h1>
+            <p className="prose-body mt-4 text-bagua-muted">
+              先定其心，再观其象。把此刻真正想问的事交给六爻，结果会被保存在历史记录中。
+            </p>
+          </div>
+          <div className="hidden md:flex items-center gap-3.5 border-4 border-bagua-text bg-bagua-surface p-3.5 shadow-soft">
+            <div className="relic-frame-square h-16 w-16 md:h-18 md:w-18 flex-shrink-0 p-1.5 shadow-xs">
+              <Image src="/icons/divine-hero-3d.webp" alt="三钱起卦宝炉" width={112} height={112} className="antique-blend h-full w-full object-contain" priority />
+            </div>
+            <div>
+              <p className="font-display text-xs tracking-wider text-bagua-primary">三钱法 · 灵应卦炉</p>
+              <p className="font-mono text-[10px] text-bagua-muted">两阴一阳为少阳 · 纯阳为老阳</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -141,8 +153,8 @@ export default function DivinePage() {
                 <h2 className="font-display text-lg tracking-wider">起卦方式</h2>
               </div>
               <div className="flex items-center gap-4 border-4 border-bagua-text bg-bagua-wash p-4 shadow-soft">
-                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary text-bagua-surface">
-                  <Coins className="h-5 w-5" />
+                <span className="relic-frame-round h-16 w-16 md:h-18 md:w-18 flex-shrink-0 p-0 shadow-xs">
+                  <Image src="/icons/shortcut-coins.webp" alt="硬币法" width={112} height={112} className="antique-blend h-full w-full object-contain" />
                 </span>
                 <div>
                   <p className="font-display text-base tracking-wider">硬币法 · 三钱六掷</p>
@@ -171,14 +183,13 @@ export default function DivinePage() {
             )}
           </div>
 
-          <aside className="paper-panel enter-up stagger-2 hidden self-start p-6 lg:block">
-            <p className="font-display text-[10px] tracking-[0.28em] text-bagua-primary">仪式提示</p>
-            <h3 className="mt-2 font-display text-lg tracking-wider">静候一问</h3>
-            <div className="mt-5 space-y-5 font-body text-sm leading-relaxed text-bagua-text">
-              <Step n="1" title="定心">杂念放下，专注意图。</Step>
-              <Step n="2" title="起问">默念你所问之事，让问题完整。</Step>
-              <Step n="3" title="投爻">三钱六掷，六爻自下而上记录。</Step>
-              <Step n="4" title="读象">动爻多少，决定读卦辞还是爻辞。</Step>
+          <aside className="space-y-4">
+            <h2 className="font-display text-xs tracking-[0.28em] text-bagua-muted">起卦步骤</h2>
+            <div className="space-y-3">
+              <Step n="1" title="定心" icon="/icons/ritual-ask.webp" shape="square">杂念放下，专注意图。</Step>
+              <Step n="2" title="起问" icon="/icons/shortcut-learn.webp" shape="square">默念你所问之事，让问题完整。</Step>
+              <Step n="3" title="投爻" icon="/icons/ritual-cast-new.webp" shape="round">三钱六掷，六爻自下而上记录。</Step>
+              <Step n="4" title="读象" icon="/icons/ritual-read-new.webp" shape="square">动爻多少，决定读卦辞还是爻辞。</Step>
             </div>
             <div className="mt-6 border-t-4 border-bagua-fiber pt-4">
               <p className="font-display text-[10px] tracking-[0.28em] text-bagua-muted">LIVE</p>
@@ -193,15 +204,21 @@ export default function DivinePage() {
   )
 }
 
-function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+function Step({ n, title, icon, shape = 'square', children }: { n: string; title: string; icon?: string; shape?: 'round' | 'square'; children: React.ReactNode }) {
   return (
-    <div className="flex gap-3">
-      <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary font-display text-xs text-bagua-surface">
-        {n}
-      </span>
-      <div>
-        <p className="font-display text-sm tracking-wider text-bagua-primary">{title}</p>
-        <p className="mt-1 text-bagua-muted">{children}</p>
+    <div className="flex items-center gap-3">
+      {icon ? (
+        <div className={`${shape === 'round' ? 'relic-frame-round p-0' : 'relic-frame-square p-1'} h-11 w-11 flex-shrink-0 shadow-2xs`}>
+          <Image src={icon} alt="" width={88} height={88} className="antique-blend h-full w-full object-contain" />
+        </div>
+      ) : (
+        <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary font-display text-xs text-bagua-surface">
+          {n}
+        </span>
+      )}
+      <div className="min-w-0">
+        <p className="font-display text-xs tracking-wider text-bagua-primary">{n}. {title}</p>
+        <p className="mt-0.5 text-xs text-bagua-muted">{children}</p>
       </div>
     </div>
   )

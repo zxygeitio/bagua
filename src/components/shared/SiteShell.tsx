@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -31,8 +32,17 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
       <div className="pixel-grid" aria-hidden="true" />
       <header className="site-header">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-6">
-          <Link href="/" className="flex items-center gap-2 text-bagua-text">
-            <Logo className="h-7 w-7 text-bagua-primary pixelated" />
+          <Link href="/" className="flex items-center gap-2.5 text-bagua-text group">
+            <div className="relic-frame-square relative h-8 w-8 md:h-9 md:w-9 flex-shrink-0 p-0.5 shadow-2xs transition group-hover:scale-105 group-hover:border-bagua-primary">
+              <Image
+                src="/icons/brand-logo-3d.webp"
+                alt="八卦"
+                width={72}
+                height={72}
+                className="h-full w-full object-contain"
+                priority
+              />
+            </div>
             <span className="font-display text-sm tracking-[0.14em]">八卦</span>
           </Link>
           <div className="hidden items-center gap-3 md:flex">
@@ -71,8 +81,16 @@ export function SiteShell({ children, eyebrow }: SiteShellProps) {
           <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
             {/* 品牌区 */}
             <div>
-              <div className="flex items-center gap-2">
-                <Logo className="h-6 w-6 text-bagua-primary pixelated" />
+              <div className="flex items-center gap-2.5">
+                <div className="relic-frame-square relative h-8 w-8 md:h-9 md:w-9 flex-shrink-0 p-0.5 shadow-2xs">
+                  <Image
+                    src="/icons/brand-logo-3d.webp"
+                    alt="八卦"
+                    width={72}
+                    height={72}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
                 <span className="font-display text-base tracking-[0.16em]">八卦</span>
               </div>
               <p className="prose-body mt-3 text-xs text-bagua-muted">

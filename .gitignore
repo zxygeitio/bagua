@@ -61,3 +61,5 @@ published-*.png
 .tmp-image-response.json
 .superpowers/
 %SystemDrive%/
+修改建议*.png
+public/icons/*.png

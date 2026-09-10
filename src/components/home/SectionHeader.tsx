@@ -23,7 +23,7 @@ export function SectionHeader({ index, title, desc, link }: SectionHeaderProps) 
             {title}
           </h2>
         </div>
-        <p className="prose-body mt-2 text-bagua-muted">{desc}</p>
+        <p className="mt-2 max-w-xl font-body text-xs text-bagua-muted md:text-sm">{desc}</p>
       </div>
       {link && (
         <Link

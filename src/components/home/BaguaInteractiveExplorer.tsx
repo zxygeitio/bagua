@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { BaguaCompass } from '@/components/home/BaguaCompass'
-import { PaperTilt } from '@/components/shared/PaperTilt'
 import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
 import type { TrigramName } from '@/lib/qigua/types'
 
@@ -171,53 +170,67 @@ export function BaguaInteractiveExplorer() {
   const detail = TRIGRAM_DETAILS[selected]
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.05fr_1fr] lg:items-center">
-      {/* 左侧：带微互动的罗盘本体 */}
-      <div className="flex flex-col items-center">
-        <PaperTilt className="paper-stack paper-stage w-full max-w-[460px]" intensity={3.5}>
-          <div className="paper-panel paper-depth p-4 md:p-6 shadow-soft">
+    <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+      {/* 左侧：先天八卦罗盘本体 */}
+      <div className="paper-panel relative flex flex-col justify-between border-4 border-bagua-text bg-bagua-surface p-5 md:p-6 shadow-soft">
+        {/* 顶部档案元数据 */}
+        <div className="flex items-center justify-between border-b border-bagua-fiber pb-3">
+          <span className="font-display text-xs tracking-[0.24em] text-bagua-primary">
+            先天八卦 · 伏羲八方位
+          </span>
+          <span className="border border-bagua-fiber bg-bagua-canvas px-2 py-0.5 font-mono text-[11px] text-bagua-muted">
+            当前选中 · {selected}卦
+          </span>
+        </div>
+
+        {/* 中央罗盘展示区 */}
+        <div className="my-auto flex items-center justify-center py-4">
+          <div className="w-full max-w-[430px]">
             <BaguaCompass
               activeTrigram={selected}
               onSelectTrigram={(name) => setSelected(name)}
             />
           </div>
-        </PaperTilt>
+        </div>
 
-        {/* 下方快速选择条 */}
-        <div className="mt-5 flex w-full max-w-[460px] items-center justify-between border-2 border-bagua-text bg-bagua-surface p-1 shadow-sm">
-          {ORDERED_TRIGRAMS.map((t) => {
-            const isActive = selected === t
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setSelected(t)}
-                className={`flex flex-1 flex-col items-center py-1.5 transition ${
-                  isActive
-                    ? 'bg-bagua-primary text-bagua-surface font-semibold shadow-xs'
-                    : 'text-bagua-text hover:bg-bagua-wash'
-                }`}
-                title={`${t}卦 (${TRIGRAM_SYMBOLS[t]})`}
-              >
-                <span className="font-display text-sm leading-none">{TRIGRAM_SYMBOLS[t]}</span>
-                <span className="mt-0.5 font-display text-[11px]">{t}</span>
-              </button>
-            )
-          })}
+        {/* 底部快速选择条 */}
+        <div className="border-t border-bagua-fiber pt-4">
+          <div className="flex items-center justify-between border-2 border-bagua-text bg-bagua-surface p-1 shadow-2xs">
+            {ORDERED_TRIGRAMS.map((t) => {
+              const isActive = selected === t
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setSelected(t)}
+                  className={`flex flex-1 flex-col items-center py-1.5 transition ${
+                    isActive
+                      ? 'bg-bagua-primary text-bagua-surface font-semibold shadow-xs'
+                      : 'text-bagua-text hover:bg-bagua-wash'
+                  }`}
+                  title={`${t}卦 (${TRIGRAM_SYMBOLS[t]})`}
+                >
+                  <span className="font-display text-sm leading-none">{TRIGRAM_SYMBOLS[t]}</span>
+                  <span className="mt-0.5 font-display text-[11px]">{t}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
       {/* 右侧：经典古籍立轴样式的解读卡 */}
-      <div className="paper-panel relative border-4 border-bagua-text bg-bagua-surface p-6 md:p-8 shadow-soft">
-        {/* 顶部档案元数据 */}
-        <div className="flex items-center justify-between border-b border-bagua-fiber pb-3">
-          <span className="font-display text-xs tracking-[0.24em] text-bagua-primary">
-            {detail.order}
-          </span>
-          <span className="border border-bagua-fiber bg-bagua-canvas px-2 py-0.5 font-mono text-[11px] text-bagua-muted">
-            先天方位 · {detail.direction}
-          </span>
-        </div>
+      <div className="paper-panel relative flex flex-col justify-between border-4 border-bagua-text bg-bagua-surface p-5 md:p-6 shadow-soft">
+        <div>
+          {/* 顶部档案元数据 */}
+          <div className="flex items-center justify-between border-b border-bagua-fiber pb-3">
+            <span className="font-display text-xs tracking-[0.24em] text-bagua-primary">
+              {detail.order}
+            </span>
+            <span className="border border-bagua-fiber bg-bagua-canvas px-2 py-0.5 font-mono text-[11px] text-bagua-muted">
+              先天方位 · {detail.direction}
+            </span>
+          </div>
 
         {/* 卦象标题与大符号 */}
         <div className="mt-5 flex items-center justify-between gap-4">
@@ -281,6 +294,8 @@ export function BaguaInteractiveExplorer() {
               {line}
             </span>
           ))}
+        </div>
+
         </div>
 
         {/* 底部行动入口 */}

@@ -1,4 +1,5 @@
 import type { RefObject } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { ArrowRight, X } from '@/components/icons'
@@ -6,6 +7,7 @@ import { ArrowRight, X } from '@/components/icons'
 interface MethodShortcut {
   readonly href: string
   readonly Icon: React.ComponentType<{ className?: string }>
+  readonly image?: string
   readonly title: string
   readonly desc: string
   readonly recommended: boolean
@@ -47,7 +49,19 @@ export function MethodInspector({ index, method, closeButtonRef, dialogRef, onCl
           <X className="h-4 w-4" />
         </button>
         <div className="ritual-dialog__header">
-          <span className="ritual-dialog__seal"><Icon className="h-8 w-8" /></span>
+          <span className={`ritual-dialog__seal ${method.href === '/divine' ? 'relic-frame-round p-0' : 'relic-frame-square p-2'} h-18 w-18 md:h-20 md:w-20 flex-shrink-0 shadow-xs`}>
+            {method.image ? (
+              <Image
+                src={method.image}
+                alt=""
+                width={128}
+                height={128}
+                className="antique-blend h-full w-full object-contain"
+              />
+            ) : (
+              <Icon className="h-8 w-8" />
+            )}
+          </span>
           <div>
             <p className="section-kicker">仪式索引 / 0{index + 1}</p>
             <h2 id="ritual-dialog-title" className="mt-2 font-display text-2xl tracking-[0.16em] text-bagua-text">{method.title}</h2>

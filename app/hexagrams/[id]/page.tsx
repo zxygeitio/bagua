@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -6,6 +7,14 @@ import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { getGuaById } from '@/lib/iching'
 import type { Gua } from '@/lib/iching'
+
+const WUXING_IMAGE: Record<string, string> = {
+  金: '/icons/wuxing-metal.webp',
+  木: '/icons/wuxing-wood.webp',
+  水: '/icons/wuxing-water.webp',
+  火: '/icons/wuxing-fire.webp',
+  土: '/icons/wuxing-earth.webp',
+}
 
 interface PageProps {
   params: { id: string }
@@ -46,14 +55,29 @@ export default function HexagramDetailPage({ params }: PageProps) {
   const bianFirstId = gua.guaBian[0]
   const bian = bianFirstId !== undefined ? getGuaById(bianFirstId) : null
 
+  const wuxingImg = WUXING_IMAGE[gua.wuxing]
+
   return (
     <SiteShell eyebrow={`GUA ${gua.id.toString().padStart(2, '0')} / 64`}>
       <article className="mx-auto max-w-5xl px-4 py-8 md:px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="enter-up">
-            <p className="font-display text-[11px] tracking-[0.28em] text-bagua-muted">
-              {gua.shangGua}上 · {gua.xiaGua}下 · 五行{gua.wuxing}
-            </p>
+            <div className="flex items-center gap-2.5">
+              <span className="font-display text-[11px] tracking-[0.28em] text-bagua-muted">
+                {gua.shangGua}上 · {gua.xiaGua}下 · 五行{gua.wuxing}
+              </span>
+              {wuxingImg ? (
+                <div className="relative h-7 w-7 flex-shrink-0 overflow-hidden rounded-full border-2 border-bagua-text/70 bg-bagua-canvas p-0.5 shadow-2xs">
+                  <Image
+                    src={wuxingImg}
+                    alt={`五行 · ${gua.wuxing}`}
+                    width={56}
+                    height={56}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ) : null}
+            </div>
             <h1 className="mt-3 font-display text-4xl tracking-[0.12em] md:text-6xl">{gua.name}</h1>
             <p className="mt-2 font-body text-sm tracking-[0.18em] text-bagua-muted">{gua.pronunciation}</p>
           </div>
@@ -133,7 +157,7 @@ export default function HexagramDetailPage({ params }: PageProps) {
 interface RelationMiniProps {
   label: string
   sub: string
-  gua: Pick<Gua, 'id' | 'name'> | null | undefined
+  gua: Pick<Gua, 'id' | 'name' | 'wuxing'> | null | undefined
   disabled?: boolean
 }
 
@@ -146,11 +170,30 @@ function RelationMini({ label, sub, gua, disabled }: RelationMiniProps) {
       </div>
     )
   }
+  const wuxingImg = WUXING_IMAGE[gua.wuxing]
   return (
-    <Link href={`/hexagrams/${gua.id}`} className="btn-press block border-4 border-bagua-text bg-bagua-surface p-3 hover:bg-bagua-wash">
-      <div className="font-display text-[10px] tracking-widest text-bagua-primary">{label}</div>
-      <div className="mt-1 font-display text-sm tracking-widest">{gua.name}</div>
-      <div className="mt-1 font-body text-xs text-bagua-muted">#{gua.id} · {sub}</div>
+    <Link
+      href={`/hexagrams/${gua.id}`}
+      className="btn-press flex items-center justify-between border-4 border-bagua-text bg-bagua-surface p-3 hover:bg-bagua-wash"
+    >
+      <div>
+        <div className="font-display text-[10px] tracking-widest text-bagua-primary">{label}</div>
+        <div className="mt-1 font-display text-sm tracking-widest">{gua.name}</div>
+        <div className="mt-1 font-body text-xs text-bagua-muted">
+          #{gua.id} · {sub}
+        </div>
+      </div>
+      {wuxingImg ? (
+        <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border border-bagua-text/60 bg-bagua-canvas p-0.5 shadow-2xs">
+          <Image
+            src={wuxingImg}
+            alt={gua.wuxing}
+            width={64}
+            height={64}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      ) : null}
     </Link>
   )
 }

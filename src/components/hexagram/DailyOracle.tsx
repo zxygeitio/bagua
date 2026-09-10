@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -82,30 +83,47 @@ export function DailyOracle() {
           </div>
         </div>
 
-        {/* 右侧：操作区 */}
-        <div className="flex flex-shrink-0 items-center gap-3">
-          {existing ? (
+        {/* 右侧：操作区与天时感应朱印 */}
+        <div className="flex flex-shrink-0 items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2.5 border-r border-bagua-fiber/70 pr-4">
+            <div className="relative h-11 w-11 flex-shrink-0 opacity-85 transition hover:opacity-100 hover:scale-105">
+              <Image
+                src="/icons/oracle-seal.webp"
+                alt="天时感应朱印"
+                width={88}
+                height={88}
+                className="antique-blend h-full w-full object-contain"
+              />
+            </div>
+            <div className="text-left">
+              <p className="font-display text-[10px] tracking-wider text-bagua-primary">天时印可</p>
+              <p className="font-mono text-[9px] text-bagua-muted">子时更替 · 每日一卦</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {existing ? (
+              <Link
+                href={`/result?id=${existing.id}`}
+                className="btn-secondary px-5 py-2.5 text-xs font-medium"
+              >
+                查看今日记录
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={openToday}
+                className="btn-primary glow-pulse px-6 py-2.5 text-xs font-medium"
+              >
+                开启今日
+              </button>
+            )}
             <Link
-              href={`/result?id=${existing.id}`}
-              className="btn-secondary px-5 py-2.5 text-xs font-medium"
+              href={`/hexagrams/${gua.id}`}
+              className="btn-secondary px-4 py-2.5 text-xs font-medium"
             >
-              查看今日记录
+              全文
             </Link>
-          ) : (
-            <button
-              type="button"
-              onClick={openToday}
-              className="btn-primary glow-pulse px-6 py-2.5 text-xs font-medium"
-            >
-              开启今日
-            </button>
-          )}
-          <Link
-            href={`/hexagrams/${gua.id}`}
-            className="btn-secondary px-4 py-2.5 text-xs font-medium"
-          >
-            全文
-          </Link>
+          </div>
         </div>
       </div>
     </div>

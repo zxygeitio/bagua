@@ -21,24 +21,18 @@ const POSITIONS: Array<{
   guaId: number
   direction: string
   element: string
+  x: number
+  y: number
 }> = [
-  { angle: 0, trigram: '乾', guaId: 1, direction: '南', element: '天 · 金' },
-  { angle: 45, trigram: '兑', guaId: 58, direction: '东南', element: '泽 · 金' },
-  { angle: 90, trigram: '离', guaId: 30, direction: '东', element: '火 · 火' },
-  { angle: 135, trigram: '震', guaId: 51, direction: '东北', element: '雷 · 木' },
-  { angle: 180, trigram: '坤', guaId: 2, direction: '北', element: '地 · 土' },
-  { angle: 225, trigram: '巽', guaId: 57, direction: '西南', element: '风 · 木' },
-  { angle: 270, trigram: '坎', guaId: 29, direction: '西', element: '水 · 水' },
-  { angle: 315, trigram: '艮', guaId: 52, direction: '西北', element: '山 · 土' },
+  { angle: 0, trigram: '乾', guaId: 1, direction: '南', element: '天 · 金', x: 49.94, y: 15.14 },
+  { angle: 45, trigram: '兑', guaId: 58, direction: '东南', element: '泽 · 金', x: 74.14, y: 25.30 },
+  { angle: 90, trigram: '离', guaId: 30, direction: '东', element: '火 · 火', x: 83.69, y: 49.32 },
+  { angle: 135, trigram: '震', guaId: 51, direction: '东北', element: '雷 · 木', x: 74.08, y: 73.26 },
+  { angle: 180, trigram: '坤', guaId: 2, direction: '北', element: '地 · 土', x: 49.92, y: 83.19 },
+  { angle: 225, trigram: '巽', guaId: 57, direction: '西南', element: '风 · 木', x: 25.76, y: 73.24 },
+  { angle: 270, trigram: '坎', guaId: 29, direction: '西', element: '水 · 水', x: 16.02, y: 49.31 },
+  { angle: 315, trigram: '艮', guaId: 52, direction: '西北', element: '山 · 土', x: 25.71, y: 25.38 },
 ]
-
-const polarPercent = (radius: number, angle: number) => {
-  const rad = ((angle - 90) * Math.PI) / 180
-  return {
-    x: 50 + radius * Math.cos(rad),
-    y: 50 + radius * Math.sin(rad),
-  }
-}
 
 export function BaguaCompass({
   priority = false,
@@ -80,12 +74,35 @@ export function BaguaCompass({
       </div>
 
       {POSITIONS.map((position) => {
-        const point = polarPercent(35.5, position.angle)
         const style = {
-          '--compass-x': `${point.x}%`,
-          '--compass-y': `${point.y}%`,
+          '--compass-x': `${position.x}%`,
+          '--compass-y': `${position.y}%`,
         } as CSSProperties
         const isActive = activeTrigram === position.trigram
+
+        const nodeContent = (
+          <span className="compass-node__symbol" aria-hidden="true">{TRIGRAM_SYMBOLS[position.trigram]}</span>
+        )
+
+        const label = `${position.trigram}卦 · 方位${position.direction} · ${position.element}`
+
+        if (onSelectTrigram) {
+          return (
+            <button
+              key={position.trigram}
+              type="button"
+              style={style}
+              data-active={isActive ? 'true' : undefined}
+              onClick={() => onSelectTrigram(position.trigram)}
+              onMouseEnter={() => onSelectTrigram(position.trigram)}
+              className="compass-node"
+              title={label}
+              aria-label={label}
+            >
+              {nodeContent}
+            </button>
+          )
+        }
 
         return (
           <Link
@@ -93,25 +110,11 @@ export function BaguaCompass({
             href={`/hexagrams/${position.guaId}`}
             style={style}
             data-active={isActive ? 'true' : undefined}
-            onClick={(e) => {
-              if (onSelectTrigram) {
-                e.preventDefault()
-                onSelectTrigram(position.trigram)
-              }
-            }}
-            onMouseEnter={() => {
-              if (onSelectTrigram) {
-                onSelectTrigram(position.trigram)
-              }
-            }}
             className="compass-node"
-            title={`${position.trigram} · ${position.direction} · ${position.element}`}
+            title={label}
+            aria-label={label}
           >
-            <span className="compass-node__symbol" aria-hidden="true">{TRIGRAM_SYMBOLS[position.trigram]}</span>
-            <span className="compass-node__meta">
-              <b>{position.trigram}</b>
-              <i>{position.direction}</i>
-            </span>
+            {nodeContent}
           </Link>
         )
       })}

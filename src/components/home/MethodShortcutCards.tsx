@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type RefObject } from 'react'
+import Image from 'next/image'
 
 import { MethodInspector } from '@/components/home/MethodInspector'
 import { Reveal } from '@/components/Reveal'
@@ -9,15 +10,17 @@ import { Coins, Hand, Leaf } from '@/components/icons'
 interface ShortcutItem {
   readonly href: string
   readonly Icon: React.ComponentType<{ className?: string }>
+  readonly image: string
   readonly title: string
   readonly desc: string
   readonly recommended: boolean
+  readonly shape: 'round' | 'square'
 }
 
 const SHORTCUTS: ReadonlyArray<ShortcutItem> = [
-  { href: '/divine', Icon: Coins, title: '快速起卦', desc: '三钱六掷 · 10 秒', recommended: true },
-  { href: '/learn', Icon: Leaf, title: '易学入门', desc: '八卦 · 卦辞 · 读法', recommended: false },
-  { href: '/hexagrams', Icon: Hand, title: '六十四卦', desc: '逐卦细读', recommended: false },
+  { href: '/divine', Icon: Coins, image: '/icons/shortcut-coins.webp', title: '快速起卦', desc: '三钱六掷 · 10 秒', recommended: true, shape: 'round' },
+  { href: '/learn', Icon: Leaf, image: '/icons/shortcut-learn.webp', title: '易学入门', desc: '八卦 · 卦辞 · 读法', recommended: false, shape: 'square' },
+  { href: '/hexagrams', Icon: Hand, image: '/icons/shortcut-hexagrams.webp', title: '六十四卦', desc: '逐卦细读', recommended: false, shape: 'square' },
 ] as const
 
 /**
@@ -98,8 +101,14 @@ export function MethodShortcutCards() {
                   aria-haspopup="dialog"
                   aria-label={`查看${m.title}详情`}
                 >
-                  <span className="ritual-card__seal flex h-12 w-12 flex-shrink-0 items-center justify-center text-bagua-primary">
-                    <Icon className="h-6 w-6" />
+                  <span className={`ritual-card__seal ${m.shape === 'round' ? 'relic-frame-round p-0' : 'relic-frame-square p-1.5'} h-16 w-16 md:h-18 md:w-18 flex-shrink-0 shadow-2xs transition duration-300 group-hover:scale-105`}>
+                    <Image
+                      src={m.image}
+                      alt=""
+                      width={112}
+                      height={112}
+                      className="antique-blend h-full w-full object-contain pointer-events-none"
+                    />
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">

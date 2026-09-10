@@ -26,13 +26,13 @@ export default function LearnPage() {
           <TrigramOverview />
         </Section>
 
-        <Section index="01.5" title="六十四卦曼陀罗" intro="按上卦分八区，每区八卦。悬停查看卦名，点击进入全文。">
+        <Section index="01.5" title="璇玑六十四卦圆图" intro="邵雍《皇极经世》周天六十四卦圆图。按上卦分八区，统摄周天象数。悬停星位感应卦象，亦可切换八宫体悟万物生克。">
           <div className="flex justify-center">
             <HexagramMandala />
           </div>
         </Section>
 
-        <Section index="02" title="硬币起卦法" intro="三枚铜钱六掷，六爻自下而上记录；6 与 9 为动爻。">
+        <Section index="02" title="起卦三种法门" intro="周易起卦，法由心生。既有最便行之三钱法，亦有古雅之揲蓍法，更有应物观象之梅花易数。">
           <MethodCards />
         </Section>
 

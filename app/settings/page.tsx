@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { SiteShell } from '@/components/shared/SiteShell'
@@ -94,8 +95,8 @@ export default function SettingsPage() {
         {/* 起卦方式 */}
         <Section index="01" Icon={Coins} title="起卦方式" desc="当前仅保留经过校验的硬币法。">
           <div className="flex items-center gap-4 border-4 border-bagua-text bg-bagua-wash p-4 shadow-soft">
-            <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary text-bagua-surface">
-              <Coins className="h-5 w-5" />
+            <span className="relic-frame-round h-16 w-16 md:h-18 md:w-18 flex-shrink-0 p-0 shadow-2xs">
+              <Image src="/icons/shortcut-coins.webp" alt="铜钱法" width={112} height={112} className="antique-blend h-full w-full object-contain" />
             </span>
             <div>
               <p className="font-display text-base tracking-wider">铜钱 · 三钱六掷</p>
@@ -118,35 +119,57 @@ export default function SettingsPage() {
                 }`}
               />
             </span>
+            <div>
+              <p className="font-display text-base tracking-wider">
+                {showAnimation ? '已开启' : '已关闭'}
+              </p>
+              <p className="mt-0.5 font-body text-xs text-bagua-muted">
+                {showAnimation ? '起卦时六爻逐层显现，有 500ms 仪式延时' : '立即得出全部六爻'}
+              </p>
+            </div>
             <input
               type="checkbox"
               checked={showAnimation}
               onChange={(e) => setShowAnimation(e.target.checked)}
               className="sr-only"
             />
-            <div className="flex-1">
-              <p className="font-display text-sm tracking-wider">启用起卦仪式动画</p>
-              <p className="font-body text-xs text-bagua-muted">
-                六爻逐爻显现，跟随动爻节奏。系统「减少动态效果」也会自动关闭。
-              </p>
-            </div>
           </label>
         </Section>
 
-        {/* 云同步 */}
+        {/* 切面 */}
+        <Section index="03" Icon={Heart} title="关注问题切面" desc="快速填充起卦主题，便于在卦辞中找到对应的切面。">
+          <div className="grid gap-2 sm:grid-cols-2">
+            {SCENARIOS.map((s) => (
+              <div key={s.tag} className="border-4 border-bagua-fiber bg-bagua-surface p-3">
+                <span className={`font-display text-sm tracking-widest ${s.color}`}>{s.tag}</span>
+                <p className="mt-1 font-body text-xs text-bagua-muted">{s.hint}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 数据与同步 */}
         <Section
-          index="03"
+          index="04"
           Icon={isSupabaseConfigured ? Cloud : CloudOff}
           title="云同步"
           desc={isSupabaseConfigured ? '已连接 Supabase' : '未配置云端，本地保存'}
           iconClassName={isSupabaseConfigured ? 'text-bagua-primary' : 'text-bagua-muted'}
         >
           <div className="space-y-3">
-            <div className="flex items-center gap-3 border-4 border-bagua-fiber bg-bagua-canvas/60 p-3">
-              <SyncIndicator />
-              <span className="font-body text-sm text-bagua-muted">
-                本机 {records.length} 条 · {isSupabaseConfigured ? '可同步' : '仅本地'}
-              </span>
+            <div className="flex items-center gap-3.5 border-4 border-bagua-fiber bg-bagua-canvas/60 p-3">
+              <div className="relic-frame-square h-12 w-12 md:h-14 md:w-14 flex-shrink-0 p-1.5 shadow-2xs">
+                <Image src="/icons/settings-sync-3d.webp" alt="祥云同步" width={80} height={80} className="antique-blend h-full w-full object-contain" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <SyncIndicator />
+                  <span className="font-display text-xs tracking-wider text-bagua-text">玉符云轴</span>
+                </div>
+                <p className="mt-0.5 font-body text-xs text-bagua-muted truncate">
+                  本机 {records.length} 条记录 · {isSupabaseConfigured ? '云端已就绪' : '仅保存在本地 IndexedDB'}
+                </p>
+              </div>
             </div>
             {isSupabaseConfigured && (
               <div className="grid grid-cols-2 gap-2">
@@ -190,7 +213,7 @@ export default function SettingsPage() {
         </Section>
 
         {/* 数据管理 */}
-        <Section index="04" Icon={Trash2} title="数据管理" desc="清空本机设置或导出记录。">
+        <Section index="05" Icon={Trash2} title="数据管理" desc="清空本机设置或导出记录。">
           <div className="space-y-2">
             <button
               onClick={() => {
@@ -218,7 +241,7 @@ export default function SettingsPage() {
         </Section>
 
         {/* 关于 */}
-        <Section index="05" Icon={Info} title="关于" desc="版本与数据说明。">
+        <Section index="06" Icon={Info} title="关于" desc="版本与数据说明。">
           <dl className="space-y-3 font-body text-sm">
             <Row label="版本" value="v0.2.0" />
             <Row label="技术栈" value="Next.js 14 · TypeScript · Tailwind" />
@@ -230,7 +253,7 @@ export default function SettingsPage() {
         </Section>
 
         {/* 快速链接 */}
-        <Section index="06" Icon={Anchor} title="相关链接" desc="学习资源与导航。">
+        <Section index="07" Icon={Anchor} title="相关链接" desc="学习资源与导航。">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <Link href="/learn" className="btn-secondary flex items-center gap-2 text-xs">
               <Heart className="h-3.5 w-3.5" />

@@ -40,7 +40,7 @@
     /* Fixed multi-layer backgrounds force a full viewport repaint on scroll. */
     background-attachment: scroll, scroll, scroll, scroll;
     color: var(--paper-ink);
-    font-family: var(--font-body), 'Noto Serif SC', 'Songti SC', serif;
+    font-family: var(--font-song), var(--font-body), 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', 'STSong', serif;
     font-size: var(--type-body-size);
     line-height: var(--type-body-leading);
     letter-spacing: var(--type-body-tracking);
@@ -56,7 +56,7 @@
   .nav-link,
   .btn-primary,
   .btn-secondary {
-    font-family: var(--font-display), ui-monospace, monospace;
+    font-family: var(--font-song), var(--font-display), var(--font-body), 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', 'STSong', serif;
     font-synthesis: none;
   }
 
@@ -969,34 +969,30 @@ html.is-scrolling .ritual-dialog__orbit {
 .instrument-label,.instrument-foot { display:flex; justify-content:space-between; gap:1rem; font-family:var(--font-display),ui-monospace,monospace; font-size:10px; letter-spacing:.16em; color:var(--paper-muted); }
 .instrument-label { margin:0 0 10px; }
 .instrument-foot { margin-top:12px; padding-top:10px; border-top:1px solid var(--paper-fiber); }
-.bagua-compass { position:relative; width:100%; max-width:460px; aspect-ratio:1; margin-inline:auto; isolation:isolate; overflow:hidden; border-radius:50%; filter:drop-shadow(0 16px 18px rgba(44,36,22,.22)) drop-shadow(0 0 16px rgba(183,140,62,.14)); transform:translateZ(0); content-visibility:auto; contain-intrinsic-size:460px 460px; }
-.compass-plate { z-index:0; object-fit:cover; user-select:none; }
+.bagua-compass { position:relative; width:100%; max-width:460px; aspect-ratio:1; margin-inline:auto; isolation:isolate; border-radius:50%; filter:drop-shadow(0 20px 24px rgba(44,36,22,.35)) drop-shadow(0 0 22px rgba(183,140,62,.24)); transform:translateZ(18px); }
+.compass-plate { z-index:0; object-fit:cover; border-radius:50%; user-select:none; }
 .compass-pixel-grain { position:absolute; inset:2.5%; z-index:1; border-radius:50%; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:linear-gradient(rgba(255,244,205,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(35,27,17,.28) 1px,transparent 1px); background-size:3px 3px; mask-image:radial-gradient(circle,transparent 0 24%,#000 45% 78%,transparent 98%); }
 .compass-light-sweep { position:absolute; inset:3.7%; z-index:2; overflow:hidden; border-radius:50%; pointer-events:none; mix-blend-mode:screen; opacity:.7; animation:compass-scan 10s linear infinite; background:conic-gradient(from -20deg,transparent 0 9%,rgba(255,218,136,.24) 13%,rgba(255,236,181,.5) 14%,rgba(183,140,62,.08) 18%,transparent 23% 100%); mask-image:radial-gradient(circle,transparent 0 25%,#000 33% 92%,transparent 98%); }
 .compass-engine-ring { position:absolute; z-index:3; border-radius:50%; pointer-events:none; }
 .compass-engine-ring--outer { inset:7.3%; border:1px dashed rgba(255,218,133,.44); box-shadow:inset 0 0 12px rgba(183,140,62,.18),0 0 8px rgba(183,140,62,.18); animation:spin-slow 72s linear infinite; }
 .compass-engine-ring--inner { inset:29.1%; border:1px solid rgba(58,40,19,.64); box-shadow:0 0 0 3px rgba(211,159,67,.12),inset 0 0 16px rgba(73,47,20,.28); animation:spin-slow-reverse 54s linear infinite; }
-.compass-bearing { position:absolute; z-index:4; display:grid; place-items:center; width:22px; height:22px; color:#edd49c; background:rgba(40,28,18,.82); border:1px solid rgba(221,172,82,.8); box-shadow:2px 2px 0 rgba(34,24,15,.38); font-family:var(--font-display),ui-monospace,monospace; font-size:10px; line-height:1; }
-.compass-bearing--south { top:4.2%; left:50%; transform:translateX(-50%); }
-.compass-bearing--east { top:50%; right:4.2%; transform:translateY(-50%); }
-.compass-bearing--north { bottom:4.2%; left:50%; transform:translateX(-50%); }
-.compass-bearing--west { top:50%; left:4.2%; transform:translateY(-50%); }
-.compass-core-wrap { position:absolute; left:50%; top:50%; z-index:6; display:flex; flex-direction:column; align-items:center; justify-content:center; width:31%; aspect-ratio:1; transform:translate(-50%,-50%); pointer-events:none; animation:core-float 6s ease-in-out infinite; }
-.compass-core-halo { position:absolute; inset:-16%; border-radius:50%; border:1px dashed rgba(198,146,53,.5); background:radial-gradient(circle,rgba(255,225,151,.28),transparent 66%); box-shadow:0 0 24px rgba(183,140,62,.3),inset 0 0 18px rgba(183,140,62,.18); animation:core-pulse 4.8s ease-in-out infinite; }
-.compass-taiji-css { position:relative; width:74%; aspect-ratio:1; overflow:hidden; border-radius:50%; border:2px solid rgba(38,27,18,.92); background:linear-gradient(90deg,#34261b 0 50%,#d7b56f 50%); box-shadow:0 8px 0 rgba(38,27,18,.22),inset 0 0 0 2px rgba(245,219,158,.22); transform:rotate(-12deg); }
+.compass-bearing { position:absolute; z-index:4; display:grid; place-items:center; width:22px; height:22px; color:#edd49c; background:rgba(40,28,18,.88); border:1px solid rgba(221,172,82,.8); box-shadow:2px 2px 0 rgba(34,24,15,.38); font-family:var(--font-song),serif; font-size:11px; line-height:1; }
+.compass-bearing--south { top:5.5%; left:50%; transform:translateX(-50%); }
+.compass-bearing--east { top:50%; right:5.5%; transform:translateY(-50%); }
+.compass-bearing--north { bottom:5.5%; left:50%; transform:translateX(-50%); }
+.compass-bearing--west { top:50%; left:5.5%; transform:translateY(-50%); }
+.compass-core-wrap { position:absolute; left:50%; top:50%; z-index:15; display:flex; flex-direction:column; align-items:center; justify-content:center; width:33.4%; aspect-ratio:1; transform:translate(-50%,-50%); pointer-events:none; }
+.compass-core-halo { position:absolute; inset:-12%; border-radius:50%; border:1px dashed rgba(198,146,53,.5); background:radial-gradient(circle,rgba(255,225,151,.28),transparent 66%); box-shadow:0 0 24px rgba(183,140,62,.3),inset 0 0 18px rgba(183,140,62,.18); animation:core-pulse 4.8s ease-in-out infinite; }
+.compass-taiji-css { position:relative; width:100%; height:100%; aspect-ratio:1; overflow:hidden; border-radius:50%; border:2.5px solid rgba(38,27,18,.95); background:linear-gradient(90deg,#34261b 0 50%,#d7b56f 50%); box-shadow:0 6px 14px rgba(38,27,18,.35),inset 0 0 0 2px rgba(245,219,158,.35); transform:rotate(-12deg); }
 .compass-taiji-css::before,.compass-taiji-css::after { content:''; position:absolute; left:25%; width:50%; aspect-ratio:1; border-radius:50%; }
 .compass-taiji-css::before { top:0; background:#34261b; box-shadow:inset 0 0 0 8px #d7b56f; }
 .compass-taiji-css::after { bottom:0; background:#d7b56f; box-shadow:inset 0 0 0 8px #34261b; }
 .compass-core-caption { position:absolute; top:87%; padding:2px 5px; color:#3d2a19; background:rgba(222,192,132,.9); border:1px solid rgba(62,43,25,.62); font-family:var(--font-display),ui-monospace,monospace; font-size:7px; letter-spacing:.18em; white-space:nowrap; }
-.compass-node { --node-size:clamp(30px,9.2%,42px); position:absolute; left:var(--compass-x); top:var(--compass-y); z-index:7; display:flex; flex-direction:column; align-items:center; width:var(--node-size); color:#2f2117; transform:translate(-50%,-50%) translateZ(18px); transform-style:preserve-3d; filter:drop-shadow(0 4px 6px rgba(31,22,14,.55)) drop-shadow(1px 2px 0 rgba(31,22,14,.4)); transition:transform 260ms cubic-bezier(.2,.8,.2,1),filter 260ms ease; }
-.compass-node__symbol { display:grid; place-items:center; width:100%; aspect-ratio:1; border-radius:50%; border:2px solid rgba(65,43,23,.88); color:#2d2119; background:radial-gradient(circle at 38% 28%,rgba(255,241,199,.96),rgba(208,167,95,.9) 68%,rgba(113,73,34,.94)); box-shadow:inset 0 0 0 2px rgba(247,217,151,.58),inset 0 -5px 8px rgba(58,37,19,.22),0 0 9px rgba(224,173,70,.22); font-family:'Noto Serif Symbols','Segoe UI Symbol',serif; font-size:clamp(20px,5.2vw,28px); line-height:1; text-shadow:0 1px rgba(255,235,185,.35); }
-.compass-node__meta { position:absolute; top:calc(100% - 1px); display:flex; align-items:center; gap:3px; padding:2px 4px; color:#f4deb0; background:rgba(45,31,19,.88); border:1px solid rgba(203,153,67,.62); white-space:nowrap; box-shadow:1px 2px 0 rgba(27,18,12,.28); }
-.compass-node__meta b { font-family:var(--font-display),ui-monospace,monospace; font-size:8px; font-weight:500; letter-spacing:.08em; }
-.compass-node__meta i { color:#d8bb82; font-family:var(--font-body),serif; font-size:7px; font-style:normal; }
-@media (hover:hover) and (pointer:fine) { .compass-node:hover { z-index:10; transform:translate(-50%,-55%) translateZ(30px) scale(1.13); filter:drop-shadow(3px 7px 2px rgba(31,22,14,.32)) drop-shadow(0 0 8px rgba(229,177,75,.28)); } .compass-node:hover .compass-node__symbol { color:#6f251c; border-color:#8e3227; } }
-.compass-node[data-active='true'] { z-index:12; transform:translate(-50%,-55%) translateZ(32px) scale(1.18); filter:drop-shadow(0 0 16px rgba(183,140,62,.6)) drop-shadow(0 0 8px rgba(178,58,42,.5)); }
-.compass-node[data-active='true'] .compass-node__symbol { color:#6f251c; border-color:#8e3227; box-shadow:inset 0 0 0 2px rgba(255,235,185,.9), 0 0 14px rgba(178,58,42,.6); }
-.compass-node[data-active='true'] .compass-node__meta { background:rgba(142,50,39,.95); border-color:rgba(255,218,136,.85); color:#fff; }
+.compass-node { --node-size:clamp(40px,12.5%,54px); position:absolute; left:var(--compass-x); top:var(--compass-y); z-index:25; display:flex; align-items:center; justify-content:center; width:var(--node-size); height:var(--node-size); border-radius:50%; color:#2f2117; transform:translate(-50%,-50%) translateZ(28px); transform-style:preserve-3d; filter:drop-shadow(0 6px 10px rgba(31,22,14,.6)) drop-shadow(1px 3px 0 rgba(31,22,14,.45)); transition:transform 260ms cubic-bezier(.2,.8,.2,1),filter 260ms ease; }
+.compass-node__symbol { display:grid; place-items:center; width:100%; height:100%; aspect-ratio:1; border-radius:50%; border:2px solid rgba(44,36,22,.95); color:#1e160d; background:radial-gradient(circle at 35% 25%,#fffdf7 0%,#f5e8c8 42%,#d4a853 85%,#8c5b23 100%); box-shadow:inset 0 0 0 2px rgba(221,172,82,.95),inset 0 -4px 6px rgba(58,37,19,.28),0 6px 14px rgba(44,36,22,.45); font-family:var(--font-song),'Noto Serif Symbols',serif; font-size:clamp(22px,5.6vw,30px); font-weight:bold; line-height:1; text-shadow:0 1px rgba(255,235,185,.45); user-select:none; }
+@media (hover:hover) and (pointer:fine) { .compass-node:hover { z-index:30; transform:translate(-50%,-50%) translateZ(36px) scale(1.15); filter:drop-shadow(0 10px 18px rgba(31,22,14,.45)) drop-shadow(0 0 12px rgba(229,177,75,.45)); } .compass-node:hover .compass-node__symbol { color:#b23a2a; border-color:#b23a2a; } }
+.compass-node[data-active='true'] { z-index:32; transform:translate(-50%,-50%) translateZ(38px) scale(1.18); filter:drop-shadow(0 0 18px rgba(183,140,62,.7)) drop-shadow(0 0 10px rgba(178,58,42,.6)); }
+.compass-node[data-active='true'] .compass-node__symbol { color:#b23a2a; border-color:#b23a2a; box-shadow:inset 0 0 0 2px rgba(255,235,185,.95), 0 0 16px rgba(178,58,42,.65); }
 .ritual-step { position:relative; }
 .ritual-step::after { content:''; position:absolute; right:-1px; top:50%; width:5px; height:5px; border-radius:50%; background:var(--paper-gold); opacity:.6; }
 .ritual-step:last-child::after { display:none; }
@@ -1239,3 +1235,57 @@ html.is-scrolling .ritual-dialog__orbit {
   .ritual-dialog::after,
   .ritual-dialog__orbit { animation: none !important; transition: none !important; }
 }
+
+/* 宣纸古文物装裱系统：去除虚线，圆璧金石环与方册页斗方区分，与 3D 资产天然契合 */
+.relic-frame-round {
+  border-radius: 9999px;
+  border: 2px solid rgba(44, 36, 22, 0.85);
+  box-shadow: inset 0 0 0 2px rgba(221, 172, 82, 0.45), 0 4px 12px rgba(44, 36, 22, 0.14);
+  background: #ede3cf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  padding: 0 !important;
+}
+
+/* 圆形边框内的图片：全幅撑满并固定微放 118%，彻底隐藏原图外方角，与外圆完美对应贴合，无跳变或漏边 */
+.relic-frame-round img,
+.relic-frame-round > img,
+.relic-frame-round > div > img,
+.relic-frame-round span > img {
+  border-radius: 9999px !important;
+  object-fit: cover !important;
+  transform: scale(1.18) !important;
+  width: 100% !important;
+  height: 100% !important;
+  clip-path: circle(49% at 50% 50%);
+  pointer-events: none;
+}
+
+.relic-frame-square {
+  border-radius: 4px;
+  border: 2px solid rgba(44, 36, 22, 0.75);
+  box-shadow: inset 0 0 0 2px rgba(178, 58, 42, 0.25), 0 4px 12px rgba(44, 36, 22, 0.1);
+  background: linear-gradient(135deg, var(--paper-surface) 0%, var(--paper-canvas) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.relic-frame-square::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(44, 36, 22, 0.18);
+  pointer-events: none;
+}
+
+.antique-blend {
+  mix-blend-mode: multiply;
+}
+
+

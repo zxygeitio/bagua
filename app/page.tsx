@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { BaguaCompass } from '@/components/home/BaguaCompass'
@@ -7,16 +8,7 @@ import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { MethodShortcutCards } from '@/components/home/MethodShortcutCards'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeader } from '@/components/home/SectionHeader'
-import {
-  Earth,
-  Fire,
-  Hand,
-  Metal,
-  Star,
-  Water,
-  Wood,
-  Wand,
-} from '@/components/icons'
+import { Wand } from '@/components/icons'
 import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
 import { PaperParticles } from '@/components/shared/PaperParticles'
@@ -30,22 +22,19 @@ const FEATURED = [
   { id: 64, phase: '未穷', seal: '转', note: '生生不息' },
 ] as const
 
-const WUXING = [
-  { tag: '木', gua: 3, color: 'wood', label: '木属', desc: '生发向上', border: 'border-emerald-800/40 hover:border-emerald-700', bg: 'hover:bg-emerald-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,110,60,0.15)]' },
-  { tag: '火', gua: 30, color: 'fire', label: '火属', desc: '炎上光明', border: 'border-rose-800/40 hover:border-rose-700', bg: 'hover:bg-rose-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(178,58,42,0.18)]' },
-  { tag: '土', gua: 2, color: 'earth', label: '土属', desc: '厚德载物', border: 'border-amber-800/40 hover:border-amber-700', bg: 'hover:bg-amber-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(180,120,40,0.16)]' },
-  { tag: '金', gua: 1, color: 'metal', label: '金属', desc: '刚毅决断', border: 'border-yellow-700/50 hover:border-yellow-600', bg: 'hover:bg-yellow-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(200,160,50,0.18)]' },
-  { tag: '水', gua: 5, color: 'water', label: '水属', desc: '润下流通', border: 'border-sky-800/40 hover:border-sky-700', bg: 'hover:bg-sky-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,90,140,0.16)]' },
+const RITUAL_STEPS = [
+  { step: '01', title: '问事', desc: '把问题说清', icon: '/icons/ritual-ask.webp', shape: 'square' },
+  { step: '02', title: '投爻', desc: '记录当下', icon: '/icons/ritual-cast-new.webp', shape: 'round' },
+  { step: '03', title: '读象', desc: '看见变化', icon: '/icons/ritual-read-new.webp', shape: 'square' },
 ] as const
 
-const WUXING_ICON = { wood: Wood, fire: Fire, earth: Earth, metal: Metal, water: Water } as const
-const WUXING_TEXT = {
-  wood: 'text-bagua-wood',
-  fire: 'text-bagua-fire',
-  earth: 'text-bagua-earth',
-  metal: 'text-bagua-metal',
-  water: 'text-bagua-water',
-} as const
+const WUXING = [
+  { tag: '木', gua: 3, color: 'wood', image: '/icons/wuxing-wood.webp', badge: '/icons/wuxing-badge-wood.webp', label: '木属', desc: '生发向上', border: 'border-emerald-800/40 hover:border-emerald-700', bg: 'hover:bg-emerald-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,110,60,0.15)]' },
+  { tag: '火', gua: 30, color: 'fire', image: '/icons/wuxing-fire.webp', badge: '/icons/wuxing-badge-fire.webp', label: '火属', desc: '炎上光明', border: 'border-rose-800/40 hover:border-rose-700', bg: 'hover:bg-rose-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(178,58,42,0.18)]' },
+  { tag: '土', gua: 2, color: 'earth', image: '/icons/wuxing-earth.webp', badge: '/icons/wuxing-badge-earth.webp', label: '土属', desc: '厚德载物', border: 'border-amber-800/40 hover:border-amber-700', bg: 'hover:bg-amber-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(180,120,40,0.16)]' },
+  { tag: '金', gua: 1, color: 'metal', image: '/icons/wuxing-metal.webp', badge: '/icons/wuxing-badge-metal.webp', label: '金属', desc: '刚毅决断', border: 'border-yellow-700/50 hover:border-yellow-600', bg: 'hover:bg-yellow-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(200,160,50,0.18)]' },
+  { tag: '水', gua: 5, color: 'water', image: '/icons/wuxing-water.webp', badge: '/icons/wuxing-badge-water.webp', label: '水属', desc: '润下流通', border: 'border-sky-800/40 hover:border-sky-700', bg: 'hover:bg-sky-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,90,140,0.16)]' },
+] as const
 
 export default function HomePage() {
   return (
@@ -90,12 +79,17 @@ export default function HomePage() {
                 </div>
               </Reveal>
               <Reveal delay={360} direction="up">
-                <div className="mt-10 grid max-w-lg grid-cols-3 border-y border-bagua-fiber py-4">
-                  {([['问事','把问题说清'],['投爻','记录当下'],['读象','看见变化']] as const).map(([title, desc], index) => (
-                    <div key={title} className="ritual-step border-r border-bagua-fiber px-3 first:pl-0 last:border-r-0">
-                      <span className="font-display text-[10px] tracking-[0.2em] text-bagua-primary">0{index + 1}</span>
-                      <p className="mt-2 font-display text-sm tracking-wider text-bagua-text">{title}</p>
-                      <p className="mt-1 font-body text-[10px] text-bagua-muted">{desc}</p>
+                <div className="mt-10 grid max-w-lg grid-cols-3 border-y border-bagua-fiber py-3.5">
+                  {RITUAL_STEPS.map(({ step, title, desc, icon, shape }) => (
+                    <div key={title} className="ritual-step flex items-center gap-3 border-r border-bagua-fiber px-3 first:pl-0 last:border-r-0">
+                      <div className={`${shape === 'round' ? 'relic-frame-round p-0' : 'relic-frame-square p-1'} h-12 w-12 md:h-14 md:w-14 flex-shrink-0 shadow-2xs transition group-hover:scale-105`}>
+                        <Image src={icon} alt="" width={80} height={80} className="antique-blend h-full w-full object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="font-display text-[10px] tracking-[0.2em] text-bagua-primary">{step}</span>
+                        <p className="font-display text-sm tracking-wider text-bagua-text">{title}</p>
+                        <p className="font-body text-[10px] text-bagua-muted truncate">{desc}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -106,7 +100,11 @@ export default function HomePage() {
               <div className="instrument-stage">
                 <div className="instrument-label"><span>先天 · 八方位</span><span>仪器读数 / 08</span></div>
                 <PaperTilt className="paper-stage" intensity={4.5}>
-                  <div className="paper-stack paper-depth p-3 md:p-4"><BaguaCompass priority /></div>
+                  <div className="paper-stack paper-depth relative p-3 md:p-4 overflow-visible">
+                    <div className="relative z-10 drop-shadow-md">
+                      <BaguaCompass priority />
+                    </div>
+                  </div>
                 </PaperTilt>
                 <div className="instrument-foot"><span>乾南 / 坤北 / 离东 / 坎西</span><span className="font-display">BAGUA · 08</span></div>
               </div>
@@ -136,27 +134,42 @@ export default function HomePage() {
             />
           </Reveal>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {WUXING.map(({ tag, gua: id, color, label, desc, border, bg, glow }, i) => {
+            {WUXING.map(({ tag, gua: id, image, badge, label, desc, border, bg, glow }, i) => {
               const gua = getGuaById(id)
-              const Icon = WUXING_ICON[color as keyof typeof WUXING_ICON]
-              const txt = WUXING_TEXT[color as keyof typeof WUXING_TEXT]
               if (!gua) return null
               return (
                 <Reveal key={tag} delay={i * 80} direction="up">
                   <Link
                     href={`/hexagrams/${id}`}
-                    className={`paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 p-4 transition-all duration-300 md:p-5 ${border} ${bg} ${glow}`}
+                    className={`paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 p-3.5 transition-all duration-300 md:p-4.5 ${border} ${bg} ${glow}`}
                   >
                     <div className="flex w-full items-center justify-between">
                       <span className="font-display text-[10px] tracking-widest text-bagua-muted">
                         五行 · {tag}
                       </span>
-                      <Icon className={`h-4 w-4 ${txt} transition group-hover:scale-110`} strokeWidth={1.6} />
+                      <div className="relic-frame-round h-6 w-6 sm:h-6.5 sm:w-6.5 flex-shrink-0 p-0 shadow-2xs transition duration-300 group-hover:scale-110">
+                        <Image
+                          src={badge}
+                          alt={`五行${tag}`}
+                          width={48}
+                          height={48}
+                          className="antique-blend h-full w-full object-cover"
+                        />
+                      </div>
                     </div>
-                    <div className="my-1 font-display text-3xl tracking-widest text-bagua-text transition group-hover:scale-105">
-                      {tag}
+
+                    {/* 五行专属高清艺术圆徽 */}
+                    <div className="relic-frame-round my-2 h-18 w-18 sm:h-20 sm:w-20 flex-shrink-0 p-0 shadow-2xs transition duration-300 group-hover:scale-105">
+                      <Image
+                        src={image}
+                        alt={`五行${tag}`}
+                        width={128}
+                        height={128}
+                        className="antique-blend h-full w-full object-cover"
+                      />
                     </div>
-                    <div className="my-1 border border-bagua-fiber/60 bg-bagua-canvas p-1.5 shadow-2xs transition group-hover:border-bagua-text">
+
+                    <div className="my-0.5 border border-bagua-fiber/60 bg-bagua-canvas p-1 shadow-2xs transition group-hover:border-bagua-text">
                       <HexagramSymbol gua={gua} size="sm" />
                     </div>
                     <div className="font-display text-sm tracking-widest text-bagua-text group-hover:text-bagua-primary">
@@ -178,7 +191,7 @@ export default function HomePage() {
             <SectionHeader
               index="02"
               title="先天八卦方位"
-              desc="伏羲所作。乾南坤北、离东坎西，八方位以应天地之理。"
+              desc="伏羲所作：乾南坤北、离东坎西，以八方位应天地之理。"
               link={{ href: '/learn', label: '学习更多' }}
             />
           </Reveal>

@@ -1,5 +1,6 @@
 'use client'
 import { useMemo, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useHistoryStore } from '@/store/history'
 import { CAST_METHOD_LABELS } from '@/types/iching'
@@ -191,13 +192,26 @@ export default function HistoryPage() {
         )}
 
         {filtered.length === 0 ? (
-          <div className="paper-panel enter-up stagger-3 p-12 text-center">
-            <Sparkles className="mx-auto h-12 w-12 text-bagua-muted" />
-            <p className="mt-4 font-body text-bagua-muted">
-              {records.length === 0 ? '暂无起卦记录' : '没有匹配的记录'}
+          <div className="paper-panel enter-up stagger-3 border-4 border-bagua-text bg-bagua-surface p-10 md:p-14 text-center shadow-soft">
+            <div className="relic-frame-square mx-auto h-36 w-36 md:h-44 md:w-44 p-3 shadow-soft">
+              <Image
+                src="/icons/history-empty-3d.webp"
+                alt="档案空函"
+                width={256}
+                height={256}
+                className="antique-blend h-full w-full object-contain"
+              />
+            </div>
+            <h3 className="mt-4 font-display text-lg tracking-wider text-bagua-text">
+              {records.length === 0 ? '匣中虚静 · 暂无卜案' : '卷中无此条目'}
+            </h3>
+            <p className="mt-2 font-body text-xs text-bagua-muted max-w-sm mx-auto leading-relaxed">
+              {records.length === 0
+                ? '每一次起卦与诚心问卜，都将化为一卷竹帛录入此匣，以待岁月印证。'
+                : '未能检索到相符的卦名或问事关键词，请尝试其他字词。'}
             </p>
-            <Link href="/divine" className="btn-primary mt-6">
-              前往起卦 →
+            <Link href="/divine" className="btn-primary mt-6 inline-flex">
+              开启今日起卦 →
             </Link>
           </div>
         ) : view === 'list' ? (
