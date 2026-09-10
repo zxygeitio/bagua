@@ -4,7 +4,6 @@ import { HexagramMandala } from '@/components/learn/HexagramMandala'
 import { MethodCards } from '@/components/learn/MethodCards'
 import { ReadingGuide } from '@/components/learn/ReadingGuide'
 import { TrigramOverview } from '@/components/learn/TrigramCard'
-import { SiteShell } from '@/components/shared/SiteShell'
 
 export const metadata: Metadata = {
   title: '易学入门',
@@ -13,48 +12,46 @@ export const metadata: Metadata = {
 
 export default function LearnPage() {
   return (
-    <SiteShell eyebrow="LEARN / 03">
-      <main className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
-        <header className="enter-up">
-          <h1 className="font-display text-5xl tracking-[0.06em] md:text-6xl">易学入门</h1>
-          <p className="prose-body mt-4 max-w-2xl text-bagua-muted">
-            这里集中了起卦前需要知道的事。先把八卦与硬币起卦规则看一遍，再去起卦，会更顺手。
-          </p>
-        </header>
+    <main className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
+      <header className="enter-up">
+        <h1 className="font-display text-5xl tracking-[0.06em] md:text-6xl">易学入门</h1>
+        <p className="prose-body mt-4 max-w-2xl text-bagua-muted">
+          这里集中了起卦前需要知道的事。先把八卦与硬币起卦规则看一遍，再去起卦，会更顺手。
+        </p>
+      </header>
 
-        <Section index="01" title="八卦总览" intro="卦象的基础是八卦。下表为每一卦的取象与卦德，点击可展开详细。">
-          <TrigramOverview />
-        </Section>
+      <Section index="01" title="八卦总览" intro="卦象的基础是八卦。下表为每一卦的取象与卦德，点击可展开详细。">
+        <TrigramOverview />
+      </Section>
 
-        <Section index="01.5" title="璇玑六十四卦圆图" intro="邵雍《皇极经世》周天六十四卦圆图。按上卦分八区，统摄周天象数。悬停星位感应卦象，亦可切换八宫体悟万物生克。">
-          <div className="flex justify-center">
-            <HexagramMandala />
-          </div>
-        </Section>
+      <Section index="01.5" title="璇玑六十四卦圆图" intro="邵雍《皇极经世》周天六十四卦圆图。按上卦分八区，统摄周天象数。悬停星位感应卦象，亦可切换八宫体悟万物生克。">
+        <div className="flex justify-center">
+          <HexagramMandala />
+        </div>
+      </Section>
 
-        <Section index="02" title="起卦三种法门" intro="周易起卦，法由心生。既有最便行之三钱法，亦有古雅之揲蓍法，更有应物观象之梅花易数。">
-          <MethodCards />
-        </Section>
+      <Section index="02" title="起卦三种法门" intro="周易起卦，法由心生。既有最便行之三钱法，亦有古雅之揲蓍法，更有应物观象之梅花易数。">
+        <MethodCards />
+      </Section>
 
-        <Section index="03" title="卦怎么读" intro="卦辞为体，爻辞为用；动爻处即是问题的关键。以下是常用的五步读卦法。">
-          <ReadingGuide />
-        </Section>
+      <Section index="03" title="卦怎么读" intro="卦辞为体，爻辞为用；动爻处即是问题的关键。以下是常用的五步读卦法。">
+        <ReadingGuide />
+      </Section>
 
-        <Section index="04" title="常见概念" intro="以下名词在阅读卦辞时常出现，记住它们能在不解之处少卡一些。">
-          <div className="grid gap-3 sm:grid-cols-2">
-            {GLOSSARY.map((g) => (
-              <div key={g.term} className="paper-panel--quiet border-4 border-bagua-fiber bg-bagua-surface p-4">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-base text-bagua-primary">{g.term}</span>
-                  <span className="font-body text-xs text-bagua-muted">{g.pinyin}</span>
-                </div>
-                <p className="prose-body mt-2 text-sm text-bagua-text">{g.def}</p>
+      <Section index="04" title="常见概念" intro="以下名词在阅读卦辞时常出现，记住它们能在不解之处少卡一些。">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {GLOSSARY.map((g) => (
+            <div key={g.term} className="paper-panel--quiet border-4 border-bagua-fiber bg-bagua-surface p-4">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-base text-bagua-primary">{g.term}</span>
+                <span className="font-body text-xs text-bagua-muted">{g.pinyin}</span>
               </div>
-            ))}
-          </div>
-        </Section>
-      </main>
-    </SiteShell>
+              <p className="prose-body mt-2 text-sm text-bagua-text">{g.def}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+    </main>
   )
 }
 

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { SiteShell } from '@/components/shared/SiteShell'
 import { SyncIndicator } from '@/components/SyncIndicator'
 import {
   Anchor,
@@ -82,8 +81,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <SiteShell eyebrow="SETTINGS / 04">
-      <main className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
+    <main className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
         <header className="enter-up mb-10">
           <p className="section-kicker">系统设置</p>
           <h1 className="mt-4 font-display text-5xl tracking-[0.06em]">设置</h1>
@@ -274,7 +272,6 @@ export default function SettingsPage() {
           八卦 · 仅供文化学习与学术研究
         </p>
       </main>
-    </SiteShell>
   )
 }
 

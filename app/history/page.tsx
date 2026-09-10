@@ -8,7 +8,6 @@ import { getGuaById, type Scenario } from '@/lib/iching'
 import { SCENARIO_LABELS } from '@/types/iching'
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
 import { SyncIndicator } from '@/components/SyncIndicator'
-import { SiteShell } from '@/components/shared/SiteShell'
 import { ArrowLeft, Star, Trash2, Search, Sparkles, Calendar, ListChecks } from '@/components/icons'
 
 type View = 'list' | 'calendar'
@@ -84,8 +83,7 @@ export default function HistoryPage() {
   const favoriteCount = records.filter(r => r.favorite).length
 
   return (
-    <SiteShell eyebrow="HISTORY / 05">
-      <main className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
+    <main className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
         <div className="enter-up mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-5xl tracking-[0.06em]">历史记录</h1>
@@ -271,7 +269,6 @@ export default function HistoryPage() {
           </div>
         )}
       </main>
-    </SiteShell>
   )
 }
 

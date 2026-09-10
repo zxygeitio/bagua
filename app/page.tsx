@@ -9,7 +9,6 @@ import { MethodShortcutCards } from '@/components/home/MethodShortcutCards'
 import { Reveal } from '@/components/Reveal'
 import { SectionHeader } from '@/components/home/SectionHeader'
 import { Wand } from '@/components/icons'
-import { SiteShell } from '@/components/shared/SiteShell'
 import { PaperTilt } from '@/components/shared/PaperTilt'
 import { PaperParticles } from '@/components/shared/PaperParticles'
 import { getGuaById } from '@/lib/iching'
@@ -38,13 +37,12 @@ const WUXING = [
 
 export default function HomePage() {
   return (
-    <SiteShell>
-      <main>
-        {/* ========== Hero ========== */}
-        <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
-          <PaperParticles />
-          <div className="hero-orbit" aria-hidden="true" />
-          <div className="grid items-center gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-10">
+    <main>
+      {/* ========== Hero ========== */}
+      <section className="paper-hero relative mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
+        <PaperParticles />
+        <div className="hero-orbit" aria-hidden="true" />
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-10">
             <Reveal direction="left">
               <aside className="archive-index pl-4 md:pl-5">
                 <p className="font-display text-[10px] tracking-[0.34em] text-bagua-primary">ARCHIVE / 01</p>
@@ -250,6 +248,5 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-    </SiteShell>
   )
 }

@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { HexagramSymbol } from '@/components/hexagram/HexagramSymbol'
-import { SiteShell } from '@/components/shared/SiteShell'
 import { getGuaById } from '@/lib/iching'
 import type { Gua } from '@/lib/iching'
 
@@ -58,8 +57,7 @@ export default function HexagramDetailPage({ params }: PageProps) {
   const wuxingImg = WUXING_IMAGE[gua.wuxing]
 
   return (
-    <SiteShell eyebrow={`GUA ${gua.id.toString().padStart(2, '0')} / 64`}>
-      <article className="mx-auto max-w-5xl px-4 py-8 md:px-6">
+    <article className="mx-auto max-w-5xl px-4 py-8 md:px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="enter-up">
             <div className="flex items-center gap-2.5">
@@ -150,7 +148,6 @@ export default function HexagramDetailPage({ params }: PageProps) {
           ))}
         </div>
       </article>
-    </SiteShell>
   )
 }
 
