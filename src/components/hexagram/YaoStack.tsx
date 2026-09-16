@@ -1,9 +1,4 @@
-'use client'
-
-import { motion } from 'framer-motion'
-
 import { useReducedMotion } from '@/components/shared/useReducedMotion'
-import { motionDuration } from '@/styles/theme'
 
 export interface YaoPreview {
   yinYang: 'yang' | 'yin'
@@ -15,9 +10,14 @@ interface YaoStackProps {
   currentIndex?: number
 }
 
+/**
+ * 六爻动画条：CSS-only。
+ * `.yao-pixel` 在 globals.css 的 @layer 块里已经绑定了 yaoReveal 关键帧动画
+ * （scaleX 0.15→1, opacity 0→1, steps(4)），所以这里不需要再叠一层 framer-motion。
+ * `prefers-reduced-motion` 由 globals.css 的 reduced-motion 媒体查询自动抹平。
+ */
 export function YaoStack({ lines, currentIndex }: YaoStackProps) {
   const reduceMotion = useReducedMotion()
-  const duration = motionDuration('yaoReveal', reduceMotion) / 1000
   const labels = ['上爻', '五爻', '四爻', '三爻', '二爻', '初爻']
 
   return (
@@ -32,11 +32,9 @@ export function YaoStack({ lines, currentIndex }: YaoStackProps) {
               {label}
             </span>
             {line ? (
-              <motion.div
+              <div
                 className={`yao-pixel flex-1 ${line.yinYang === 'yin' ? 'is-yin' : 'is-yang'} ${line.isChanging ? 'is-changing' : ''}`}
-                initial={reduceMotion ? false : { scaleX: 0.15, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                transition={{ duration, ease: 'linear' }}
+                style={reduceMotion ? { animation: 'none', opacity: 1, transform: 'none' } : undefined}
               >
                 {line.yinYang === 'yin' ? (
                   <>
@@ -46,7 +44,7 @@ export function YaoStack({ lines, currentIndex }: YaoStackProps) {
                 ) : (
                   <span />
                 )}
-              </motion.div>
+              </div>
             ) : (
               <div className="h-1 flex-1 bg-bagua-fiber/40" />
             )}
