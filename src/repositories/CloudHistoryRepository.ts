@@ -1,7 +1,7 @@
 /**
  * 云端历史 Repository - 通过 Supabase 同步
  */
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase/client'
 
 export interface CloudRecord {
   clientId: string
@@ -92,6 +92,35 @@ export class CloudHistoryRepository {
     if (error) console.error('upsert failed:', error)
   }
 
+  /**
+   * 批量 upsert：单次 round-trip 处理 N 条记录，
+   * 100 条记录从约 30 秒（每次 ~300ms RTT）降到 ~1 秒。
+   */
+  async syncAll(records: CloudRecord[]): Promise<void> {
+    const supabase = getSupabaseClient()
+    if (!supabase || !this.userId || records.length === 0) return
+
+    const rows = records.map((record) => ({
+      user_id: this.userId!,
+      client_id: record.clientId,
+      method: record.method,
+      question: record.question,
+      ben_gua_id: record.benGuaId,
+      bian_gua_id: record.bianGuaId,
+      hu_gua_id: record.huGuaId,
+      changing_lines: record.changingLines,
+      lines_data: record.lines,
+      notes: record.notes,
+      favorite: record.favorite,
+    }))
+
+    const { error } = await supabase
+      .from('bagua_history')
+      .upsert(rows, { onConflict: 'user_id,client_id' })
+
+    if (error) console.error('syncAll failed:', error)
+  }
+
   async remove(clientId: string): Promise<void> {
     const supabase = getSupabaseClient()
     if (!supabase || !this.userId) return
@@ -103,13 +132,6 @@ export class CloudHistoryRepository {
       .eq('client_id', clientId)
 
     if (error) console.error('remove failed:', error)
-  }
-
-  async syncAll(records: CloudRecord[]): Promise<void> {
-    if (!isSupabaseConfigured) return
-    for (const r of records) {
-      await this.upsert(r)
-    }
   }
 }
 

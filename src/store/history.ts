@@ -64,8 +64,8 @@ export const useHistoryStore = create<HistoryState>()(
         try {
           const anonId = getAnonymousId()
           await cloudHistory.ensureUser(anonId)
-          for (const r of get().records) {
-            await cloudHistory.upsert({
+          await cloudHistory.syncAll(
+            get().records.map((r) => ({
               clientId: r.id,
               method: r.method,
               question: r.question,
@@ -77,8 +77,8 @@ export const useHistoryStore = create<HistoryState>()(
               notes: r.notes,
               favorite: r.favorite,
               timestamp: r.timestamp,
-            })
-          }
+            })),
+          )
           set({ cloudSyncStatus: 'synced' })
         } catch (e) {
           console.error('云同步失败:', e)
