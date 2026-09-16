@@ -19,7 +19,7 @@ const QUESTION_HINTS: { tag: string; hint: string; scenario: Scenario }[] = [
   { tag: '财运', hint: '近期财运与投资判断？', scenario: 'wealth' },
   { tag: '健康', hint: '身体调养与作息？', scenario: 'health' },
   { tag: '学业', hint: '学习进度与方法？', scenario: 'study' },
-  { tag: '人际', hint: '某段人际如何相处？', scenario: 'family' },
+  { tag: '家庭', hint: '家庭关系与责任如何平衡？', scenario: 'family' },
 ]
 
 export default function DivinePage() {

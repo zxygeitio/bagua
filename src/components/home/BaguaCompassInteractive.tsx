@@ -1,22 +1,13 @@
+'use client'
+
 import type { CSSProperties } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
+import type { TrigramName } from '@/lib/qigua/types'
 
-/**
- * 先天八卦方位采用传统罗盘的南上读法：乾南、坤北、离东、坎西。
- * 器物底图只提供材质；卦符、文字与链接由代码叠加，确保方位准确。
- *
- * Server Component：8 个卦象的位置在模块加载时一次性计算，
- * 无客户端副作用，无需 `useState/useEffect/useRef`。
- * 视口外的渲染由浏览器通过 `.bagua-compass` 的 `content-visibility: auto` 自动跳过。
- *
- * 如果需要节点悬停/点击交互（hover 预览、active 状态），
- * 使用 `BaguaCompassInteractive`（Client Component）。
- */
 interface BaguaPosition {
-  trigram: string
+  trigram: TrigramName
   guaId: number
   direction: string
   element: string
@@ -35,9 +26,24 @@ const POSITIONS: readonly BaguaPosition[] = [
   { trigram: '艮', guaId: 52, direction: '西北', element: '山 · 土', x: 25.71, y: 25.38 },
 ] as const
 
-export function BaguaCompass({ priority = false }: { priority?: boolean }) {
+/**
+ * 客户端版本：节点使用 `<button>` 以支持 hover 预览 + active 状态。
+ * 适用于需要交互选中态的场景（如 `BaguaInteractiveExplorer`）。
+ *
+ * 首屏 LCP 路径请使用纯 server `BaguaCompass`。
+ */
+export function BaguaCompassInteractive({
+  activeTrigram,
+  onSelectTrigram,
+}: {
+  activeTrigram?: TrigramName | null
+  onSelectTrigram?: (trigram: TrigramName) => void
+}) {
   return (
-    <nav className="bagua-compass" aria-label="先天八卦方位索引：乾南、坤北、离东、坎西">
+    <nav
+      className="bagua-compass"
+      aria-label="先天八卦方位索引：乾南、坤北、离东、坎西"
+    >
       <Image
         src="/textures/bronze-compass-plate.webp"
         alt=""
@@ -45,7 +51,6 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
         sizes="(max-width: 767px) 86vw, 460px"
         className="compass-plate"
         draggable={false}
-        priority={priority}
       />
 
       <div className="compass-pixel-grain" aria-hidden="true" />
@@ -76,21 +81,25 @@ export function BaguaCompass({ priority = false }: { priority?: boolean }) {
           '--compass-x': `${position.x}%`,
           '--compass-y': `${position.y}%`,
         } as CSSProperties
+        const isActive = activeTrigram === position.trigram
         const label = `${position.trigram}卦 · 方位${position.direction} · ${position.element}`
         return (
-          <Link
+          <button
             key={position.trigram}
-            href={`/hexagrams/${position.guaId}`}
-            prefetch={false}
+            type="button"
             style={style}
+            data-active={isActive ? 'true' : undefined}
+            onClick={() => onSelectTrigram?.(position.trigram)}
+            onMouseEnter={() => onSelectTrigram?.(position.trigram)}
             title={label}
             aria-label={label}
+            aria-pressed={isActive}
             className="compass-node"
           >
             <span className="compass-node__symbol" aria-hidden="true">
-              {TRIGRAM_SYMBOLS[position.trigram as keyof typeof TRIGRAM_SYMBOLS]}
+              {TRIGRAM_SYMBOLS[position.trigram]}
             </span>
-          </Link>
+          </button>
         )
       })}
     </nav>

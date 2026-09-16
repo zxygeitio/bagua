@@ -28,7 +28,7 @@ const SCENARIOS: { tag: string; hint: string; color: string }[] = [
   { tag: '财运', hint: '财务决策 / 风险', color: 'text-bagua-metal' },
   { tag: '健康', hint: '调养 / 心态', color: 'text-bagua-earth' },
   { tag: '学业', hint: '方向 / 节奏', color: 'text-bagua-water' },
-  { tag: '人际', hint: '合作 / 边界', color: 'text-bagua-wood' },
+  { tag: '家庭', hint: '合作 / 边界', color: 'text-bagua-wood' },
 ]
 
 export default function SettingsPage() {
