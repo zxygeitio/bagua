@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { BaguaCompass } from '@/components/home/BaguaCompass'
+import { BaguaCompassInteractive } from '@/components/home/BaguaCompassInteractive'
 import { TRIGRAM_SYMBOLS } from '@/lib/qigua/bagua'
 import type { TrigramName } from '@/lib/qigua/types'
 
@@ -186,7 +186,7 @@ export function BaguaInteractiveExplorer() {
         {/* 中央罗盘展示区 */}
         <div className="my-auto flex items-center justify-center py-4">
           <div className="w-full max-w-[430px]">
-            <BaguaCompass
+            <BaguaCompassInteractive
               activeTrigram={selected}
               onSelectTrigram={(name) => setSelected(name)}
             />

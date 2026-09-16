@@ -12,6 +12,7 @@ import { Wand } from '@/components/icons'
 import { PaperTilt } from '@/components/shared/PaperTilt'
 import { PaperParticles } from '@/components/shared/PaperParticles'
 import { getGuaById } from '@/lib/iching'
+import type { WuXing } from '@/types/iching'
 
 const FEATURED = [
   { id: 1, phase: '元始', seal: '健', note: '纯阳自强' },
@@ -27,12 +28,44 @@ const RITUAL_STEPS = [
   { step: '03', title: '读象', desc: '看见变化', icon: '/icons/ritual-read-new.webp', shape: 'square' },
 ] as const
 
+/**
+ * 五行卡片主题：把每行的 border / bg / glow 类聚拢到 lookup，
+ * 数据数组只保留语义字段，新增五行（如"风"）只需在主题里补一行。
+ */
+const WUXING_THEMES: Record<WuXing, { border: string; bg: string; glow: string }> = {
+  木: {
+    border: 'border-emerald-800/40 hover:border-emerald-700',
+    bg: 'hover:bg-emerald-950/[0.04]',
+    glow: 'group-hover:shadow-[0_0_14px_rgba(40,110,60,0.15)]',
+  },
+  火: {
+    border: 'border-rose-800/40 hover:border-rose-700',
+    bg: 'hover:bg-rose-950/[0.04]',
+    glow: 'group-hover:shadow-[0_0_14px_rgba(178,58,42,0.18)]',
+  },
+  土: {
+    border: 'border-amber-800/40 hover:border-amber-700',
+    bg: 'hover:bg-amber-950/[0.04]',
+    glow: 'group-hover:shadow-[0_0_14px_rgba(180,120,40,0.16)]',
+  },
+  金: {
+    border: 'border-yellow-700/50 hover:border-yellow-600',
+    bg: 'hover:bg-yellow-950/[0.04]',
+    glow: 'group-hover:shadow-[0_0_14px_rgba(200,160,50,0.18)]',
+  },
+  水: {
+    border: 'border-sky-800/40 hover:border-sky-700',
+    bg: 'hover:bg-sky-950/[0.04]',
+    glow: 'group-hover:shadow-[0_0_14px_rgba(40,90,140,0.16)]',
+  },
+}
+
 const WUXING = [
-  { tag: '木', gua: 3, color: 'wood', image: '/icons/wuxing-wood.webp', badge: '/icons/wuxing-badge-wood.webp', label: '木属', desc: '生发向上', border: 'border-emerald-800/40 hover:border-emerald-700', bg: 'hover:bg-emerald-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,110,60,0.15)]' },
-  { tag: '火', gua: 30, color: 'fire', image: '/icons/wuxing-fire.webp', badge: '/icons/wuxing-badge-fire.webp', label: '火属', desc: '炎上光明', border: 'border-rose-800/40 hover:border-rose-700', bg: 'hover:bg-rose-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(178,58,42,0.18)]' },
-  { tag: '土', gua: 2, color: 'earth', image: '/icons/wuxing-earth.webp', badge: '/icons/wuxing-badge-earth.webp', label: '土属', desc: '厚德载物', border: 'border-amber-800/40 hover:border-amber-700', bg: 'hover:bg-amber-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(180,120,40,0.16)]' },
-  { tag: '金', gua: 1, color: 'metal', image: '/icons/wuxing-metal.webp', badge: '/icons/wuxing-badge-metal.webp', label: '金属', desc: '刚毅决断', border: 'border-yellow-700/50 hover:border-yellow-600', bg: 'hover:bg-yellow-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(200,160,50,0.18)]' },
-  { tag: '水', gua: 5, color: 'water', image: '/icons/wuxing-water.webp', badge: '/icons/wuxing-badge-water.webp', label: '水属', desc: '润下流通', border: 'border-sky-800/40 hover:border-sky-700', bg: 'hover:bg-sky-950/[0.04]', glow: 'group-hover:shadow-[0_0_14px_rgba(40,90,140,0.16)]' },
+  { tag: '木' as const, gua: 3, image: '/icons/wuxing-wood.webp', badge: '/icons/wuxing-badge-wood.webp', label: '木属', desc: '生发向上' },
+  { tag: '火' as const, gua: 30, image: '/icons/wuxing-fire.webp', badge: '/icons/wuxing-badge-fire.webp', label: '火属', desc: '炎上光明' },
+  { tag: '土' as const, gua: 2, image: '/icons/wuxing-earth.webp', badge: '/icons/wuxing-badge-earth.webp', label: '土属', desc: '厚德载物' },
+  { tag: '金' as const, gua: 1, image: '/icons/wuxing-metal.webp', badge: '/icons/wuxing-badge-metal.webp', label: '金属', desc: '刚毅决断' },
+  { tag: '水' as const, gua: 5, image: '/icons/wuxing-water.webp', badge: '/icons/wuxing-badge-water.webp', label: '水属', desc: '润下流通' },
 ] as const
 
 export default function HomePage() {
@@ -132,14 +165,15 @@ export default function HomePage() {
             />
           </Reveal>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {WUXING.map(({ tag, gua: id, image, badge, label, desc, border, bg, glow }, i) => {
+            {WUXING.map(({ tag, gua: id, image, badge, label, desc }, i) => {
               const gua = getGuaById(id)
               if (!gua) return null
+              const theme = WUXING_THEMES[tag]
               return (
                 <Reveal key={tag} delay={i * 80} direction="up">
                   <Link
                     href={`/hexagrams/${id}`}
-                    className={`paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 p-3.5 transition-all duration-300 md:p-4.5 ${border} ${bg} ${glow}`}
+                    className={`paper-panel lift group relative flex h-full flex-col items-center gap-2 overflow-hidden border-2 p-3.5 transition-all duration-300 md:p-4.5 ${theme.border} ${theme.bg} ${theme.glow}`}
                   >
                     <div className="flex w-full items-center justify-between">
                       <span className="font-display text-[10px] tracking-widest text-bagua-muted">

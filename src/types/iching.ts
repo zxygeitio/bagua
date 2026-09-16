@@ -80,6 +80,9 @@ export const ALL_SIX_RELATIONS: SixRelation[] = ['父母', '兄弟', '子孙', '
 /** 爻位列表 */
 export const ALL_YAO_POSITIONS: YaoPosition[] = [1, 2, 3, 4, 5, 6]
 
+/** 本地持久化允许的最大记录数；超出后丢弃最早的 */
+export const MAX_LOCAL_RECORDS = 100
+
 /** 起卦方式中文标签，历史方式仅用于展示旧记录 */
 export const CAST_METHOD_LABELS: Record<StoredCastMethod, string> = {
   coins: '铜钱起卦',

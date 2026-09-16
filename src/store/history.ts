@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { CastRecord, Line, StoredCastMethod, YaoPosition } from '@/lib/iching'
+import { MAX_LOCAL_RECORDS } from '@/types/iching'
 import { cloudHistory, CloudRecord } from '@/repositories/CloudHistoryRepository'
 import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { getAnonymousId } from '@/lib/supabase/identity'
@@ -26,7 +27,7 @@ export const useHistoryStore = create<HistoryState>()(
       cloudSyncStatus: 'idle',
 
       addRecord: async (record) => {
-        set((s) => ({ records: [record, ...s.records].slice(0, 100) }))
+        set((s) => ({ records: [record, ...s.records].slice(0, MAX_LOCAL_RECORDS) }))
         // 后台云同步
         if (isSupabaseConfigured && get().cloudSyncEnabled) {
           get().syncToCloud().catch(console.error)
@@ -64,8 +65,8 @@ export const useHistoryStore = create<HistoryState>()(
         try {
           const anonId = getAnonymousId()
           await cloudHistory.ensureUser(anonId)
-          for (const r of get().records) {
-            await cloudHistory.upsert({
+          await cloudHistory.syncAll(
+            get().records.map((r) => ({
               clientId: r.id,
               method: r.method,
               question: r.question,
@@ -77,8 +78,8 @@ export const useHistoryStore = create<HistoryState>()(
               notes: r.notes,
               favorite: r.favorite,
               timestamp: r.timestamp,
-            })
-          }
+            })),
+          )
           set({ cloudSyncStatus: 'synced' })
         } catch (e) {
           console.error('云同步失败:', e)
@@ -120,7 +121,7 @@ export const useHistoryStore = create<HistoryState>()(
 
           const sorted = Array.from(merged.values())
             .sort((a, b) => b.timestamp - a.timestamp)
-            .slice(0, 100)
+            .slice(0, MAX_LOCAL_RECORDS)
 
           set({ records: sorted, cloudSyncStatus: 'synced' })
         } catch (e) {

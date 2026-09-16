@@ -139,7 +139,7 @@ describe('云端历史 Repository', () => {
     await expect(repo.remove('c1')).resolves.toBeUndefined()
   })
 
-  it('syncAll 逐条上送所有记录', async () => {
+  it('syncAll 单次批量上送所有记录', async () => {
     tableResults['bagua_users'] = { data: { id: 'user-42' }, error: null }
     await repo.ensureUser('anon-1')
     tableResults['bagua_history'] = { error: null }
@@ -153,7 +153,14 @@ describe('云端历史 Repository', () => {
       timestamp: 0,
     }))
     await repo.syncAll(records)
-    // from 调用次数：ensureUser 1 次 + upsert 3 次
-    expect(fromSpy.mock.calls.filter((c) => c[0] === 'bagua_history')).toHaveLength(3)
+    // from 调用次数：ensureUser 1 次 + syncAll 1 次批量 upsert
+    expect(fromSpy.mock.calls.filter((c) => c[0] === 'bagua_history')).toHaveLength(1)
+  })
+
+  it('syncAll 空数组直接返回', async () => {
+    tableResults['bagua_users'] = { data: { id: 'user-42' }, error: null }
+    await repo.ensureUser('anon-1')
+    await expect(repo.syncAll([])).resolves.toBeUndefined()
+    expect(fromSpy.mock.calls.filter((c) => c[0] === 'bagua_history')).toHaveLength(0)
   })
 })

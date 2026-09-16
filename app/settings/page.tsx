@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Section } from '@/components/shared/Section'
 import { SyncIndicator } from '@/components/SyncIndicator'
 import {
   Anchor,
@@ -28,7 +29,7 @@ const SCENARIOS: { tag: string; hint: string; color: string }[] = [
   { tag: '财运', hint: '财务决策 / 风险', color: 'text-bagua-metal' },
   { tag: '健康', hint: '调养 / 心态', color: 'text-bagua-earth' },
   { tag: '学业', hint: '方向 / 节奏', color: 'text-bagua-water' },
-  { tag: '人际', hint: '合作 / 边界', color: 'text-bagua-wood' },
+  { tag: '家庭', hint: '合作 / 边界', color: 'text-bagua-wood' },
 ]
 
 export default function SettingsPage() {
@@ -272,42 +273,6 @@ export default function SettingsPage() {
           八卦 · 仅供文化学习与学术研究
         </p>
       </main>
-  )
-}
-
-function Section({
-  index,
-  Icon,
-  title,
-  desc,
-  iconClassName,
-  children,
-}: {
-  index: string
-  Icon: typeof Coins
-  title: string
-  desc: string
-  iconClassName?: string
-  children: React.ReactNode
-}) {
-  return (
-    <section className="enter-up mb-10">
-      <div className="mb-4 flex items-center gap-3 border-b-4 border-bagua-text pb-2">
-        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center border-4 border-bagua-text bg-bagua-primary text-bagua-surface">
-          <Icon className={`h-4 w-4 ${iconClassName ?? 'text-bagua-surface'}`} strokeWidth={1.8} />
-        </span>
-        <div className="flex-1">
-          <div className="flex items-baseline gap-2">
-            <span className="font-display text-[10px] tracking-[0.28em] text-bagua-muted">
-              {index}
-            </span>
-            <h2 className="font-display text-xl tracking-wider">{title}</h2>
-          </div>
-          <p className="font-body text-xs text-bagua-muted">{desc}</p>
-        </div>
-      </div>
-      {children}
-    </section>
   )
 }
 
